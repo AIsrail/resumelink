@@ -45,7 +45,6 @@
         .card-item:hover { transform: scale(1.02); border-color: #10b981; }
         .name-fix { font-weight: 900; line-height: 1.2 !important; display: block; padding: 0.15em 0; letter-spacing: -0.02em; }
 
-        /* ОЖИВШАЯ РАМКА */
         .glow-wrapper {
             position: relative;
             display: inline-block;
@@ -181,11 +180,10 @@
                     const genAI = new GoogleGenerativeAI(apiKey);
                     const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
                     
-                    // Обновленный промпт с логикой форматирования имени и доп. блоками
-                    const prompt = `Analyze text and extract into JSON. Target language: ${isEn ? 'English' : 'Russian'}. 
+                    const prompt = `Analyze text and extract into JSON. Target language: Use the same language as the source text. 
                     Task: Create a professional interactive profile. 
-                    MANDATORY FOR NAME: If target language is English, format the "name" field as "First Name Last Name" only (omit patronymic/middle name). If Russian, keep full name.
-                    MANDATORY FOR BLOCKS: If the text contains enough information, generate additional blocks in "additional" array (e.g., "Key Achievements", "Professional Strengths", or "Tech Stack"). If no specific info for a block exists, do NOT create it.
+                    MANDATORY FOR NAME: If target language is English, format the "name" field as "First Name Last Name" only (omit patronymic). If Russian, keep full name.
+                    MANDATORY FOR BLOCKS: If the text contains enough information, generate additional blocks in "additional" array (e.g., "Key Achievements", "Professional Strengths"). If no specific info exists, do NOT create it.
                     JSON structure: {
                         "labels": {"summary": "", "experience": "", "education": "", "contacts": "", "languages": "", "hobbies": "", "links": ""}, 
                         "name": "", "title": "", "contacts": {"p": "", "e": "", "l": ""}, 
@@ -198,12 +196,28 @@
 
                     const result = await model.generateContent(prompt + " Text: " + text.substring(0, 9000));
                     const response = await result.response;
-                    const jsonStr = response.text().substring(response.text().indexOf('{'), response.text().lastIndexOf('}') + 1);
+                    const rawText = response.text();
+                    
+                    // Безопасный парсинг JSON
+                    const startIdx = rawText.indexOf('{');
+                    const endIdx = rawText.lastIndexOf('}');
+                    if (startIdx === -1 || endIdx === -1) throw new Error("Invalid response");
+                    
+                    const jsonStr = rawText.substring(startIdx, endIdx + 1);
                     const parsedData = JSON.parse(jsonStr);
+                    
+                    // Инициализация пустых массивов для стабильности JSX
+                    parsedData.experience = parsedData.experience || [];
+                    parsedData.education = parsedData.education || [];
+                    parsedData.additional = parsedData.additional || [];
+
                     setResumeData(parsedData);
                     await autoPublish(parsedData);
                     setStep('result');
-                } catch (err) { alert("Error"); }
+                } catch (err) { 
+                    console.error(err);
+                    alert(isEn ? "Analysis error. Try again." : "Ошибка анализа. Попробуйте снова."); 
+                }
                 setLoading(false);
             };
 
@@ -272,7 +286,7 @@
                 </div>
             );
 
-            const L = resumeData.labels;
+            const L = resumeData.labels || {};
             return (
                 <div className="max-w-6xl mx-auto px-4 py-10 space-y-8">
                     <div className="flex justify-between items-center">
@@ -336,7 +350,7 @@
                             </div>
                         )}
 
-                        {resumeData.additional?.map((block, i) => block.title && (
+                        {resumeData.additional?.map((block, i) => block?.title && (
                             <div key={i} className="card-item col-span-1 md:col-span-2">
                                 <h3 className="text-blue-400 text-[12px] font-bold uppercase mb-6 tracking-widest">{block.title}</h3>
                                 <p className="text-[16px] text-gray-300 leading-relaxed">{block.content}</p>
