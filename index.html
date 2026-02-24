@@ -5,14 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ResumeLink — Твой интерактивный профиль</title>
 
-    <!-- Иконки -->
     <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
     <link rel="manifest" href="/favicon/site.webmanifest">
 
-    <!-- Превью в мессенджерах -->
     <meta property="og:title" content="ResumeLink — интерактивное резюме по ссылке">
     <meta property="og:description" content="Загрузи PDF резюме и получи красивый профиль со ссылкой и QR-кодом">
     <meta property="og:image" content="https://resumelink.cc/og-image.png">
@@ -47,7 +45,6 @@
         }
 
         .zoom-text { display: inline-block; transition: all 0.3s ease; transform-origin: left center; width: 100%; }
-        /* Исправлено: теперь при наведении белеет абсолютно весь текст внутри карточки, включая серые подписи */
         .card-item:hover .zoom-text:not(.no-zoom),
         .card-item:hover .zoom-text:not(.no-zoom) p,
         .card-item:hover .zoom-text:not(.no-zoom) span { 
@@ -61,14 +58,13 @@
         }
 
         .no-zoom { transform: none !important; }
-        /* ДОБАВИЛИ ВОЗДУХ В ФИО */
         .name-fix { 
-    font-weight: 900; 
-    line-height: 1.2 !important; /* Увеличили плотность, но добавили зазор */
-    display: block; 
-    padding: 0.15em 0; /* Создает невидимый защитный барьер вокруг каждой строки */
-    letter-spacing: -0.02em; /* Немного сближает буквы для современного вида */
-}
+            font-weight: 900; 
+            line-height: 1.2 !important; 
+            display: block; 
+            padding: 0.15em 0; 
+            letter-spacing: -0.02em; 
+        }
         
         .spinner { border: 3px solid #222; border-top: 3px solid #10b981; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -83,77 +79,118 @@
     <script type="text/babel" data-type="module">
         import { GoogleGenerativeAI } from "@google/generative-ai";
         const { useState, useEffect } = React;
-	const GOOGLE_CLIENT_ID = "989558223775-35ninpo0b9i61i1986c28qr88l4hplqf.apps.googleusercontent.com";
         const pdfjs = window['pdfjs-dist/build/pdf'];
         pdfjs.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-        // МАССИВ СТАДИЙ
-        const stages = ["Анализируем текст...", "Извлекаем данные...", "Генерируем блоки...", "Создаём QR-код...", "Почти готово..."];
+        const WORKER_URL = "https://resumelink-worker.aisrail.workers.dev";
 
         function App() {
             const [resumeData, setResumeData] = useState(null);
             const [loading, setLoading] = useState(false);
-            const [loadingStage, setLoadingStage] = useState(0); // Состояние для этапов
+            const [loadingStage, setLoadingStage] = useState(0); 
             const [step, setStep] = useState('setup');
+            const [savedId, setSavedId] = useState(null);
             const [showTooltip, setShowTooltip] = useState(false);
+            
             const apiKey = 'AIzaSyAQ_Sr41LA4HGKkIakTin0okQnyblOl0Ts';
 
-            // Закрытие подсказки при скролле
-            useEffect(() => {
-                const handleScroll = () => { if (showTooltip) setShowTooltip(false); };
-                window.addEventListener('scroll', handleScroll);
-                return () => window.removeEventListener('scroll', handleScroll);
-            }, [showTooltip]);
+            const isEn = navigator.language.startsWith('en');
 
-            // ТАЙМЕР ДЛЯ СТАДИЙ ЗАГРУЗКИ
+            const T = {
+                en: {
+                    mainTitle: "Turn text into a stylish profile",
+                    uploadBtn: "Upload Resume",
+                    publishBtn: "Publish",
+                    published: "Link copied to clipboard!",
+                    backBtn: "← Back",
+                    atsScore: "ATS Score",
+                    atsHint: "This score reflects how successfully your resume will pass automatic HR filters. 80%+ is an excellent result!",
+                    how: "HOW IT WORKS",
+                    contact: "For cooperation:",
+                    footerEng: "Empowering professionals with AI-driven visual storytelling.",
+                    steps: [
+                        { t: "UPLOAD", d: "Upload your file in any format." },
+                        { t: "AI MAGIC", d: "AI structures data and calculates ATS." },
+                        { t: "SHARE", d: "Get your link and personal QR code." }
+                    ],
+                    stages: ["Analyzing text...", "Extracting data...", "Generating blocks...", "Creating QR code...", "Optimizing mobile layout...", "Finalizing interactive elements...", "Almost ready..."]
+                },
+                ru: {
+                    mainTitle: "Преврати текст в стильный профиль",
+                    uploadBtn: "Загрузить резюме",
+                    publishBtn: "Опубликовать",
+                    published: "Ссылка скопирована!",
+                    backBtn: "← Назад",
+                    atsScore: "ATS Score",
+                    atsHint: "Этот показатель отражает, насколько успешно ваше резюме пройдет автоматические фильтры HR-систем. 80%+ — отличный результат!",
+                    how: "КАК ЭТО РАБОТАЕТ",
+                    contact: "По вопросам сотрудничества:",
+                    footerEng: "Empowering professionals with AI-driven visual storytelling.",
+                    steps: [
+                        { t: "ЗАГРУЗКА", d: "Загрузи файл в любом формате." },
+                        { t: "AI МАГИЯ", d: "Нейросеть структурирует данные и считает ATS." },
+                        { t: "ПОДЕЛИТЬСЯ", d: "Получи ссылку и личный QR-код." }
+                    ],
+                    stages: ["Анализируем текст...", "Извлекаем данные...", "Генерируем блоки...", "Создаём QR-код...", "Оптимизируем мобильную верстку...", "Настраиваем интерактив...", "Почти готово..."]
+                }
+            };
+
+            const curr = isEn ? T.en : T.ru;
+            const stages = curr.stages;
+
+            useEffect(() => {
+                const params = new URLSearchParams(window.location.search);
+                const id = params.get('id');
+                if (id) {
+                    setLoading(true);
+                    fetch(`${WORKER_URL}/${id}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            setResumeData(data);
+                            setSavedId(id);
+                            setStep('result');
+                            setLoading(false);
+                        })
+                        .catch(() => {
+                            setLoading(false);
+                        });
+                }
+            }, []);
+
             useEffect(() => {
                 let interval;
                 if (loading) {
                     interval = setInterval(() => {
                         setLoadingStage(prev => (prev < stages.length - 1 ? prev + 1 : prev));
-                    }, 3500);
+                    }, 2500);
                 }
                 return () => clearInterval(interval);
-            }, [loading]);
+            }, [loading, stages.length]);
 
-            useEffect(() => {
-                if (step !== 'result' || window.innerWidth > 640) return;
-                const cards = document.querySelectorAll('.card-item');
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) entry.target.classList.add('in-view');
-                        else entry.target.classList.remove('in-view');
+            const handlePublish = async () => {
+                setLoading(true);
+                try {
+                    const res = await fetch(WORKER_URL, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(resumeData)
                     });
-                }, { threshold: 0.3 });
-                cards.forEach(card => observer.observe(card));
-                return () => observer.disconnect();
-            }, [step]);
+                    const result = await res.json();
+                    setSavedId(result.id);
+                    const newUrl = `${window.location.origin}${window.location.pathname}?id=${result.id}`;
+                    navigator.clipboard.writeText(newUrl);
+                    alert(curr.published);
+                } catch (err) {
+                    alert("Error publishing");
+                }
+                setLoading(false);
+            };
 
             const processAI = async (text) => {
                 try {
                     const genAI = new GoogleGenerativeAI(apiKey);
                     const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
-                    
-                    const prompt = `Analyze the provided text.
-                    1. Identify the language of the source text.
-                    2. Extract info into JSON.
-                    3. MANDATORY: Translate ALL keys in "labels" AND ALL "title" fields in "additional" array to the language of the source text.
-                    Structure: 
-                    {
-                      "labels": {"summary": "", "experience": "", "education": "", "contacts": "", "languages": "", "hobbies": "", "links": ""},
-                      "name": "Full Name",
-                      "title": "Job Title",
-                      "contacts": {"p": "", "e": "", "l": ""},
-                      "socials": {"li": "", "gh": "", "tg": ""},
-                      "summary": "",
-                      "atsScore": 85,
-                      "experience": [{"c": "", "p": "", "t": "", "d": ""}],
-                      "education": [{"s": "", "d": "", "y": ""}],
-                      "languages": [],
-                      "hobbies": [],
-                      "additional": [{"title": "", "content": ""}]
-                    }`;
-
+                    const prompt = `Analyze the provided text. 1. Target language: ${isEn ? 'English' : 'Source text language'}. 2. Extract info into JSON. 3. MANDATORY: Translate ALL keys in "labels" AND ALL "title" fields in "additional" array to the target language. Structure: {"labels": {"summary": "", "experience": "", "education": "", "contacts": "", "languages": "", "hobbies": "", "links": ""}, "name": "Full Name", "title": "Job Title", "contacts": {"p": "", "e": "", "l": ""}, "socials": {"li": "", "gh": "", "tg": ""}, "summary": "", "atsScore": 85, "experience": [{"c": "", "p": "", "t": "", "d": ""}], "education": [{"s": "", "d": "", "y": ""}], "languages": [], "hobbies": [], "additional": [{"title": "", "content": ""}]}`;
                     const result = await model.generateContent(prompt + " Source Text: " + text.substring(0, 9000));
                     const response = await result.response;
                     const jsonStr = response.text().substring(response.text().indexOf('{'), response.text().lastIndexOf('}') + 1);
@@ -178,55 +215,72 @@
                             text += content.items.map(s => s.str).join(" ") + " ";
                         }
                     } else if (file.name.endsWith('.docx')) {
-                        // ИСПРАВЛЕНО: Теперь ВОРД загрузится
                         const arrayBuffer = await file.arrayBuffer();
                         const result = await window.mammoth.extractRawText({ arrayBuffer: arrayBuffer });
                         text = result.value; 
-                    } else {
-                        text = await file.text();
-                    }
-                    
-                    if (!text.trim()) throw new Error("Пустой файл");
+                    } else { text = await file.text(); }
                     await processAI(text);
-                } catch (err) { 
-                    alert("Ошибка чтения файла. Используйте .docx или .pdf"); 
-                    setLoading(false); 
-                }
+                } catch (err) { alert("Ошибка чтения файла."); setLoading(false); }
             };
 
             if (step === 'setup') return (
-                <div className="max-w-full mx-auto px-4 py-20 text-center">
-                    <h1 className="text-5xl sm:text-8xl font-black mb-6 italic tracking-tighter inline-block bg-gradient-to-r from-emerald-400 to-blue-500 bg-clip-text text-transparent">ResumeLink</h1>
-                    <p className="text-gray-400 mb-12 text-xl sm:text-2xl font-light italic">Преврати текст в стильный профиль</p>
-                    <div className="inline-block p-1 bg-[#161616] border border-white/5 rounded-[40px] max-w-full overflow-hidden">
-                        <div className="p-8 sm:p-20 border-dashed border-2 border-emerald-500/10 rounded-[36px]">
-                            {loading ? ( 
-                                <div className="space-y-6">
-                                    <div className="spinner mx-auto"></div>
-                                    <p className="text-emerald-500 font-bold animate-pulse tracking-widest uppercase text-sm">{stages[loadingStage]}</p>
+                <div className="max-w-4xl mx-auto px-4 py-20 text-center flex flex-col min-h-screen">
+                    <div className="flex-grow">
+                        <h1 className="text-6xl sm:text-8xl font-black mb-6 italic tracking-tighter inline-block bg-gradient-to-r from-emerald-400 to-blue-500 bg-clip-text text-transparent">ResumeLink</h1>
+                        <p className="text-gray-400 mb-12 text-xl sm:text-2xl font-light italic">{curr.mainTitle}</p>
+                        <div className="inline-block p-1 bg-[#161616] border border-white/5 rounded-[40px] max-w-full overflow-hidden mb-20">
+                            <div className="p-8 sm:p-20 border-dashed border-2 border-emerald-500/10 rounded-[36px]">
+                                {loading ? ( 
+                                    <div className="space-y-6">
+                                        <div className="spinner mx-auto"></div>
+                                        <p className="text-emerald-500 font-bold animate-pulse tracking-widest uppercase text-sm">{stages[loadingStage]}</p>
+                                    </div>
+                                ) : (
+                                    <label className="bg-emerald-600 hover:bg-emerald-500 px-8 sm:px-16 py-6 rounded-3xl font-bold cursor-pointer transition-all inline-block text-lg shadow-2xl whitespace-nowrap">
+                                        {curr.uploadBtn} <input type="file" onChange={handleFile} className="hidden" />
+                                    </label>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+                            {curr.steps.map((s, i) => (
+                                <div key={i} className="bg-[#111] p-8 rounded-3xl border border-white/5">
+                                    <div className="text-emerald-500 font-black mb-2 italic">0{i+1}</div>
+                                    <h4 className="font-bold text-sm mb-2 uppercase tracking-widest">{s.t}</h4>
+                                    <p className="text-gray-500 text-xs leading-relaxed">{s.d}</p>
                                 </div>
-                            ) : (
-                                <label className="bg-emerald-600 hover:bg-emerald-500 px-8 sm:px-16 py-6 rounded-3xl font-bold cursor-pointer transition-all inline-block text-lg shadow-2xl whitespace-nowrap">
-                                    Загрузить резюме <input type="file" onChange={handleFile} className="hidden" />
-                                </label>
-                            )}
+                            ))}
                         </div>
                     </div>
+
+                    <footer className="mt-20 pt-10 border-t border-white/5 space-y-4">
+                        <p className="text-gray-600 text-sm italic">{curr.footerEng}</p>
+                        <div className="text-gray-500 text-[10px] uppercase tracking-widest font-bold">
+                            {curr.contact} <a href="mailto:resumelinkcc@gmail.com" className="text-emerald-500 hover:underline">resumelinkcc@gmail.com</a>
+                        </div>
+                    </footer>
                 </div>
             );
 
             const L = resumeData.labels;
-            const atsHint = "Этот показатель отражает, насколько успешно ваше резюме пройдет автоматические фильтры HR-систем. 80%+ — отличный результат!";
+            const shareUrl = savedId ? `${window.location.origin}${window.location.pathname}?id=${savedId}` : window.location.href;
 
             return (
                 <div className="max-w-6xl mx-auto px-4 py-10 space-y-8" onClick={() => setShowTooltip(false)}>
                     <div className="flex justify-between items-center">
                         <h1 className="text-3xl font-black bg-gradient-to-r from-emerald-400 to-blue-500 bg-clip-text text-transparent italic">ResumeLink</h1>
-                        <button onClick={() => setStep('setup')} className="text-gray-600 text-[10px] font-bold uppercase border border-white/5 px-5 py-2 rounded-full">← Назад</button>
+                        <div className="flex gap-4 items-center">
+                            {!savedId && (
+                                <button onClick={handlePublish} className="bg-emerald-600 hover:bg-emerald-500 px-6 py-2 rounded-full font-bold text-[10px] uppercase transition-all shadow-lg">
+                                    {loading ? "..." : curr.publishBtn}
+                                </button>
+                            )}
+                            <button onClick={() => {window.location.search=""; setStep('setup');}} className="text-gray-600 text-[10px] font-bold uppercase border border-white/5 px-5 py-2 rounded-full">{curr.backBtn}</button>
+                        </div>
                     </div>
 
                     <div className="grid-layout">
-                        {/* HEADER */}
                         <div className="card-item col-span-full flex flex-col md:flex-row justify-between items-start md:items-center bg-[#111] border-emerald-500/10 p-10 gap-6" style={{overflow: 'visible'}}>
                             <div className="max-w-2xl">
                                 <h2 className="text-4xl md:text-[56px] name-fix tracking-tighter no-zoom" contentEditable="true" suppressContentEditableWarning={true}>{resumeData.name}</h2>
@@ -234,22 +288,17 @@
                             </div>
                             <div className="text-left md:text-right relative">
                                 <div className="text-emerald-500 text-2xl font-black no-zoom leading-none">{resumeData.atsScore}%</div>
-                                <p className="text-[12px] text-gray-500 uppercase tracking-widest mt-2 font-bold no-zoom flex items-center md:justify-end">ATS Score 
+                                <p className="text-[12px] text-gray-500 uppercase tracking-widest mt-2 font-bold no-zoom flex items-center md:justify-end">{curr.atsScore} 
                                     <span className="cursor-pointer text-emerald-500 text-[18px] ml-2" onClick={(e) => { e.stopPropagation(); setShowTooltip(!showTooltip); }}>(?)</span>
                                 </p>
                                 {showTooltip && (
-    <div className="fixed sm:absolute z-[100] top-[20%] sm:top-full left-1/2 sm:left-auto transform -translate-x-1/2 sm:translate-x-0 sm:right-0 mt-3 w-[90vw] sm:w-64 p-5 bg-zinc-900 border border-emerald-500/40 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] text-[14px] text-gray-200 text-left">
-        <div className="flex justify-between items-start mb-2 sm:hidden">
-            <span className="font-bold text-emerald-500 uppercase text-[10px]">ATS Info</span>
-            <button onClick={() => setShowTooltip(false)} className="text-gray-500">✕</button>
-        </div>
-        {atsHint}
-    </div>
-)}
+                                    <div className="fixed sm:absolute z-[100] top-[20%] sm:top-full left-1/2 sm:left-auto transform -translate-x-1/2 sm:translate-x-0 sm:right-0 mt-3 w-[90vw] sm:w-64 p-5 bg-zinc-900 border border-emerald-500/40 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] text-[14px] text-gray-200 text-left">
+                                        {curr.atsHint}
+                                    </div>
+                                )}
                             </div>
                         </div>
 
-                        {/* SUMMARY */}
                         {resumeData.summary && (
                             <div className="card-item col-span-1 md:col-span-3">
                                 <h3 className="text-blue-400 text-[12px] font-bold uppercase mb-6 no-zoom tracking-widest">{L.summary}</h3>
@@ -257,7 +306,6 @@
                             </div>
                         )}
 
-                        {/* CONTACTS */}
                         {(resumeData.contacts?.p || resumeData.contacts?.e || resumeData.contacts?.l) && (
                             <div className="card-item bg-blue-500/5 border-blue-500/20">
                                 <h3 className="text-blue-400 text-[12px] font-bold uppercase mb-6 no-zoom tracking-widest">{L.contacts}</h3>
@@ -269,7 +317,6 @@
                             </div>
                         )}
 
-                        {/* EXPERIENCE */}
                         {resumeData.experience?.length > 0 && (
                             <div className="card-item col-span-1 md:col-span-3">
                                 <h3 className="text-blue-400 text-[10px] font-bold uppercase mb-8 no-zoom tracking-widest">{L.experience}</h3>
@@ -285,7 +332,6 @@
                             </div>
                         )}
 
-                        {/* EDUCATION */}
                         {resumeData.education?.length > 0 && (
                             <div className="card-item">
                                 <h3 className="text-blue-400 text-[12px] font-bold uppercase mb-8 no-zoom tracking-widest">{L.education}</h3>
@@ -300,7 +346,6 @@
                             </div>
                         )}
 
-                        {/* DYNAMIC SECTIONS */}
                         {resumeData.additional?.map((block, i) => block.title && (
                             <div key={i} className="card-item col-span-1 md:col-span-2">
                                 <h3 className="text-blue-400 text-[12px] font-bold uppercase mb-6 no-zoom tracking-widest">{block.title}</h3>
@@ -308,36 +353,17 @@
                             </div>
                         ))}
 
-                        {/* LANGUAGES */}
-                        {resumeData.languages?.length > 0 && (
-                            <div className="card-item">
-                                <h3 className="text-blue-400 text-[12px] font-bold uppercase mb-6 no-zoom tracking-widest">{L.languages}</h3>
-                                <div className="flex flex-wrap gap-2">
-                                    {resumeData.languages.map((l, i) => <span key={i} className="bg-white/5 px-3 py-1 rounded-lg text-sm zoom-text">{l}</span>)}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* HOBBIES */}
-                        {resumeData.hobbies?.length > 0 && (
-                            <div className="card-item">
-                                <h3 className="text-blue-400 text-[12px] font-bold uppercase mb-6 no-zoom tracking-widest">{L.hobbies}</h3>
-                                <p className="text-gray-400 zoom-text">#{resumeData.hobbies.join(", #")}</p>
-                            </div>
-                        )}
-
-                        {/* LINKS & QR */}
                         <div className="card-item col-span-1 md:col-span-2 flex items-center justify-between bg-gradient-to-br from-[#111] to-[#1a1a1a]">
                             <div className="space-y-4 w-full">
                                 <h3 className="text-blue-400 text-[12px] font-bold uppercase no-zoom tracking-widest">{L.links}</h3>
                                 <div className="flex gap-3">
-                                    <a href={resumeData.socials?.li || "#"} target="_blank" className={`p-3 rounded-2xl transition-all text-2xl ${resumeData.socials?.li ? 'bg-blue-600/20 opacity-100' : 'bg-white/5 opacity-20 pointer-events-none'}`}>🔗</a>
-                                    <a href={resumeData.socials?.gh || "#"} target="_blank" className={`p-3 rounded-2xl transition-all text-2xl ${resumeData.socials?.gh ? 'bg-gray-700/20 opacity-100' : 'bg-white/5 opacity-20 pointer-events-none'}`}>🐙</a>
-                                    <a href={resumeData.socials?.tg || "#"} target="_blank" className={`p-3 rounded-2xl transition-all text-2xl ${resumeData.socials?.tg ? 'bg-sky-500/20 opacity-100' : 'bg-white/5 opacity-20 pointer-events-none'}`}>✈️</a>
+                                    <a href={resumeData.socials?.li || "#"} target="_blank" className="p-3 bg-blue-600/20 rounded-2xl text-2xl">🔗</a>
+                                    <a href={resumeData.socials?.gh || "#"} target="_blank" className="p-3 bg-white/5 rounded-2xl text-2xl">🐙</a>
+                                    <a href={resumeData.socials?.tg || "#"} target="_blank" className="p-3 bg-sky-500/20 rounded-2xl text-2xl">✈️</a>
                                 </div>
                             </div>
                             <div className="bg-white p-2 rounded-2xl shrink-0">
-                                <img src={`https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(window.location.href)}`} alt="QR" />
+                                <img src={`https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(shareUrl)}`} alt="QR" />
                             </div>
                         </div>
                     </div>
