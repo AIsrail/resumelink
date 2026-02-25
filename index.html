@@ -174,51 +174,54 @@
             };
 
             const processAI = async (text) => {
-                try {
-                    const genAI = new GoogleGenerativeAI(apiKey);
-                    const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
-                    
-                    const prompt = `Analyze text and extract into JSON. Target language: Use the same language as the source text. 
-                    Task: Create a professional interactive profile. 
-                    MANDATORY FOR NAME: If target language is English, format the "name" field as "First Name Last Name" only (omit patronymic). If Russian, keep full name.
-                    MANDATORY FOR BLOCKS: If the text contains enough information, generate additional blocks in "additional" array (e.g., "Key Achievements", "Professional Strengths"). If no specific info exists, do NOT create it.
-                    JSON structure: {
-                        "labels": {"summary": "", "experience": "", "education": "", "contacts": "", "languages": "", "hobbies": "", "links": ""}, 
-                        "name": "", "title": "", "contacts": {"p": "", "e": "", "l": ""}, 
-                        "socials": {"li": "", "gh": "", "tg": ""}, "summary": "", "atsScore": 85, 
-                        "experience": [{"c": "", "p": "", "t": "", "d": ""}], 
-                        "education": [{"s": "", "d": "", "y": ""}], 
-                        "languages": [], "hobbies": [], 
-                        "additional": [{"title": "", "content": ""}]
-                    }`;
+    try {
+        const prompt = `Analyze text and extract into JSON. Target language: Use the same language as the source text. 
+        Task: Create a professional interactive profile. 
+        MANDATORY FOR NAME: If target language is English, format the "name" field as "First Name Last Name" only (omit patronymic). If Russian, keep full name.
+        MANDATORY FOR BLOCKS: If the text contains enough information, generate additional blocks in "additional" array. 
+        JSON structure: {
+            "labels": {"summary": "", "experience": "", "education": "", "contacts": "", "languages": "", "hobbies": "", "links": ""}, 
+            "name": "", "title": "", "contacts": {"p": "", "e": "", "l": ""}, 
+            "socials": {"li": "", "gh": "", "tg": ""}, "summary": "", "atsScore": 85, 
+            "experience": [{"c": "", "p": "", "t": "", "d": ""}], 
+            "education": [{"s": "", "d": "", "y": ""}], 
+            "languages": [], "hobbies": [], 
+            "additional": [{"title": "", "content": ""}]
+        } Text: ${text.substring(0, 9000)}`;
 
-                    const result = await model.generateContent(prompt + " Text: " + text.substring(0, 9000));
-                    const response = await result.response;
-                    const rawText = response.text();
-                    
-                    // Безопасный парсинг JSON
-                    const startIdx = rawText.indexOf('{');
-                    const endIdx = rawText.lastIndexOf('}');
-                    if (startIdx === -1 || endIdx === -1) throw new Error("Invalid response");
-                    
-                    const jsonStr = rawText.substring(startIdx, endIdx + 1);
-                    const parsedData = JSON.parse(jsonStr);
-                    
-                    // Инициализация пустых массивов для стабильности JSX
-                    parsedData.experience = parsedData.experience || [];
-                    parsedData.education = parsedData.education || [];
-                    parsedData.additional = parsedData.additional || [];
+        // СТУЧИМСЯ В ВОРКЕР: Теперь шлем запрос на твой сервер, а не в Google
+        const res = await fetch(`${WORKER_URL}/generate`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt })
+        });
 
-                    setResumeData(parsedData);
-                    await autoPublish(parsedData);
-                    setStep('result');
-                } catch (err) { 
-                    console.error(err);
-                    alert(isEn ? "Analysis error. Try again." : "Ошибка анализа. Попробуйте снова."); 
-                }
-                setLoading(false);
-            };
+        const data = await res.json();
+        
+        // Получаем ответ, который Воркер прислал от ИИ
+        const rawText = data.candidates[0].content.parts[0].text;
+        
+        const startIdx = rawText.indexOf('{');
+        const endIdx = rawText.lastIndexOf('}');
+        if (startIdx === -1 || endIdx === -1) throw new Error("Invalid response");
+        
+        const jsonStr = rawText.substring(startIdx, endIdx + 1);
+        const parsedData = JSON.parse(jsonStr);
+        
+        parsedData.experience = parsedData.experience || [];
+        parsedData.education = parsedData.education || [];
+        parsedData.additional = parsedData.additional || [];
 
+        setResumeData(parsedData);
+        await autoPublish(parsedData); // Сохраняем в базу данных KV через тот же Воркер
+        setStep('result');
+    } catch (err) { 
+        console.error(err);
+        alert(isEn ? "Analysis failed. Key may be blocked or hidden in Worker." : "Ошибка анализа. Проверьте настройки Воркера."); 
+    }
+    setLoading(false);
+};
+  
             const handleFile = async (e) => {
                 const file = e.target.files[0];
                 if (!file) return;
