@@ -34,10 +34,6 @@
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
-    <script type="importmap">
-        { "imports": { "@google/generative-ai": "https://esm.run/@google/generative-ai" } }
-    </script>
-
     <style>
         body { background: #0a0a0a; font-family: 'Outfit', sans-serif; color: white; min-height: 100vh; margin: 0; overflow-x: hidden; }
         .grid-layout { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; grid-auto-rows: min-content; }
@@ -110,7 +106,7 @@
                     contact: "For cooperation:",
                     footerEng: "Empowering professionals with AI-driven visual storytelling.",
                     steps: [
-                        { t: "UPLOAD", d: "Upload your file in any format." },
+                        { t: "UPLOAD", d: "Upload your file in PDF or DOC format." },
                         { t: "AI MAGIC", d: "AI structures data and calculates ATS." },
                         { t: "SHARE", d: "Get your link and personal QR code." }
                     ],
