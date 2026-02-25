@@ -85,6 +85,7 @@
                     const reader = new FileReader();
                     reader.onload = async () => {
                         const typedarray = new Uint8Array(reader.result);
+                        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
                         const pdf = await pdfjsLib.getDocument(typedarray).promise;
                         let fullText = "";
                         for (let i = 1; i <= Math.min(pdf.numPages, 5); i++) {
@@ -103,15 +104,19 @@
 
             const processAI = async (text) => {
                 try {
-                    const prompt = `Analyze text and extract into JSON. Target language: Same as source. 
+                    // Используем Воркер как прокси, чтобы не светить ключ
+                    const prompt = `Analyze text and extract into JSON. Target language: Use the same language as the source text. 
+                    Task: Create a professional interactive profile. 
+                    MANDATORY FOR NAME: If target language is English, format the "name" field as "First Name Last Name" only (omit patronymic). If Russian, keep full name.
+                    MANDATORY FOR BLOCKS: If the text contains enough information, generate additional blocks in "additional" array (e.g., "Key Achievements", "Professional Strengths"). If no specific info exists, do NOT create it.
                     JSON structure: {
-                        "labels": {"summary": "Profile", "experience": "Experience", "education": "Education", "contacts": "Contacts", "languages": "Languages", "hobbies": "Hobbies", "links": "Links"}, 
+                        "labels": {"summary": "", "experience": "", "education": "", "contacts": "", "languages": "", "hobbies": "", "links": ""}, 
                         "name": "", "title": "", "contacts": {"p": "", "e": "", "l": ""}, 
                         "socials": {"li": "", "gh": "", "tg": ""}, "summary": "", "atsScore": 85, 
                         "experience": [{"c": "", "p": "", "t": "", "d": ""}], 
                         "education": [{"s": "", "d": "", "y": ""}], 
                         "languages": [], "hobbies": [], 
-                        "additional": []
+                        "additional": [{"title": "", "content": ""}]
                     } Text: ${text.substring(0, 9000)}`;
 
                     const res = await fetch(`${WORKER_URL}/generate`, {
@@ -127,7 +132,8 @@
                     const rawText = data.candidates[0].content.parts[0].text;
                     const startIdx = rawText.indexOf('{');
                     const endIdx = rawText.lastIndexOf('}');
-                    const parsedData = JSON.parse(rawText.substring(startIdx, endIdx + 1));
+                    const jsonStr = rawText.substring(startIdx, endIdx + 1);
+                    const parsedData = JSON.parse(jsonStr);
                     
                     parsedData.experience = parsedData.experience || [];
                     parsedData.education = parsedData.education || [];
@@ -138,7 +144,7 @@
                     setStep('result');
                 } catch (err) { 
                     console.error(err);
-                    alert("Ошибка: ИИ не ответил. Проверьте настройки ключа (None) в Google Cloud."); 
+                    alert(isEn ? "Analysis error. Check Google Cloud settings (None)." : "Ошибка анализа. Проверьте настройки ключа (None) в Google Cloud."); 
                 }
                 setLoading(false);
             };
