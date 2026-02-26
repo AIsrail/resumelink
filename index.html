@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ResumeLink — Создать интерактивное резюме онлайн с ИИ</title>
-    <meta name="description" content="Бесплатный конструктор интерактивных резюме. Преврати свой PDF или Word в стильный профиль с QR-кодом и проверкой ATS-score за 10 секунд с помощью ИИ.">
-    <meta name="keywords" content="создать резюме, интерактивное резюме, онлайн конструктор резюме, ATS score проверить, резюме с qr кодом, нейросеть для резюме">
+    <title>ResumeLink — AI Resume Builder | AI конструктор резюме</title>
+    <meta name="description" content="AI-powered interactive resume builder. Умный AI конструктор резюме: преврати файл в стильный профиль с QR-кодом за 10 секунд.">
+    <meta name="keywords" content="AI resume builder, AI конструктор резюме, интерактивное резюме, ATS score, digital CV">
 
-    <meta property="og:title" content="ResumeLink — Твой профиль нового поколения">
-    <meta property="og:description" content="Умный конструктор резюме: ИИ анализ, стильный дизайн и персональный QR-код в один клик.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://resumelink.cc">
+    <meta property="og:title" content="ResumeLink — AI-Powered Interactive Profiles">
+    <meta property="og:description" content="Transform your resume into a stylish digital profile. AI конструктор резюме нового поколения.">
     <meta property="og:image" content="https://resumelink.cc/favicon/apple-touch-icon.png">
+    <meta property="og:url" content="https://resumelink.cc">
     
     <script type="application/ld+json">
     {
@@ -297,8 +296,9 @@
                     <footer className="mt-20 pt-10 border-t border-white/5 space-y-4">
                         <p className="text-gray-600 text-sm italic">{curr.footerEng}</p>
                         <div className="text-gray-500 text-[10px] uppercase tracking-widest font-bold">
-                            {curr.contact} <a href="mailto:resumelinkcc@gmail.com" className="text-emerald-500">resumelinkcc@gmail.com</a>
-                        </div>
+    <a href="/about.html" className="hover:text-emerald-500 transition-colors mr-4 underline underline-offset-4">{isEn ? "About" : "О сервисе"}</a>
+    {curr.contact} <a href="mailto:sarytopdev@gmail.com" className="text-emerald-500 ml-1">sarytopdev@gmail.com</a>
+			</div>
                     </footer>
                 </div>
             );
