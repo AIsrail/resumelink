@@ -411,7 +411,7 @@
         ReactDOM.createRoot(document.getElementById('root')).render(<App />);
     </script>
 
-<button id="share-button" class="share-btn">
+<button id="share-button" class="share-btn" style="display: none;">
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
     <polyline points="16 6 12 2 8 6"></polyline>
@@ -449,12 +449,20 @@
 document.addEventListener('DOMContentLoaded', () => {
     const shareBtn = document.getElementById('share-button');
     
-    // Проверяем, есть ли в URL параметр 'id'
+    // 1. Проверяем URL на наличие id
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('id')) {
-        shareBtn.style.display = 'flex'; // Показываем кнопку, если это страница результата
+    const hasId = urlParams.has('id');
+
+    console.log("Is ID present:", hasId); // Это для проверки в консоли браузера
+
+    if (hasId) {
+        // Показываем кнопку принудительно
+        shareBtn.setAttribute('style', 'display: flex !important'); 
+    } else {
+        shareBtn.style.display = 'none';
     }
 
+    // 2. Логика самой кнопки
     shareBtn.addEventListener('click', async () => {
         const shareData = {
             title: 'ResumeLink | Interactive Profile',
@@ -468,12 +476,11 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 await navigator.clipboard.writeText(window.location.href);
                 const btnText = shareBtn.querySelector('span');
-                const originalText = btnText.innerText;
                 btnText.innerText = 'Link Copied!';
-                setTimeout(() => { btnText.innerText = originalText; }, 2000);
+                setTimeout(() => { btnText.innerText = 'Share Profile'; }, 2000);
             }
         } catch (err) {
-            console.log('Error sharing:', err);
+            console.error('Share error:', err);
         }
     });
 });
