@@ -564,6 +564,7 @@ html, body {
 }
 
 #rl-print-dom {
+    padding-bottom: 16pt;    
     font-family: 'Outfit', sans-serif;
     color: #0f172a;
     width: 210mm;
@@ -783,15 +784,26 @@ html, body {
 }
 
 .rl-watermark {
-    margin-top: 8pt;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
     font-size: 5.5pt;
     color: #94a3b8;
     text-align: center;
+
     border-top: 0.35pt solid #cbd5e1;
-    padding-top: 3pt;
+
+    padding: 2.5pt 0 2pt 0;
+
     background: #ffffff !important;
+    background-color: #ffffff !important;
+
     font-family: 'Outfit', sans-serif;
     letter-spacing: 0.03em;
+
+    z-index: 10;
 }
 `;
 
