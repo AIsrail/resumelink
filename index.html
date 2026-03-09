@@ -472,11 +472,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const hasId = urlParams.has('id');
 
-    // Показываем кнопки управления, только если резюме создано (есть ID)
-    if (hasId) {
-        shareBtn.style.display = 'flex';
-        downloadBtn.style.display = 'flex';
-    }
+    // Показываем кнопки управления только ПОСЛЕ загрузки данных (через __RL_SET_RESUME_DATA__)
+    // hasId только определяет что резюме будет загружено — но данные ещё не пришли
+    // Поэтому кнопки показываются из React через window.__RL_SHOW_BUTTONS__
 
     // Логика кнопки Share
     shareBtn.addEventListener('click', async () => {
@@ -507,7 +505,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function printResume() {
     // Получаем данные из React-состояния через глобальную переменную
     const data = window.__RL_RESUME_DATA__;
-    if (!data) { window.print(); return; }
+    if (!data) { alert('Resume data is loading, please wait a moment and try again.'); return; }
 
     const e = (s) => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     const L = data.labels || {};
@@ -574,34 +572,37 @@ function printResume() {
         #rl-print-dom { font-family: 'Outfit', sans-serif; color: #0f172a; width: 210mm; background: #fff; }
 
         /* ── HEADER ── */
-        .rl-header { display: flex; justify-content: space-between; align-items: center; padding: 18pt 22pt 14pt 18pt; border-bottom: 2pt solid #0f172a; background: #fff; }
-        .rl-name-first { font-size: 26pt; font-weight: 300; line-height: 1.1; display: block; }
-        .rl-name-last  { font-size: 26pt; font-weight: 800; line-height: 1.1; display: block; }
+        /* Линия снизу — тёмно-серая вместо почти чёрной */
+        .rl-header { display: flex; justify-content: space-between; align-items: center; padding: 18pt 22pt 14pt 18pt; border-bottom: 2pt solid #475569; background: #fff; }
+        .rl-name-first { font-size: 26pt; font-weight: 300; line-height: 1.1; display: block; color: #1e293b; }
+        /* Фамилия — в акцентном синем, как в Resumke_example */
+        .rl-name-last  { font-size: 26pt; font-weight: 800; line-height: 1.1; display: block; color: #3b82f6; }
         .rl-job-title  { font-size: 7pt; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #64748b; margin-top: 5pt; }
         .rl-photo { width: 64pt; height: 64pt; border-radius: 50%; background: #cbd5e1; flex-shrink: 0; overflow: hidden; }
         .rl-photo img { width: 100%; height: 100%; object-fit: cover; }
 
         /* ── CONTACT BAR ── */
-        .rl-contacts { display: flex; align-items: center; justify-content: center; gap: 0; background: #1e293b; padding: 7pt 0; width: 100%; }
+        /* Чуть менее чёрный фон — #1e293b → #2d3f55, мягче */
+        .rl-contacts { display: flex; align-items: center; justify-content: center; gap: 0; background: #2d3f55; padding: 7pt 0; width: 100%; }
         .rl-contacts span { color: #e2e8f0; font-size: 6.5pt; white-space: nowrap; padding: 0 10pt; }
-        .rl-sep { color: #475569 !important; padding: 0 !important; }
+        .rl-sep { color: #64748b !important; padding: 0 !important; }
 
         /* ── TWO-COLUMN BODY (TABLE TRICK) ── */
-        /* Оба div — display:table-cell внутри display:table.
-           Это единственный CSS-способ растянуть sidebar-фон на все страницы. */
         .rl-body { display: table; width: 210mm; min-height: 240mm; table-layout: fixed; border-collapse: collapse; }
-        .rl-sidebar { display: table-cell; width: 62mm; background: #f1f5f9; vertical-align: top; padding: 16pt 14pt; border-right: 0.5pt solid #cbd5e1; }
+        /* Sidebar — лёгкий голубоватый оттенок вместо нейтрального серого */
+        .rl-sidebar { display: table-cell; width: 62mm; background: #e8f0fe; vertical-align: top; padding: 16pt 14pt; border-right: 1pt solid #bfcfe8; }
         .rl-main    { display: table-cell; width: 148mm; background: #fff; vertical-align: top; padding: 14pt 18pt; }
 
         /* ── SECTION TITLES ── */
+        /* Линия под заголовком — акцентный синий вместо чёрной */
         .rl-section { margin-bottom: 14pt; break-inside: avoid; page-break-inside: avoid; }
-        .rl-section-title { font-size: 6.5pt; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: #0f172a; border-bottom: 2pt solid #0f172a; padding-bottom: 4pt; margin-bottom: 9pt; }
+        .rl-section-title { font-size: 6.5pt; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: #1e293b; border-bottom: 2pt solid #3b82f6; padding-bottom: 4pt; margin-bottom: 9pt; }
 
         /* ── EDUCATION ── */
         .rl-edu-item { margin-bottom: 10pt; break-inside: avoid; page-break-inside: avoid; }
-        .rl-edu-degree { font-size: 7.5pt; font-weight: 700; color: #0f172a; }
-        .rl-edu-school { font-size: 6.5pt; color: #64748b; margin-top: 1pt; }
-        .rl-edu-year   { font-size: 6pt;   color: #94a3b8; margin-top: 1pt; }
+        .rl-edu-degree { font-size: 7.5pt; font-weight: 700; color: #1e293b; }
+        .rl-edu-school { font-size: 6.5pt; color: #475569; margin-top: 1pt; }
+        .rl-edu-year   { font-size: 6pt;   color: #64748b; margin-top: 1pt; }
 
         /* ── LANGUAGES ── */
         .rl-lang-item { font-size: 7pt; color: #334155; padding: 2pt 0; }
@@ -612,18 +613,20 @@ function printResume() {
         /* ── EXPERIENCE ── */
         .rl-exp-entry { break-inside: avoid; page-break-inside: avoid; margin-bottom: 2pt; }
         .rl-exp-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1pt; }
-        .rl-exp-title   { font-size: 8.5pt; font-weight: 700; color: #0f172a; }
+        .rl-exp-title   { font-size: 8.5pt; font-weight: 700; color: #1e293b; }
         .rl-exp-period  { font-size: 7pt; font-weight: 600; color: #3b82f6; white-space: nowrap; margin-left: 8pt; }
         .rl-exp-company { font-size: 7pt; color: #64748b; margin-bottom: 4pt; }
         .rl-exp-desc    { font-size: 7pt; color: #475569; line-height: 1.55; }
-        .rl-exp-divider { border-top: 0.5pt solid #e2e8f0; margin: 8pt 0; }
+        /* Разделитель между опытом — синеватый */
+        .rl-exp-divider { border-top: 0.5pt solid #bfcfe8; margin: 8pt 0; }
         .rl-exp-entry:last-child .rl-exp-divider { display: none; }
 
         /* ── ADDITIONAL ── */
         .rl-additional-text { font-size: 7.5pt; color: #334155; line-height: 1.55; }
 
         /* ── WATERMARK ── */
-        .rl-watermark { position: fixed; bottom: 0; left: 0; right: 0; font-size: 6pt; color: #94a3b8; text-align: center; border-top: 0.5pt solid #e2e8f0; padding: 3pt 0; background: #fff; font-family: 'Outfit', sans-serif; }
+        /* Короткий текст, светло-серый, тонкая линия сверху */
+        .rl-watermark { position: fixed; bottom: 0; left: 0; right: 0; font-size: 5.5pt; color: #94a3b8; text-align: center; border-top: 0.5pt solid #e2e8f0; padding: 3pt 0; background: #fff; font-family: 'Outfit', sans-serif; letter-spacing: 0.05em; }
       </style>
 
       <!-- ШАПКА -->
@@ -674,7 +677,7 @@ function printResume() {
       </div>
 
       <!-- ВАТЕРМАРКА -->
-      <div class="rl-watermark">Created via ResumeLink.cc — Interactive mobile version available online</div>
+      <div class="rl-watermark">Made with ResumeLink.cc · resumelink.cc</div>
 
     </div>`;
 
@@ -702,6 +705,11 @@ function printResume() {
 // React вызывает window.__RL_SET_RESUME_DATA__(data) при каждом обновлении данных
 window.__RL_SET_RESUME_DATA__ = function(data) {
     window.__RL_RESUME_DATA__ = data;
+    // Показываем кнопки только когда данные реально загружены
+    const shareBtn = document.getElementById('share-button');
+    const downloadBtn = document.getElementById('download-button');
+    if (shareBtn) shareBtn.style.display = 'flex';
+    if (downloadBtn) downloadBtn.style.display = 'flex';
 };
 </script>
 	
