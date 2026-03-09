@@ -147,6 +147,7 @@
                     setLoading(true);
                     fetch(`${WORKER_URL}/${id}`).then(res => res.json()).then(data => {
                         setResumeData(data);
+                        if (window.__RL_SET_RESUME_DATA__) window.__RL_SET_RESUME_DATA__(data);
                         setSavedId(id);
                         setStep('result');
                         setLoading(false);
@@ -223,6 +224,7 @@
                     parsedData.additional = parsedData.additional || [];
 
                     setResumeData(parsedData);
+                    if (window.__RL_SET_RESUME_DATA__) window.__RL_SET_RESUME_DATA__(parsedData);
                     await autoPublish(parsedData);
                     setStep('result');
                 } catch (err) { 
@@ -423,7 +425,7 @@
       <span>Share Profile</span>
     </button>
 
-    <button id="download-button" onclick="window.print()" class="download-btn">
+    <button id="download-button" onclick="printResume()" class="download-btn">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
       <span>Download PDF</span>
     </button>
@@ -441,134 +443,26 @@
 </div>
 
 <style>
-  /* 1. СТИЛИ ДЛЯ ВЕБ-САЙТА (Кнопки управления) */
+  /* СТИЛИ КНОПОК НА САЙТЕ */
   .share-btn, .download-btn {
     position: fixed; right: 20px; z-index: 1000; align-items: center; gap: 8px;
     color: white; padding: 12px 24px; border-radius: 50px; border: none;
-    font-weight: 600; cursor: pointer; transition: transform 0.2s;
+    font-weight: 600; cursor: pointer; transition: transform 0.2s, background 0.2s;
     font-family: 'Outfit', sans-serif; display: none;
   }
-  .share-btn { bottom: 20px; background: #10b981; }
-  .download-btn { bottom: 80px; background: #3b82f6; }
+  .share-btn { bottom: 20px; background: #10b981; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); }
+  .download-btn { bottom: 80px; background: #3b82f6; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
+  .share-btn:active, .download-btn:active { transform: scale(0.95); }
+  
   .rl-site-footer { margin-top: 60px; text-align: center; padding: 40px 20px; font-size: 14px; color: #666; border-top: 1px solid #1a1a1a; }
 
-  /* 2. МАГИЯ PDF (SIDEBAR LAYOUT) */
+  /* ЕДИНЫЙ ИДЕАЛЬНЫЙ БЛОК ДЛЯ ПЕЧАТИ */
   @media print {
-    /* Настройка листа */
-    @page { 
-      margin: 0; 
-      size: A4; 
-    }
-
-    /* Полная очистка PDF от интерфейса сайта */
-    .no-print, .share-btn, .download-btn, .rl-site-footer, 
-    button, header, [onclick*="window.location"], 
-    .text-gray-600, h1.bg-gradient-to-r { 
-      display: none !important; 
-    }
-
-    body {
-      background: white !important;
-      color: #1a1a1a !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
-    }
-
-    /* РИСУЕМ ФОН САЙДБАРА НА КАЖДОЙ СТРАНИЦЕ */
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0;
-      width: 32%; /* Пропорция как в примере */
-      height: 100%;
-      background: #f1f5f9 !important; /* Цвет из примера */
-      z-index: -1;
-      border-right: 0.5pt solid #e2e8f0;
-    }
-
-    /* Имитируем двухколоночную таблицу */
-    .grid-layout {
-      display: table !important;
-      width: 100% !important;
-      border-spacing: 0 !important;
-    }
-
-    /* Настройка всех блоков резюме */
-    .card-item {
-      display: block !important;
-      background: transparent !important;
-      border: none !important;
-      border-radius: 0 !important;
-      margin: 0 !important;
-      box-shadow: none !important;
-      page-break-inside: avoid !important;
-      break-inside: avoid !important;
-    }
-
-    /* РАСПРЕДЕЛЕНИЕ: ЛЕВАЯ КОЛОНКА (SIDEBAR) */
-    .card-item:nth-child(4), .card-item:nth-child(6), 
-    .card-item:nth-child(8), .card-item:nth-child(9) {
-      display: table-cell !important;
-      width: 32% !important;
-      padding: 25px 20px !important;
-      float: left !important;
-      clear: left !important;
-    }
-
-    /* РАСПРЕДЕЛЕНИЕ: ПРАВАЯ КОЛОНКА (CONTENT) */
-    .card-item:nth-child(1), .card-item:nth-child(3), 
-    .card-item:nth-child(5), .card-item:nth-child(7) {
-      display: table-cell !important;
-      width: 68% !important;
-      padding: 30px 40px !important;
-      float: right !important;
-      clear: right !important;
-    }
-
-    /* ТИПОГРАФИКА (Стиль как в Resumke Example) */
-    h2 { 
-      font-size: 28pt !important; 
-      font-weight: 800 !important; 
-      color: #0f172a !important; 
-      margin-top: 0 !important;
-      line-height: 1.1 !important;
-    }
-    
-    h3 { 
-      font-size: 10pt !important; 
-      font-weight: 700 !important; 
-      color: #3b82f6 !important; 
-      text-transform: uppercase; 
-      border-bottom: 0.8pt solid #cbd5e1; 
-      padding-bottom: 6px; 
-      margin-bottom: 15px !important;
-      margin-top: 20px !important;
-    }
-
-    /* Списки и описания опыта */
-    .text-gray-200, .text-gray-300, .text-gray-400, .text-gray-500 {
-      color: #334155 !important;
-      font-size: 10pt !important;
-    }
-
-    .border-l-2 {
-      border-left: 2pt solid #3b82f6 !important;
-      padding-left: 15px !important;
-    }
-
-    /* ВАТЕРМАРКА (Чистая, в углу) */
-    .pdf-watermark {
-      display: block !important;
-      position: fixed;
-      bottom: 8mm; right: 10mm;
-      font-size: 8pt;
-      color: #94a3b8 !important;
-      background: none !important;
-      border: none !important;
-    }
+    /* Скрываем весь сайт — показываем только #rl-print-dom */
+    body > *:not(#rl-print-dom) { display: none !important; }
+    #rl-print-dom { display: block !important; }
   }
+	
 </style>
 
 <script>
@@ -603,6 +497,212 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) { console.error('Error:', err); }
     });
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// printResume() — инжектирует чистый print-DOM из данных resumeData,
+// вызывает window.print(), затем удаляет DOM.
+// Это единственный надёжный способ получить стабильный многостраничный PDF
+// из плоской React-структуры без изменения основного кода.
+// ─────────────────────────────────────────────────────────────────────────────
+function printResume() {
+    // Получаем данные из React-состояния через глобальную переменную
+    const data = window.__RL_RESUME_DATA__;
+    if (!data) { window.print(); return; }
+
+    const e = (s) => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const L = data.labels || {};
+
+    // ── ШАПКА ────────────────────────────────────────────────────
+    const nameParts = (data.name || '').trim().split(' ');
+    const firstName = nameParts.slice(0, -1).join(' ') || nameParts[0] || '';
+    const lastName  = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';
+
+    // ── КОНТАКТЫ (без эмодзи) ────────────────────────────────────
+    const contacts = [];
+    if (data.contacts?.p) contacts.push('<span>' + e(data.contacts.p) + '</span>');
+    if (data.contacts?.e) contacts.push('<span>' + e(data.contacts.e) + '</span>');
+    if (data.contacts?.l) contacts.push('<span>' + e(data.contacts.l) + '</span>');
+    const contactBar = contacts.join('<span class="rl-sep">|</span>');
+
+    // ── EDUCATION (sidebar) ───────────────────────────────────────
+    const eduHtml = (data.education || []).map(ed => `
+        <div class="rl-edu-item">
+            <div class="rl-edu-degree">${e(ed.d)}</div>
+            <div class="rl-edu-school">${e(ed.s)}</div>
+            <div class="rl-edu-year">${e(ed.y)}</div>
+        </div>`).join('');
+
+    // ── LANGUAGES (sidebar) ───────────────────────────────────────
+    const langsHtml = (data.languages || []).map(l =>
+        `<div class="rl-lang-item">${e(l)}</div>`).join('');
+
+    // ── HOBBIES (sidebar) ─────────────────────────────────────────
+    const hobbiesHtml = (data.hobbies || []).length > 0
+        ? `<div class="rl-section">
+               <div class="rl-section-title">${e(L.hobbies || 'Hobbies')}</div>
+               <div class="rl-lang-item">${e((data.hobbies || []).join(', '))}</div>
+           </div>` : '';
+
+    // ── EXPERIENCE (main) ─────────────────────────────────────────
+    const expHtml = (data.experience || []).map(ex => `
+        <div class="rl-exp-entry">
+            <div class="rl-exp-header">
+                <span class="rl-exp-title">${e(ex.p)}</span>
+                <span class="rl-exp-period">${e(ex.t)}</span>
+            </div>
+            <div class="rl-exp-company">${e(ex.c)}</div>
+            <div class="rl-exp-desc">${e(ex.d)}</div>
+            <div class="rl-exp-divider"></div>
+        </div>`).join('');
+
+    // ── ADDITIONAL BLOCKS (main) ──────────────────────────────────
+    const additionalHtml = (data.additional || [])
+        .filter(b => b && b.title)
+        .map(b => `
+        <div class="rl-section" style="margin-top:10pt">
+            <div class="rl-section-title">${e(b.title)}</div>
+            <div class="rl-additional-text">${e(b.content)}</div>
+        </div>`).join('');
+
+    // ── СБОРКА HTML ───────────────────────────────────────────────
+    const html = `
+    <div id="rl-print-dom">
+      <style>
+        /* ── PAGE ── */
+        @page { size: A4 portrait; margin: 0; }
+        * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-sizing: border-box; margin: 0; padding: 0; }
+        #rl-print-dom { font-family: 'Outfit', sans-serif; color: #0f172a; width: 210mm; background: #fff; }
+
+        /* ── HEADER ── */
+        .rl-header { display: flex; justify-content: space-between; align-items: center; padding: 18pt 22pt 14pt 18pt; border-bottom: 2pt solid #0f172a; background: #fff; }
+        .rl-name-first { font-size: 26pt; font-weight: 300; line-height: 1.1; display: block; }
+        .rl-name-last  { font-size: 26pt; font-weight: 800; line-height: 1.1; display: block; }
+        .rl-job-title  { font-size: 7pt; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #64748b; margin-top: 5pt; }
+        .rl-photo { width: 64pt; height: 64pt; border-radius: 50%; background: #cbd5e1; flex-shrink: 0; overflow: hidden; }
+        .rl-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* ── CONTACT BAR ── */
+        .rl-contacts { display: flex; align-items: center; justify-content: center; gap: 0; background: #1e293b; padding: 7pt 0; width: 100%; }
+        .rl-contacts span { color: #e2e8f0; font-size: 6.5pt; white-space: nowrap; padding: 0 10pt; }
+        .rl-sep { color: #475569 !important; padding: 0 !important; }
+
+        /* ── TWO-COLUMN BODY (TABLE TRICK) ── */
+        /* Оба div — display:table-cell внутри display:table.
+           Это единственный CSS-способ растянуть sidebar-фон на все страницы. */
+        .rl-body { display: table; width: 210mm; min-height: 240mm; table-layout: fixed; border-collapse: collapse; }
+        .rl-sidebar { display: table-cell; width: 62mm; background: #f1f5f9; vertical-align: top; padding: 16pt 14pt; border-right: 0.5pt solid #cbd5e1; }
+        .rl-main    { display: table-cell; width: 148mm; background: #fff; vertical-align: top; padding: 14pt 18pt; }
+
+        /* ── SECTION TITLES ── */
+        .rl-section { margin-bottom: 14pt; break-inside: avoid; page-break-inside: avoid; }
+        .rl-section-title { font-size: 6.5pt; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: #0f172a; border-bottom: 2pt solid #0f172a; padding-bottom: 4pt; margin-bottom: 9pt; }
+
+        /* ── EDUCATION ── */
+        .rl-edu-item { margin-bottom: 10pt; break-inside: avoid; page-break-inside: avoid; }
+        .rl-edu-degree { font-size: 7.5pt; font-weight: 700; color: #0f172a; }
+        .rl-edu-school { font-size: 6.5pt; color: #64748b; margin-top: 1pt; }
+        .rl-edu-year   { font-size: 6pt;   color: #94a3b8; margin-top: 1pt; }
+
+        /* ── LANGUAGES ── */
+        .rl-lang-item { font-size: 7pt; color: #334155; padding: 2pt 0; }
+
+        /* ── SUMMARY ── */
+        .rl-summary { font-size: 8pt; font-style: italic; line-height: 1.65; color: #334155; margin-bottom: 14pt; }
+
+        /* ── EXPERIENCE ── */
+        .rl-exp-entry { break-inside: avoid; page-break-inside: avoid; margin-bottom: 2pt; }
+        .rl-exp-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1pt; }
+        .rl-exp-title   { font-size: 8.5pt; font-weight: 700; color: #0f172a; }
+        .rl-exp-period  { font-size: 7pt; font-weight: 600; color: #3b82f6; white-space: nowrap; margin-left: 8pt; }
+        .rl-exp-company { font-size: 7pt; color: #64748b; margin-bottom: 4pt; }
+        .rl-exp-desc    { font-size: 7pt; color: #475569; line-height: 1.55; }
+        .rl-exp-divider { border-top: 0.5pt solid #e2e8f0; margin: 8pt 0; }
+        .rl-exp-entry:last-child .rl-exp-divider { display: none; }
+
+        /* ── ADDITIONAL ── */
+        .rl-additional-text { font-size: 7.5pt; color: #334155; line-height: 1.55; }
+
+        /* ── WATERMARK ── */
+        .rl-watermark { position: fixed; bottom: 0; left: 0; right: 0; font-size: 6pt; color: #94a3b8; text-align: center; border-top: 0.5pt solid #e2e8f0; padding: 3pt 0; background: #fff; font-family: 'Outfit', sans-serif; }
+      </style>
+
+      <!-- ШАПКА -->
+      <div class="rl-header">
+        <div>
+          <span class="rl-name-first">${e(firstName)}</span>
+          <span class="rl-name-last">${e(lastName)}</span>
+          <div class="rl-job-title">${e(data.title)}</div>
+        </div>
+        <div class="rl-photo">
+          ${data.photoUrl ? `<img src="${e(data.photoUrl)}" alt="">` : ''}
+        </div>
+      </div>
+
+      <!-- КОНТАКТ-БАР -->
+      <div class="rl-contacts">${contactBar}</div>
+
+      <!-- ДВУХКОЛОНОЧНОЕ ТЕЛО -->
+      <div class="rl-body">
+
+        <!-- SIDEBAR -->
+        <div class="rl-sidebar">
+          ${eduHtml ? `<div class="rl-section">
+            <div class="rl-section-title">${e(L.education || 'Education')}</div>
+            ${eduHtml}
+          </div>` : ''}
+
+          ${langsHtml ? `<div class="rl-section">
+            <div class="rl-section-title">${e(L.languages || 'Languages')}</div>
+            ${langsHtml}
+          </div>` : ''}
+
+          ${hobbiesHtml}
+        </div>
+
+        <!-- MAIN -->
+        <div class="rl-main">
+          ${data.summary ? `<div class="rl-summary">${e(data.summary)}</div>` : ''}
+
+          ${expHtml ? `<div class="rl-section">
+            <div class="rl-section-title">${e(L.experience || 'Experience')}</div>
+            ${expHtml}
+          </div>` : ''}
+
+          ${additionalHtml}
+        </div>
+
+      </div>
+
+      <!-- ВАТЕРМАРКА -->
+      <div class="rl-watermark">Created via ResumeLink.cc — Interactive mobile version available online</div>
+
+    </div>`;
+
+    // Инжектируем, печатаем, удаляем
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = html;
+    const printDom = wrapper.firstElementChild;
+    document.body.appendChild(printDom);
+
+    // Даём браузеру отрендерить DOM перед печатью
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            window.print();
+            // Удаляем после печати (с небольшой задержкой для Safari)
+            setTimeout(() => {
+                if (printDom && printDom.parentNode) {
+                    printDom.parentNode.removeChild(printDom);
+                }
+            }, 1000);
+        });
+    });
+}
+
+// Экспортируем resumeData из React в window для printResume()
+// React вызывает window.__RL_SET_RESUME_DATA__(data) при каждом обновлении данных
+window.__RL_SET_RESUME_DATA__ = function(data) {
+    window.__RL_RESUME_DATA__ = data;
+};
 </script>
 	
 </body>
