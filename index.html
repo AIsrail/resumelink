@@ -567,14 +567,16 @@ function printResume() {
     }
 
     #rl-print-dom {
-        font-family: 'Outfit', sans-serif;
-        color: #0f172a;
-        width: 210mm;
-        background: #ffffff !important;
-        background-color: #ffffff !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-        color-adjust: exact !important;
+    	font-family: 'Outfit', sans-serif;
+	color: #0f172a;
+    	width: 210mm;
+    	min-height: 297mm;
+    	padding-bottom: 16pt;
+    	background: #ffffff !important;
+    	background-color: #ffffff !important;
+    	-webkit-print-color-adjust: exact !important;
+    	print-color-adjust: exact !important;
+    	color-adjust: exact !important;
     }
 
     .rl-header {
@@ -644,12 +646,13 @@ function printResume() {
     }
 
     .rl-body {
-        display: table;
-        width: 210mm;
-        table-layout: fixed;
-        border-collapse: collapse;
-        background: #ffffff !important;
-        background-color: #ffffff !important;
+    	display: table;
+    	width: 210mm;
+    	table-layout: fixed;
+    	border-collapse: collapse;
+    	min-height: 235mm;
+    	background: #ffffff !important;
+    	background-color: #ffffff !important;
     }
 
     .rl-sidebar {
@@ -798,19 +801,19 @@ function printResume() {
     }
 
     .rl-watermark {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        font-size: 5.5pt;
-        color: #94a3b8;
-        text-align: center;
-        border-top: 0.5pt solid #e2e8f0;
-        padding: 3pt 0;
-        background: #ffffff !important;
-        background-color: #ffffff !important;
-        font-family: 'Outfit', sans-serif;
-        letter-spacing: 0.03em;
+    	position: fixed;
+    	bottom: 0;
+    	left: 0;
+    	right: 0;
+    	font-size: 5.5pt;
+    	color: #94a3b8;
+    	text-align: center;
+    	border-top: 0.35pt solid #cbd5e1;
+    	padding: 2.5pt 0 2pt 0;
+    	background: #ffffff !important;
+    	background-color: #ffffff !important;
+    	font-family: 'Outfit', sans-serif;
+    	letter-spacing: 0.03em;
     }
 `;
 
