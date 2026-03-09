@@ -81,6 +81,40 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @media (max-width: 1024px) { .grid-layout { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 640px) { .grid-layout { grid-template-columns: 1fr; } }
+
+		/* В обычном браузере этот текст нам не нужен, поэтому прячем его */
+.pdf-watermark {
+    display: none;
+}
+
+/* А вот эти правила сработают ТОЛЬКО в момент сохранения в PDF */
+@media print {
+    /* 1. Прячем кнопку скачивания, чтобы она не печаталась сама на себе */
+    .no-print {
+        display: none !important;
+    }
+
+    /* 2. Заставляем PDF быть цветным и красивым */
+    body {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* 3. Показываем нашу ватермарку в самом низу PDF-страницы */
+    /* (Если мы добавим класс premium-user, это правило перестанет работать) */
+    body:not(.premium-user) .pdf-watermark {
+        display: block !important;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 10px;
+        color: #999 !important;
+        border-top: 0.5px solid #eee;
+        padding: 5px 0;
+    }
+}
     </style>
 </head>
 <body>
@@ -411,108 +445,116 @@
         ReactDOM.createRoot(document.getElementById('root')).render(<App />);
     </script>
 
-<button id="share-button" class="share-btn" style="display: none;">
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
-    <polyline points="16 6 12 2 8 6"></polyline>
-    <line x1="12" y1="2" x2="12" y2="15"></line>
-  </svg>
-  <span>Share Profile</span>
-</button>
+<div class="no-print">
+    <button id="share-button" class="share-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+      <span>Share Profile</span>
+    </button>
+
+    <button id="download-button" onclick="window.print()" class="download-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+      <span>Download PDF</span>
+    </button>
+</div>
+
+<footer class="rl-site-footer no-print">
+    <p>&copy; 2026 ResumeLink | <a href="/policy.html" style="color: #10b981; text-decoration: none;">Privacy & Terms</a></p>
+    <div style="margin-top: 10px; color: #444;">
+        Built with <a href="https://resumelink.cc" style="color: #10b981; text-decoration: none; font-weight: bold;">ResumeLink.cc</a> — AI mobile-first resumes
+    </div>
+</footer>
+
+<div class="pdf-watermark">
+    Created via ResumeLink.cc — Interactive mobile version available online
+</div>
 
 <style>
-  .share-btn {
-    display: none;
-    position: fixed;
-    bottom: 80px;
-    right: 20px;
-	display: none;
-    align-items: center;
-    gap: 8px;
-    background: #10b981; /* Твой фирменный изумрудный цвет */
-    color: white;
-    padding: 12px 20px;
-    border-radius: 50px;
-    border: none;
-    font-weight: 600;
-    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
-    cursor: pointer;
-    z-index: 1000;
-    transition: transform 0.2s;
+  /* СТИЛИ КНОПОК НА САЙТЕ */
+  .share-btn, .download-btn {
+    position: fixed; right: 20px; z-index: 1000; align-items: center; gap: 8px;
+    color: white; padding: 12px 24px; border-radius: 50px; border: none;
+    font-weight: 600; cursor: pointer; transition: transform 0.2s, background 0.2s;
+    font-family: 'Outfit', sans-serif; display: none;
   }
-  .share-btn:active {
-    transform: scale(0.95);
+  .share-btn { bottom: 20px; background: #10b981; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); }
+  .download-btn { bottom: 80px; background: #3b82f6; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
+  .share-btn:active, .download-btn:active { transform: scale(0.95); }
+  
+  .rl-site-footer { margin-top: 60px; text-align: center; padding: 40px 20px; font-size: 14px; color: #666; border-top: 1px solid #1a1a1a; }
+
+  /* ПРАВИЛА ДЛЯ ПЕЧАТИ (БЕЛЫЙ PDF) */
+  @media print {
+    /* Прячем кнопки и футер сайта в PDF */
+    .no-print, .share-btn, .download-btn, .rl-site-footer {
+      display: none !important;
+    }
+    /* Делаем фон белым, а текст черным */
+    body {
+      background: white !important;
+      color: black !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    /* Делаем карточки светлыми для печати */
+    .card-item {
+      background: white !important;
+      border: 1px solid #eee !important;
+      color: black !important;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+    /* Перекрашиваем серый текст в темный для читаемости */
+    .text-gray-200, .text-gray-300, .text-gray-400, .text-gray-500 {
+      color: #333 !important;
+    }
+    /* Показываем ватермарку только в PDF */
+    .pdf-watermark {
+      display: block !important;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      text-align: center;
+      font-size: 10px;
+      color: #999 !important;
+      border-top: 0.5px solid #eee;
+      padding: 5px 0;
+      background: white !important;
+    }
   }
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const shareBtn = document.getElementById('share-button');
-    
-    // 1. Проверяем URL на наличие id
+    const downloadBtn = document.getElementById('download-button');
     const urlParams = new URLSearchParams(window.location.search);
     const hasId = urlParams.has('id');
 
-    console.log("Is ID present:", hasId); // Это для проверки в консоли браузера
-
+    // Показываем кнопки управления, только если резюме создано (есть ID)
     if (hasId) {
-        // Показываем кнопку принудительно
-        shareBtn.setAttribute('style', 'display: flex !important'); 
-    } else {
-        shareBtn.style.display = 'none';
+        shareBtn.style.display = 'flex';
+        downloadBtn.style.display = 'flex';
     }
 
-    // 2. Логика самой кнопки
+    // Логика кнопки Share
     shareBtn.addEventListener('click', async () => {
         const shareData = {
-            title: 'ResumeLink | Interactive Profile',
-            text: 'Check out this professional interactive resume profile!',
+            title: 'ResumeLink Profile',
+            text: 'Оцени моё интерактивное резюме!',
             url: window.location.href
         };
-
         try {
             if (navigator.share) {
                 await navigator.share(shareData);
             } else {
                 await navigator.clipboard.writeText(window.location.href);
-                const btnText = shareBtn.querySelector('span');
-                btnText.innerText = 'Link Copied!';
-                setTimeout(() => { btnText.innerText = 'Share Profile'; }, 2000);
+                const span = shareBtn.querySelector('span');
+                span.innerText = 'Link Copied!';
+                setTimeout(() => { span.innerText = 'Share Profile'; }, 2000);
             }
-        } catch (err) {
-            console.error('Share error:', err);
-        }
+        } catch (err) { console.error('Error:', err); }
     });
 });
 </script>
-
-<footer style="margin-top: 50px; text-align: center; padding: 20px; font-size: 14px; color: #666;">
-    <p>&copy; 2026 ResumeLink | <a href="/policy.html" style="color: #2563eb; text-decoration: none;">Privacy & Terms</a></p>
-</footer>
-
-<div class="rl-watermark">
-    Built with <a href="https://resumelink.cc" target="_blank">ResumeLink.cc</a> — AI mobile-first resumes
-</div>
-
-<style>
-.rl-watermark {
-    text-align: center;
-    padding: 24px;
-    font-size: 14px;
-    color: #6b7280; /* Мягкий серый цвет */
-    background: #f9fafb;
-    border-top: 1px solid #e5e7eb;
-    font-family: 'Inter', sans-serif;
-}
-.rl-watermark a {
-    color: #2563eb;
-    text-decoration: none;
-    font-weight: 600;
-}
-.rl-watermark a:hover {
-    text-decoration: underline;
-}
-</style>
 	
 </body>
 </html>
