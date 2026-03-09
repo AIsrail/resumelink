@@ -441,81 +441,87 @@
 </div>
 
 <style>
-  /* СТИЛИ ДЛЯ САЙТА (оставляем для красоты кнопок) */
+  /* СТИЛИ ДЛЯ САЙТА (Кнопки) */
   .share-btn, .download-btn {
     position: fixed; right: 20px; z-index: 1000; align-items: center; gap: 8px;
     color: white; padding: 12px 24px; border-radius: 50px; border: none;
-    font-weight: 600; cursor: pointer; transition: transform 0.2s, background 0.2s;
+    font-weight: 600; cursor: pointer; transition: transform 0.2s;
     font-family: 'Outfit', sans-serif; display: none;
   }
-  .share-btn { bottom: 20px; background: #10b981; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); }
-  .download-btn { bottom: 80px; background: #3b82f6; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
+  .share-btn { bottom: 20px; background: #10b981; }
+  .download-btn { bottom: 80px; background: #3b82f6; }
   .rl-site-footer { margin-top: 60px; text-align: center; padding: 40px 20px; font-size: 14px; color: #666; border-top: 1px solid #1a1a1a; }
 
-  /* УЛЬТРА-ОПТИМИЗАЦИЯ ДЛЯ PDF */
+  /* ПРОФЕССИОНАЛЬНЫЙ МАКЕТ PDF (САЙДБАР) */
   @media print {
-    /* 1. Настройка страницы: убираем браузерные даты, URL и заголовки */
-    @page {
-      margin: 15mm 10mm;
-      size: auto; /* Это поможет браузеру скрыть свои колонтитулы */
+    @page { margin: 0; size: A4; }
+    
+    /* Скрываем всё лишнее */
+    .no-print, .share-btn, .download-btn, .rl-site-footer, 
+    button, header, h1, .text-gray-600, [onclick] { 
+      display: none !important; 
     }
 
     body {
       background: white !important;
       color: #1a1a1a !important;
-      font-size: 10pt !important;
-      line-height: 1.2 !important;
+      margin: 0 !important;
+      padding: 0 !important;
       -webkit-print-color-adjust: exact !important;
     }
 
-    /* 2. ЖЕСТКО СКРЫВАЕМ ТЕХНИЧЕСКИЙ МУСОР (Back, заголовок, даты) */
-    .no-print, .share-btn, .download-btn, .rl-site-footer, 
-    button, header, h1.bg-gradient-to-r, .text-gray-600, 
-    [onclick*="window.location.search"] { 
-      display: none !important; 
-    }
-
-    /* 3. УБИРАЕМ ПУСТОТУ: верстка в две колонки */
+    /* Главный контейнер PDF */
     .grid-layout {
-      display: block !important;
-      column-count: 2;
-      column-gap: 20px;
+      display: grid !important;
+      grid-template-columns: 280px 1fr !important; /* Узкий сайдбар и широкий контент */
+      min-height: 297mm;
+      gap: 0 !important;
     }
 
-    /* Имя и Summary на всю ширину сверху */
-    .col-span-full, .md\:col-span-3 {
-      column-span: all;
-      margin-bottom: 15px;
-      width: 100% !important;
+    /* ЛЕВАЯ КОЛОНКА (Сайдбар) */
+    /* Мы выберем блоки Контакты, Образование, Языки и Ссылки для сайдбара */
+    .card-item:nth-child(2), /* ATS Score (можно оставить или скрыть) */
+    .card-item:nth-child(4), /* Контакты */
+    .card-item:nth-child(6), /* Образование */
+    .card-item:nth-child(8)  /* Языки/Хобби */
+    {
+      grid-column: 1 !important;
+      background: #f8fafc !important; /* Легкий фон для сайдбара */
+      border: none !important;
+      border-right: 1pt solid #e2e8f0 !important;
+      border-radius: 0 !important;
+      padding: 20px !important;
+      margin: 0 !important;
     }
 
-    .card-item {
+    /* ПРАВАЯ КОЛОНКА (Контент) */
+    .card-item:nth-child(1), /* Имя */
+    .card-item:nth-child(3), /* Summary */
+    .card-item:nth-child(5), /* Опыт работы */
+    .card-item:nth-child(7)  /* Доп. блоки */
+    {
+      grid-column: 2 !important;
       background: white !important;
-      border: 0.5pt solid #eee !important;
-      border-radius: 8px !important;
-      padding: 12px !important;
-      margin-bottom: 10px !important;
-      page-break-inside: avoid;
-      box-shadow: none !important;
+      border: none !important;
+      padding: 30px !important;
+      margin: 0 !important;
     }
 
-    /* Улучшаем читаемость */
-    .text-gray-200, .text-gray-300, .text-gray-400, .text-gray-500 { color: #333 !important; }
-    h2 { font-size: 22pt !important; color: black !important; margin: 0 !important; }
-    h3 { font-size: 9pt !important; color: #3b82f6 !important; border-bottom: 0.5pt solid #eee; padding-bottom: 2px; }
+    /* Специфические настройки текста */
+    h2 { font-size: 28pt !important; font-weight: 800 !important; margin-bottom: 5px !important; color: #0f172a !important; }
+    h3 { font-size: 10pt !important; letter-spacing: 0.1em !important; color: #3b82f6 !important; text-transform: uppercase !important; margin-bottom: 15px !important; border: none !important; }
+    
+    .text-gray-200, .text-gray-300, .text-gray-400, .text-gray-500 { color: #334155 !important; }
+    
+    /* Опыт работы делаем списком */
+    .border-l-2 { border-left: 2pt solid #3b82f6 !important; padding-left: 15px !important; margin-bottom: 20px !important; }
 
-    /* 4. Чистая ватермарка внизу */
+    /* Ватермарка */
     .pdf-watermark {
       display: block !important;
       position: fixed;
-      bottom: -10mm;
-      left: 0;
-      right: 0;
-      font-size: 8pt;
-      color: #aaa !important;
-      text-align: center;
-      border-top: 0.5pt solid #eee;
-      padding-top: 5px;
+      bottom: 10mm; right: 10mm;
+      font-size: 8pt; color: #cbd5e1 !important;
     }
   }
 </style>
