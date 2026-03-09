@@ -541,7 +541,10 @@ function printResume() {
             <div class="rl-additional-text">${e(b.content)}</div>
         </div>`).join('');
 
-    const html = `<div id="rl-print-dom"><style>
+    // Создаем элемент стилей отдельно для корректного применения цветов при печати
+    const styleEl = document.createElement('style');
+    styleEl.id = 'rl-print-styles';
+    styleEl.innerHTML = `
         @page { size: A4 portrait; margin: 0; }
         * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-sizing: border-box; margin: 0; padding: 0; }
         #rl-print-dom { font-family: 'Outfit', sans-serif; color: #0f172a; width: 210mm; background: #fff; }
@@ -553,7 +556,7 @@ function printResume() {
         .rl-contacts { display: flex; align-items: center; justify-content: center; background: #2d3f55; padding: 7pt 0; width: 100%; }
         .rl-contacts span { color: #e2e8f0; font-size: 6.5pt; white-space: nowrap; padding: 0 10pt; }
         .rl-sep { color: #64748b !important; padding: 0 2pt !important; }
-        .rl-body { display: table; width: 210mm; min-height: 240mm; table-layout: fixed; border-collapse: collapse; }
+        .rl-body { display: table; width: 210mm; table-layout: fixed; border-collapse: collapse; }
         .rl-sidebar { display: table-cell; width: 62mm; background: #e8f0fe; vertical-align: top; padding: 16pt 14pt 24pt 14pt; border-right: 1pt solid #bfcfe8; }
         .rl-main    { display: table-cell; width: 148mm; background: #fff; vertical-align: top; padding: 14pt 18pt 24pt 18pt; }
         .rl-section { margin-bottom: 14pt; break-inside: avoid; page-break-inside: avoid; }
@@ -577,7 +580,9 @@ function printResume() {
         .rl-exp-entry:last-child .rl-exp-divider { display: none; }
         .rl-additional-text { font-size: 7.5pt; color: #334155; line-height: 1.55; }
         .rl-watermark { position: fixed; bottom: 0; left: 0; right: 0; font-size: 5.5pt; color: #94a3b8; text-align: center; border-top: 0.5pt solid #e2e8f0; padding: 3pt 0; background: #fff; font-family: 'Outfit', sans-serif; letter-spacing: 0.05em; }
-    </style>
+    `;
+
+    const html = `<div id="rl-print-dom">
     <div class="rl-header">
         <div>
             <span class="rl-name-first">${e(firstName)}</span>
@@ -606,12 +611,19 @@ function printResume() {
     const wrapper = document.createElement('div');
     wrapper.innerHTML = html;
     const printDom = wrapper.firstElementChild;
+    
+    document.head.appendChild(styleEl);
     document.body.appendChild(printDom);
+    
     requestAnimationFrame(() => requestAnimationFrame(() => {
         window.print();
-        setTimeout(() => { if (printDom?.parentNode) printDom.parentNode.removeChild(printDom); }, 1500);
+        setTimeout(() => { 
+            if (printDom?.parentNode) printDom.parentNode.removeChild(printDom); 
+            if (styleEl?.parentNode) styleEl.parentNode.removeChild(styleEl);
+        }, 1500);
     }));
 }
+
 </script>
 	
 </body>
