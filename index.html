@@ -87,34 +87,6 @@
     display: none;
 }
 
-/* А вот эти правила сработают ТОЛЬКО в момент сохранения в PDF */
-@media print {
-    /* 1. Прячем кнопку скачивания, чтобы она не печаталась сама на себе */
-    .no-print {
-        display: none !important;
-    }
-
-    /* 2. Заставляем PDF быть цветным и красивым */
-    body {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-    }
-
-    /* 3. Показываем нашу ватермарку в самом низу PDF-страницы */
-    /* (Если мы добавим класс premium-user, это правило перестанет работать) */
-    body:not(.premium-user) .pdf-watermark {
-        display: block !important;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        text-align: center;
-        font-size: 10px;
-        color: #999 !important;
-        border-top: 0.5px solid #eee;
-        padding: 5px 0;
-    }
-}
     </style>
 </head>
 <body>
@@ -482,44 +454,83 @@
   
   .rl-site-footer { margin-top: 60px; text-align: center; padding: 40px 20px; font-size: 14px; color: #666; border-top: 1px solid #1a1a1a; }
 
-  /* ПРАВИЛА ДЛЯ ПЕЧАТИ (БЕЛЫЙ PDF) */
+  /* ЕДИНЫЙ ИДЕАЛЬНЫЙ БЛОК ДЛЯ ПЕЧАТИ */
   @media print {
-    /* Прячем кнопки и футер сайта в PDF */
-    .no-print, .share-btn, .download-btn, .rl-site-footer {
-      display: none !important;
+    /* 1. Настройка листа А4 */
+    @page {
+      margin: 10mm;
+      size: A4;
     }
-    /* Делаем фон белым, а текст черным */
+
+    /* 2. Общие настройки: белый фон и черный текст */
     body {
       background: white !important;
-      color: black !important;
+      color: #1a1a1a !important;
+      font-size: 11pt !important;
+      line-height: 1.3 !important;
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
     }
-    /* Делаем карточки светлыми для печати */
-    .card-item {
-      background: white !important;
-      border: 1px solid #eee !important;
-      color: black !important;
-      box-shadow: none !important;
-      transform: none !important;
+
+    /* 3. Эффект двух колонок (как в профессиональных CV) */
+    .grid-layout {
+      display: block !important;
+      column-count: 2;
+      column-gap: 15px;
     }
-    /* Перекрашиваем серый текст в темный для читаемости */
+
+    /* Главные блоки (Имя и Summary) на всю ширину */
+    .col-span-full, .md\:col-span-3 {
+      column-span: all;
+      margin-bottom: 20px;
+    }
+
+    /* 4. Настройка карточек (белые, аккуратные) */
+    .card-item {
+      background: #ffffff !important;
+      border: 0.5pt solid #eee !important;
+      border-radius: 12px !important;
+      padding: 12px !important;
+      margin-bottom: 10px !important;
+      page-break-inside: avoid; /* Чтобы опыт работы не разрывался на 2 страницы */
+      break-inside: avoid;
+      box-shadow: none !important;
+    }
+
+    /* 5. Улучшаем видимость текста */
     .text-gray-200, .text-gray-300, .text-gray-400, .text-gray-500 {
       color: #333 !important;
     }
-    /* Показываем ватермарку только в PDF */
+    
+    h2 { font-size: 24pt !important; margin-bottom: 5px !important; color: black !important; }
+    h3 { 
+      font-size: 10pt !important; 
+      color: #3b82f6 !important; 
+      border-bottom: 0.5pt solid #eee;
+      padding-bottom: 4px;
+      margin-bottom: 10px !important;
+    }
+
+    /* 6. Прячем интерфейс сайта */
+    .no-print, .share-btn, .download-btn, .rl-site-footer {
+      display: none !important;
+    }
+
+    /* 7. Ватермарка внизу страницы */
     .pdf-watermark {
       display: block !important;
       position: fixed;
-      bottom: 0; left: 0; right: 0;
-      text-align: center;
-      font-size: 10px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      font-size: 8pt;
       color: #999 !important;
-      border-top: 0.5px solid #eee;
-      padding: 5px 0;
-      background: white !important;
+      text-align: center;
+      border-top: 0.5pt solid #eee;
+      padding-top: 5px;
     }
   }
+	
 </style>
 
 <script>
