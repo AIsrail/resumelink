@@ -441,7 +441,7 @@
 </div>
 
 <style>
-  /* СТИЛИ КНОПОК НА САЙТЕ */
+  /* СТИЛИ ДЛЯ САЙТА (оставляем для красоты кнопок) */
   .share-btn, .download-btn {
     position: fixed; right: 20px; z-index: 1000; align-items: center; gap: 8px;
     color: white; padding: 12px 24px; border-radius: 50px; border: none;
@@ -450,87 +450,74 @@
   }
   .share-btn { bottom: 20px; background: #10b981; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); }
   .download-btn { bottom: 80px; background: #3b82f6; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
-  .share-btn:active, .download-btn:active { transform: scale(0.95); }
-  
   .rl-site-footer { margin-top: 60px; text-align: center; padding: 40px 20px; font-size: 14px; color: #666; border-top: 1px solid #1a1a1a; }
 
-  /* ЕДИНЫЙ ИДЕАЛЬНЫЙ БЛОК ДЛЯ ПЕЧАТИ */
+  /* УЛЬТРА-ОПТИМИЗАЦИЯ ДЛЯ PDF */
   @media print {
-    /* 1. Настройка листа А4 */
+    /* 1. Настройка страницы: убираем браузерные даты, URL и заголовки */
     @page {
-      margin: 10mm;
-      size: A4;
+      margin: 15mm 10mm;
+      size: auto; /* Это поможет браузеру скрыть свои колонтитулы */
     }
 
-    /* 2. Общие настройки: белый фон и черный текст */
     body {
       background: white !important;
       color: #1a1a1a !important;
-      font-size: 11pt !important;
-      line-height: 1.3 !important;
+      font-size: 10pt !important;
+      line-height: 1.2 !important;
       -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
     }
 
-    /* 3. Эффект двух колонок (как в профессиональных CV) */
+    /* 2. ЖЕСТКО СКРЫВАЕМ ТЕХНИЧЕСКИЙ МУСОР (Back, заголовок, даты) */
+    .no-print, .share-btn, .download-btn, .rl-site-footer, 
+    button, header, h1.bg-gradient-to-r, .text-gray-600, 
+    [onclick*="window.location.search"] { 
+      display: none !important; 
+    }
+
+    /* 3. УБИРАЕМ ПУСТОТУ: верстка в две колонки */
     .grid-layout {
       display: block !important;
       column-count: 2;
-      column-gap: 15px;
+      column-gap: 20px;
     }
 
-    /* Главные блоки (Имя и Summary) на всю ширину */
+    /* Имя и Summary на всю ширину сверху */
     .col-span-full, .md\:col-span-3 {
       column-span: all;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
+      width: 100% !important;
     }
 
-    /* 4. Настройка карточек (белые, аккуратные) */
     .card-item {
-      background: #ffffff !important;
+      background: white !important;
       border: 0.5pt solid #eee !important;
-      border-radius: 12px !important;
+      border-radius: 8px !important;
       padding: 12px !important;
       margin-bottom: 10px !important;
-      page-break-inside: avoid; /* Чтобы опыт работы не разрывался на 2 страницы */
-      break-inside: avoid;
+      page-break-inside: avoid;
       box-shadow: none !important;
     }
 
-    /* 5. Улучшаем видимость текста */
-    .text-gray-200, .text-gray-300, .text-gray-400, .text-gray-500 {
-      color: #333 !important;
-    }
-    
-    h2 { font-size: 24pt !important; margin-bottom: 5px !important; color: black !important; }
-    h3 { 
-      font-size: 10pt !important; 
-      color: #3b82f6 !important; 
-      border-bottom: 0.5pt solid #eee;
-      padding-bottom: 4px;
-      margin-bottom: 10px !important;
-    }
+    /* Улучшаем читаемость */
+    .text-gray-200, .text-gray-300, .text-gray-400, .text-gray-500 { color: #333 !important; }
+    h2 { font-size: 22pt !important; color: black !important; margin: 0 !important; }
+    h3 { font-size: 9pt !important; color: #3b82f6 !important; border-bottom: 0.5pt solid #eee; padding-bottom: 2px; }
 
-    /* 6. Прячем интерфейс сайта */
-    .no-print, .share-btn, .download-btn, .rl-site-footer {
-      display: none !important;
-    }
-
-    /* 7. Ватермарка внизу страницы */
+    /* 4. Чистая ватермарка внизу */
     .pdf-watermark {
       display: block !important;
       position: fixed;
-      bottom: 0;
+      bottom: -10mm;
       left: 0;
       right: 0;
       font-size: 8pt;
-      color: #999 !important;
+      color: #aaa !important;
       text-align: center;
       border-top: 0.5pt solid #eee;
       padding-top: 5px;
     }
   }
-	
 </style>
 
 <script>
