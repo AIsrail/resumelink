@@ -545,276 +545,254 @@ function printResume() {
     const styleEl = document.createElement('style');
     styleEl.id = 'rl-print-styles';
  styleEl.innerHTML = `
-    @page { size: A4 portrait; margin: 0; }
+@page { size: A4 portrait; margin: 0; }
 
-    html, body {
-        margin: 0 !important;
-        padding: 0 !important;
-        background: #ffffff !important;
-        background-color: #ffffff !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-        color-adjust: exact !important;
-    }
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+}
 
-    * {
-        box-sizing: border-box;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-        color-adjust: exact !important;
-        margin: 0;
-        padding: 0;
-    }
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+}
 
-    #rl-print-dom {
-    	font-family: 'Outfit', sans-serif;
-	color: #0f172a;
-    	width: 210mm;
-    	min-height: 297mm;
-    	padding-bottom: 16pt;
-    	background: #ffffff !important;
-    	background-color: #ffffff !important;
-    	-webkit-print-color-adjust: exact !important;
-    	print-color-adjust: exact !important;
-    	color-adjust: exact !important;
-    }
+#rl-print-dom {
+    font-family: 'Outfit', sans-serif;
+    color: #0f172a;
+    width: 210mm;
+    background: #ffffff !important;
+}
 
-    .rl-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 18pt 22pt 14pt 18pt;
-        background: #ffffff !important;
-        background-color: #ffffff !important;
-        border-bottom: 2.2pt solid #475569;
-    }
+.rl-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18pt 22pt 14pt 18pt;
+    border-bottom: 2pt solid #475569;
+    background: #ffffff !important;
+}
 
-    .rl-name-first {
-        font-size: 26pt;
-        font-weight: 300;
-        line-height: 1.1;
-        display: block;
-        color: #1e293b;
-    }
+.rl-name-first {
+    font-size: 26pt;
+    font-weight: 300;
+    line-height: 1.1;
+    display: block;
+    color: #1e293b;
+}
 
-    .rl-name-last {
-        font-size: 26pt;
-        font-weight: 800;
-        line-height: 1.1;
-        display: block;
-        color: #3b82f6;
-    }
+.rl-name-last {
+    font-size: 26pt;
+    font-weight: 800;
+    line-height: 1.1;
+    display: block;
+    color: #3b82f6;
+}
 
-    .rl-job-title {
-        font-size: 7pt;
-        font-weight: 600;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-        color: #64748b;
-        margin-top: 5pt;
-    }
+.rl-job-title {
+    font-size: 7pt;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #64748b;
+    margin-top: 5pt;
+}
 
-    .rl-photo {
-        width: 64pt;
-        height: 64pt;
-        border-radius: 50%;
-        background: #dbeafe !important;
-        background-color: #dbeafe !important;
-        flex-shrink: 0;
-    }
+.rl-photo {
+    width: 64pt;
+    height: 64pt;
+    border-radius: 50%;
+    background: #dbeafe;
+    flex-shrink: 0;
+}
 
-    .rl-contacts {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        padding: 7pt 0;
-        background: #2d3f55 !important;
-        background-color: #2d3f55 !important;
-    }
+.rl-contacts {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 7pt 0;
+    background: #2d3f55 !important;
+}
 
-    .rl-contacts span {
-        color: #e2e8f0 !important;
-        font-size: 6.5pt;
-        white-space: nowrap;
-        padding: 0 10pt;
-    }
+.rl-contacts span {
+    color: #e2e8f0;
+    font-size: 6.5pt;
+    white-space: nowrap;
+    padding: 0 10pt;
+}
 
-    .rl-sep {
-        color: #94a3b8 !important;
-        padding: 0 2pt !important;
-    }
+.rl-sep {
+    color: #94a3b8 !important;
+    padding: 0 2pt !important;
+}
 
-    .rl-body {
-    	display: table;
-    	width: 210mm;
-    	table-layout: fixed;
-    	border-collapse: collapse;
-    	min-height: 235mm;
-    	background: #ffffff !important;
-    	background-color: #ffffff !important;
-    }
+.rl-body {
+    display: table;
+    width: 210mm;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
 
-    .rl-sidebar {
-        display: table-cell;
-        width: 62mm;
-        vertical-align: top;
-        padding: 16pt 14pt 24pt 14pt;
-        background: #e8f0fe !important;
-        background-color: #e8f0fe !important;
-        border-right: 1.2pt solid #bfcfe8;
-    }
+.rl-sidebar {
+    display: table-cell;
+    width: 62mm;
+    vertical-align: top;
+    padding: 16pt 14pt 24pt 14pt;
+    background: #e8f0fe !important;
+    border-right: 1pt solid #bfcfe8;
+}
 
-    .rl-main {
-        display: table-cell;
-        width: 148mm;
-        vertical-align: top;
-        padding: 14pt 18pt 24pt 18pt;
-        background: #ffffff !important;
-        background-color: #ffffff !important;
-    }
+.rl-main {
+    display: table-cell;
+    width: 148mm;
+    vertical-align: top;
+    padding: 14pt 18pt 24pt 18pt;
+    background: #ffffff !important;
+}
 
-    .rl-section {
-        margin-bottom: 14pt;
-        break-inside: avoid;
-        page-break-inside: avoid;
-    }
+.rl-section {
+    margin-bottom: 14pt;
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
 
-    .rl-section-title {
-        font-size: 6.5pt;
-        font-weight: 800;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-        color: #1e293b;
-        border-bottom: 2pt solid #3b82f6;
-        padding-bottom: 4pt;
-        margin-bottom: 9pt;
-    }
+.rl-section-title {
+    font-size: 6.5pt;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #1e293b;
+    border-bottom: 2pt solid #3b82f6;
+    padding-bottom: 4pt;
+    margin-bottom: 9pt;
+}
 
-    .rl-edu-item {
-        margin-bottom: 10pt;
-        break-inside: avoid;
-    }
+.rl-edu-item {
+    margin-bottom: 10pt;
+}
 
-    .rl-edu-degree {
-        font-size: 7.5pt;
-        font-weight: 700;
-        color: #1e293b;
-    }
+.rl-edu-degree {
+    font-size: 7.5pt;
+    font-weight: 700;
+    color: #1e293b;
+}
 
-    .rl-edu-school {
-        font-size: 6.5pt;
-        color: #475569;
-        margin-top: 1pt;
-    }
+.rl-edu-school {
+    font-size: 6.5pt;
+    color: #475569;
+    margin-top: 1pt;
+}
 
-    .rl-edu-year {
-        font-size: 6pt;
-        color: #64748b;
-        margin-top: 1pt;
-    }
+.rl-edu-year {
+    font-size: 6pt;
+    color: #64748b;
+    margin-top: 1pt;
+}
 
-    .rl-lang-item {
-        font-size: 7pt;
-        color: #334155;
-        padding: 2pt 0;
-    }
+.rl-lang-item {
+    font-size: 7pt;
+    color: #334155;
+    padding: 2pt 0;
+}
 
-    .rl-qr-section {
-        margin-top: 4pt;
-    }
+.rl-qr-section {
+    margin-top: 4pt;
+}
 
-    .rl-qr-img {
-        width: 72pt;
-        height: 72pt;
-        display: block;
-        margin: 0 0 5pt 0;
-    }
+.rl-qr-img {
+    width: 72pt;
+    height: 72pt;
+    display: block;
+    margin: 0 0 5pt 0;
+}
 
-    .rl-qr-url {
-        font-size: 5pt;
-        color: #3b82f6;
-        word-break: break-all;
-        line-height: 1.4;
-    }
+.rl-qr-url {
+    font-size: 5pt;
+    color: #3b82f6;
+    word-break: break-all;
+    line-height: 1.4;
+}
 
-    .rl-summary {
-        font-size: 8pt;
-        font-style: italic;
-        line-height: 1.65;
-        color: #334155;
-        margin-bottom: 14pt;
-    }
+.rl-summary {
+    font-size: 8pt;
+    font-style: italic;
+    line-height: 1.65;
+    color: #334155;
+    margin-bottom: 14pt;
+}
 
-    .rl-exp-entry {
-        break-inside: avoid;
-        page-break-inside: avoid;
-        margin-bottom: 2pt;
-    }
+.rl-exp-entry {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 2pt;
+}
 
-    .rl-exp-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
-        margin-bottom: 1pt;
-    }
+.rl-exp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1pt;
+}
 
-    .rl-exp-title {
-        font-size: 8.5pt;
-        font-weight: 700;
-        color: #1e293b;
-    }
+.rl-exp-title {
+    font-size: 8.5pt;
+    font-weight: 700;
+    color: #1e293b;
+}
 
-    .rl-exp-period {
-        font-size: 7pt;
-        font-weight: 600;
-        color: #3b82f6;
-        white-space: nowrap;
-        margin-left: 8pt;
-    }
+.rl-exp-period {
+    font-size: 7pt;
+    font-weight: 600;
+    color: #3b82f6;
+    white-space: nowrap;
+    margin-left: 8pt;
+}
 
-    .rl-exp-company {
-        font-size: 7pt;
-        color: #64748b;
-        margin-bottom: 4pt;
-    }
+.rl-exp-company {
+    font-size: 7pt;
+    color: #64748b;
+    margin-bottom: 4pt;
+}
 
-    .rl-exp-desc {
-        font-size: 7pt;
-        color: #475569;
-        line-height: 1.55;
-    }
+.rl-exp-desc {
+    font-size: 7pt;
+    color: #475569;
+    line-height: 1.55;
+}
 
-    .rl-exp-divider {
-        border-top: 0.8pt solid #bfcfe8;
-        margin: 8pt 0;
-    }
+.rl-exp-divider {
+    border-top: 0.6pt solid #bfcfe8;
+    margin: 8pt 0;
+}
 
-    .rl-exp-entry:last-child .rl-exp-divider {
-        display: none;
-    }
+.rl-exp-entry:last-child .rl-exp-divider {
+    display: none;
+}
 
-    .rl-additional-text {
-        font-size: 7.5pt;
-        color: #334155;
-        line-height: 1.55;
-    }
+.rl-additional-text {
+    font-size: 7.5pt;
+    color: #334155;
+    line-height: 1.55;
+}
 
-    .rl-watermark {
-    	position: fixed;
-    	bottom: 0;
-    	left: 0;
-    	right: 0;
-    	font-size: 5.5pt;
-    	color: #94a3b8;
-    	text-align: center;
-    	border-top: 0.35pt solid #cbd5e1;
-    	padding: 2.5pt 0 2pt 0;
-    	background: #ffffff !important;
-    	background-color: #ffffff !important;
-    	font-family: 'Outfit', sans-serif;
-    	letter-spacing: 0.03em;
-    }
+.rl-watermark {
+    margin-top: 8pt;
+    font-size: 5.5pt;
+    color: #94a3b8;
+    text-align: center;
+    border-top: 0.35pt solid #cbd5e1;
+    padding-top: 3pt;
+    background: #ffffff !important;
+    font-family: 'Outfit', sans-serif;
+    letter-spacing: 0.03em;
+}
 `;
 
     const html = `<div id="rl-print-dom">
