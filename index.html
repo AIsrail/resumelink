@@ -441,7 +441,7 @@
 </div>
 
 <style>
-  /* СТИЛИ ДЛЯ САЙТА (Кнопки) */
+  /* 1. СТИЛИ ДЛЯ ВЕБ-САЙТА (Кнопки управления) */
   .share-btn, .download-btn {
     position: fixed; right: 20px; z-index: 1000; align-items: center; gap: 8px;
     color: white; padding: 12px 24px; border-radius: 50px; border: none;
@@ -452,13 +452,18 @@
   .download-btn { bottom: 80px; background: #3b82f6; }
   .rl-site-footer { margin-top: 60px; text-align: center; padding: 40px 20px; font-size: 14px; color: #666; border-top: 1px solid #1a1a1a; }
 
-  /* ПРОФЕССИОНАЛЬНЫЙ МАКЕТ PDF (САЙДБАР) */
+  /* 2. МАГИЯ PDF (SIDEBAR LAYOUT) */
   @media print {
-    @page { margin: 0; size: A4; }
-    
-    /* Скрываем всё лишнее */
+    /* Настройка листа */
+    @page { 
+      margin: 0; 
+      size: A4; 
+    }
+
+    /* Полная очистка PDF от интерфейса сайта */
     .no-print, .share-btn, .download-btn, .rl-site-footer, 
-    button, header, h1, .text-gray-600, [onclick] { 
+    button, header, [onclick*="window.location"], 
+    .text-gray-600, h1.bg-gradient-to-r { 
       display: none !important; 
     }
 
@@ -468,60 +473,100 @@
       margin: 0 !important;
       padding: 0 !important;
       -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
     }
 
-    /* Главный контейнер PDF */
+    /* РИСУЕМ ФОН САЙДБАРА НА КАЖДОЙ СТРАНИЦЕ */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 32%; /* Пропорция как в примере */
+      height: 100%;
+      background: #f1f5f9 !important; /* Цвет из примера */
+      z-index: -1;
+      border-right: 0.5pt solid #e2e8f0;
+    }
+
+    /* Имитируем двухколоночную таблицу */
     .grid-layout {
-      display: grid !important;
-      grid-template-columns: 280px 1fr !important; /* Узкий сайдбар и широкий контент */
-      min-height: 297mm;
-      gap: 0 !important;
+      display: table !important;
+      width: 100% !important;
+      border-spacing: 0 !important;
     }
 
-    /* ЛЕВАЯ КОЛОНКА (Сайдбар) */
-    /* Мы выберем блоки Контакты, Образование, Языки и Ссылки для сайдбара */
-    .card-item:nth-child(2), /* ATS Score (можно оставить или скрыть) */
-    .card-item:nth-child(4), /* Контакты */
-    .card-item:nth-child(6), /* Образование */
-    .card-item:nth-child(8)  /* Языки/Хобби */
-    {
-      grid-column: 1 !important;
-      background: #f8fafc !important; /* Легкий фон для сайдбара */
+    /* Настройка всех блоков резюме */
+    .card-item {
+      display: block !important;
+      background: transparent !important;
       border: none !important;
-      border-right: 1pt solid #e2e8f0 !important;
       border-radius: 0 !important;
-      padding: 20px !important;
       margin: 0 !important;
+      box-shadow: none !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
     }
 
-    /* ПРАВАЯ КОЛОНКА (Контент) */
-    .card-item:nth-child(1), /* Имя */
-    .card-item:nth-child(3), /* Summary */
-    .card-item:nth-child(5), /* Опыт работы */
-    .card-item:nth-child(7)  /* Доп. блоки */
-    {
-      grid-column: 2 !important;
-      background: white !important;
-      border: none !important;
-      padding: 30px !important;
-      margin: 0 !important;
+    /* РАСПРЕДЕЛЕНИЕ: ЛЕВАЯ КОЛОНКА (SIDEBAR) */
+    .card-item:nth-child(4), .card-item:nth-child(6), 
+    .card-item:nth-child(8), .card-item:nth-child(9) {
+      display: table-cell !important;
+      width: 32% !important;
+      padding: 25px 20px !important;
+      float: left !important;
+      clear: left !important;
     }
 
-    /* Специфические настройки текста */
-    h2 { font-size: 28pt !important; font-weight: 800 !important; margin-bottom: 5px !important; color: #0f172a !important; }
-    h3 { font-size: 10pt !important; letter-spacing: 0.1em !important; color: #3b82f6 !important; text-transform: uppercase !important; margin-bottom: 15px !important; border: none !important; }
-    
-    .text-gray-200, .text-gray-300, .text-gray-400, .text-gray-500 { color: #334155 !important; }
-    
-    /* Опыт работы делаем списком */
-    .border-l-2 { border-left: 2pt solid #3b82f6 !important; padding-left: 15px !important; margin-bottom: 20px !important; }
+    /* РАСПРЕДЕЛЕНИЕ: ПРАВАЯ КОЛОНКА (CONTENT) */
+    .card-item:nth-child(1), .card-item:nth-child(3), 
+    .card-item:nth-child(5), .card-item:nth-child(7) {
+      display: table-cell !important;
+      width: 68% !important;
+      padding: 30px 40px !important;
+      float: right !important;
+      clear: right !important;
+    }
 
-    /* Ватермарка */
+    /* ТИПОГРАФИКА (Стиль как в Resumke Example) */
+    h2 { 
+      font-size: 28pt !important; 
+      font-weight: 800 !important; 
+      color: #0f172a !important; 
+      margin-top: 0 !important;
+      line-height: 1.1 !important;
+    }
+    
+    h3 { 
+      font-size: 10pt !important; 
+      font-weight: 700 !important; 
+      color: #3b82f6 !important; 
+      text-transform: uppercase; 
+      border-bottom: 0.8pt solid #cbd5e1; 
+      padding-bottom: 6px; 
+      margin-bottom: 15px !important;
+      margin-top: 20px !important;
+    }
+
+    /* Списки и описания опыта */
+    .text-gray-200, .text-gray-300, .text-gray-400, .text-gray-500 {
+      color: #334155 !important;
+      font-size: 10pt !important;
+    }
+
+    .border-l-2 {
+      border-left: 2pt solid #3b82f6 !important;
+      padding-left: 15px !important;
+    }
+
+    /* ВАТЕРМАРКА (Чистая, в углу) */
     .pdf-watermark {
       display: block !important;
       position: fixed;
-      bottom: 10mm; right: 10mm;
-      font-size: 8pt; color: #cbd5e1 !important;
+      bottom: 8mm; right: 10mm;
+      font-size: 8pt;
+      color: #94a3b8 !important;
+      background: none !important;
+      border: none !important;
     }
   }
 </style>
