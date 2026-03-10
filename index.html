@@ -1,16 +1,26 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ResumeLink — AI Resume Builder | AI конструктор резюме</title>
-    <meta name="description" content="AI-powered interactive resume builder. Умный AI конструктор резюме: преврати файл в стильный профиль с QR-кодом за 10 секунд.">
-    <meta name="keywords" content="AI resume builder, AI конструктор резюме, интерактивное резюме, ATS score, digital CV">
+    <title>ResumeLink — AI Resume Builder</title>
+    <meta name="description" content="AI-powered interactive resume builder. Transform your resume into a stylish digital profile with QR code in 10 seconds.">
+    <meta name="keywords" content="AI resume builder, interactive resume, ATS score, digital CV, AI конструктор резюме">
 
     <meta property="og:title" content="ResumeLink — AI-Powered Interactive Profiles">
-    <meta property="og:description" content="Transform your resume into a stylish digital profile. AI конструктор резюме нового поколения.">
+    <meta property="og:description" content="Transform your resume into a stylish digital profile with QR code in 10 seconds.">
     <meta property="og:image" content="https://resumelink.cc/favicon/apple-touch-icon.png">
     <meta property="og:url" content="https://resumelink.cc">
+
+    <script>
+    // Переключаем мета-теги на русский если браузер русский
+    if (navigator.language.startsWith('ru')) {
+        document.documentElement.lang = 'ru';
+        document.title = 'ResumeLink — AI конструктор резюме';
+        document.querySelector('meta[name="description"]').content = 'Умный AI конструктор резюме: преврати файл в стильный профиль с QR-кодом за 10 секунд.';
+        document.querySelector('meta[property="og:description"]').content = 'AI конструктор резюме нового поколения. Преврати файл в стильный профиль за 10 секунд.';
+    }
+    </script>
     
     <script type="application/ld+json">
     {
@@ -447,12 +457,6 @@
                                 <img src={`https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(window.location.href)}`} alt="QR" />
                             </div>
                         </div>
-                    </div>
-                    <div className="tally-feedback no-print">
-                        <p>{isEn ? 'Help us improve' : 'Помогите нам стать лучше'}</p>
-                        <a href="https://tally.so/r/RG4vBl" target="_blank" rel="noopener">
-                            {isEn ? 'Leave feedback ⚡' : 'Оставить отзыв ⚡'}
-                        </a>
                     </div>
                 </div>
             );
