@@ -87,6 +87,35 @@
     display: none;
 }
 
+.tally-feedback {
+    text-align: center;
+    margin-top: 32px;
+    padding: 20px;
+}
+.tally-feedback p {
+    font-size: 11px;
+    color: #444;
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+.tally-feedback a {
+    display: inline-block;
+    background: #10b981;
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 12px 28px;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+}
+.tally-feedback a:hover {
+    background: #059669;
+    transform: scale(1.04);
+}
+
     </style>
 </head>
 <body>
@@ -302,6 +331,12 @@
                         </div>
                     </div>
                     <footer className="mt-20 pt-10 border-t border-white/5 space-y-4">
+                        <div className="tally-feedback no-print">
+                            <p>{isEn ? 'Help us improve' : 'Помогите нам стать лучше'}</p>
+                            <a href="https://tally.so/r/RG4vBl" target="_blank" rel="noopener">
+                                {isEn ? 'Leave feedback ⚡' : 'Оставить отзыв ⚡'}
+                            </a>
+                        </div>
                         <p className="text-gray-600 text-sm italic">{curr.footerEng}</p>
                         <div className="text-gray-500 text-[10px] uppercase tracking-widest font-bold">
     <a href="/about.html" className="hover:text-emerald-500 transition-colors mr-4 underline underline-offset-4">{isEn ? "About" : "О сервисе"}</a>
@@ -412,6 +447,12 @@
                                 <img src={`https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(window.location.href)}`} alt="QR" />
                             </div>
                         </div>
+                    </div>
+                    <div className="tally-feedback no-print">
+                        <p>{isEn ? 'Help us improve' : 'Помогите нам стать лучше'}</p>
+                        <a href="https://tally.so/r/RG4vBl" target="_blank" rel="noopener">
+                            {isEn ? 'Leave feedback ⚡' : 'Оставить отзыв ⚡'}
+                        </a>
                     </div>
                 </div>
             );
