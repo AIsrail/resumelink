@@ -502,6 +502,8 @@
     /* Скрываем весь сайт — показываем только #rl-print-dom */
     body > *:not(#rl-print-dom) { display: none !important; }
     #rl-print-dom { display: block !important; }
+    /* Tally-кнопка вложена в React — скрываем отдельно */
+    .tally-feedback { display: none !important; }
   }
 	
 </style>
@@ -587,7 +589,7 @@ function printResume() {
     styleEl.id = 'rl-print-styles';
     styleEl.innerHTML = `
         @page { size: A4 portrait; margin: 0; }
-        * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-sizing: border-box; margin: 0; padding: 0; }
+        #rl-print-dom * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-sizing: border-box; margin: 0; padding: 0; }
         #rl-print-dom { font-family: 'Outfit', sans-serif; color: #0f172a; width: 210mm; background: #fff; }
         .rl-header { display: flex; justify-content: space-between; align-items: center; padding: 18pt 22pt 14pt 18pt; border-bottom: 2pt solid #475569; background: #fff; }
         .rl-name-first { font-size: 26pt; font-weight: 300; line-height: 1.1; display: block; color: #1e293b; }
