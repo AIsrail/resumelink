@@ -2,14 +2,14 @@ title: ResumeLink
 url: "https://resumelink.cc"
 baseurl: ""
 
-collections:
-  roles:
-    output: true
-    permalink: /roles/:name/
+# Указываем Jekyll заходить в папку role
+include: [role]
+
+# Делаем ссылки красивыми (без .html на конце)
+permalink: /:path/
 
 defaults:
   - scope:
-      path: ""
-      type: roles
+      path: "role" # Применяем настройки ко всем файлам в папке role
     values:
-      layout: role
+      layout: "role" # Используем файл _layouts/role.html
