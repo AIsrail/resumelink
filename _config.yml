@@ -1,5 +1,4 @@
 title: ResumeLink
-description: Human-Centric AI Career Guides 2026
 url: "https://resumelink.cc"
 
 collections:
@@ -7,8 +6,8 @@ collections:
     output: true
     permalink: /roles/:name/
 
-# Принудительно заставляем Jekyll зайти в эту папку
-include: [_roles]
+# Это заставит Jekyll "увидеть" папку, даже если он хочет её проигнорировать
+include: ["_roles"]
 
 defaults:
   - scope:
