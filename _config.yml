@@ -1,9 +1,5 @@
 title: ResumeLink
 url: "https://resumelink.cc"
-baseurl: ""
-
-# Явно разрешаем Jekyll использовать эти папки
-include: ["_roles", "_data", "_layouts"]
 
 collections:
   roles:
@@ -13,6 +9,6 @@ collections:
 defaults:
   - scope:
       path: ""
-      type: "roles"
+      type: roles
     values:
-      layout: "role"
+      layout: role
