@@ -3,7 +3,7 @@ layout: default
 ---
 <article class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
     <div class="flex items-center space-x-3 mb-4">
-        <span class="px-3 py-1 bg-blue-50 text-blue-700 text-sm font-medium rounded-full underline decoration-blue-200 text-xs uppercase">Expert Career Guide</span>
+        <span class="px-3 py-1 bg-blue-50 text-blue-700 text-sm font-medium rounded-full underline decoration-blue-200 text-xs uppercase">2026 Expert Guide</span>
     </div>
     
     <h1 class="text-4xl font-extrabold text-slate-900 mb-6 leading-tight">
@@ -61,7 +61,6 @@ layout: default
         <a href="https://resumelink.cc" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-10 rounded-xl transition-all shadow-lg shadow-blue-200 transform hover:-translate-y-1">
             Create Your Human-Centric Resume
         </a>
-        <p class="mt-4 text-slate-400 text-xs uppercase tracking-widest">Free Professional Templates Inside</p>
     </div>
 
     <div class="mt-16">
@@ -69,13 +68,12 @@ layout: default
         <div class="grid md:grid-cols-2 gap-6">
             {% assign related = site.roles | where_exp: "item", "item.url != page.url" | sample: 4 %}
             {% for role in related %}
-            <a href="{{ role.url }}" class="group p-6 border border-slate-100 rounded-2xl hover:border-blue-500 hover:shadow-xl hover:shadow-blue-50 transition-all bg-slate-50/30">
-                <h4 class="font-bold text-slate-800 group-hover:text-blue-600 transition-colors mb-2">{{ role.title }}</h4>
+            <a href="{{ role.url }}" class="group p-6 border border-slate-100 rounded-2xl hover:border-blue-500 hover:shadow-xl transition-all bg-slate-50/30">
+                <h4 class="font-bold text-slate-800 group-hover:text-blue-600 mb-2">{{ role.title }}</h4>
                 <p class="text-sm text-slate-500 line-clamp-2">{{ role.summary_hack }}</p>
-                <div class="mt-4 text-xs font-bold text-blue-500 uppercase tracking-widest">View Guide &rarr;</div>
+                <div class="mt-4 text-xs font-bold text-blue-500 uppercase">View Guide &rarr;</div>
             </a>
             {% endfor %}
         </div>
     </div>
-
 </article>
