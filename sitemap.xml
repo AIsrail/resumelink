@@ -8,12 +8,17 @@ permalink: /sitemap.xml
     <loc>https://resumelink.cc/</loc>
     <priority>1.0</priority>
   </url>
-  {% for page in site.pages %}
-    {% if page.path contains 'role/' %}
-    <url>
-      <loc>https://resumelink.cc{{ page.url | remove: '.html' }}</loc>
-      <priority>0.8</priority>
-    </url>
-    {% endif %}
-  {% endfor %}
+
+  {%- for page in site.pages -%}
+    {%- if page.url contains "/role/" -%}
+      {%- unless page.url contains ".css" or page.url contains ".js" -%}
+      <url>
+        <loc>https://resumelink.cc{{ page.url | replace:'index.html','' }}</loc>
+        <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+      </url>
+      {%- endunless -%}
+    {%- endif -%}
+  {%- endfor -%}
 </urlset>
