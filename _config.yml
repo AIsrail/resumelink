@@ -1,7 +1,18 @@
+title: ResumeLink
+description: Human-Centric AI Career Guides 2026
 url: "https://resumelink.cc"
-baseurl: ""
 
 collections:
   roles:
     output: true
     permalink: /roles/:name/
+
+# Это заставит Jekyll игнорировать кэш и искать папки принудительно
+include: ["_roles"]
+
+defaults:
+  - scope:
+      path: ""
+      type: "roles"
+    values:
+      layout: "role"
