@@ -8,10 +8,12 @@ permalink: /sitemap.xml
     <loc>https://resumelink.cc/</loc>
     <priority>1.0</priority>
   </url>
-  {% for doc in site.roles %}
-  <url>
-    <loc>https://resumelink.cc{{ doc.url }}</loc>
-    <priority>0.8</priority>
-  </url>
+  {% for file in site.static_files %}
+    {% if file.path contains '/role/' and file.extname == '.md' %}
+    <url>
+      <loc>https://resumelink.cc{{ file.path | remove: ".md" | append: "/" }}</loc>
+      <priority>0.8</priority>
+    </url>
+    {% endif %}
   {% endfor %}
 </urlset>
