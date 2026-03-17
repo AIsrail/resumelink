@@ -7,6 +7,9 @@ collections:
     output: true
     permalink: /roles/:name/
 
+# Принудительно заставляем Jekyll зайти в эту папку
+include: [_roles]
+
 defaults:
   - scope:
       path: ""
