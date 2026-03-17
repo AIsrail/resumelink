@@ -9,13 +9,14 @@ layout: null
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
-
-  {% for role in site.roles %}
-  <url>
-    <loc>https://resumelink.cc{{ role.url }}</loc>
-    <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
+  {% for collection in site.collections %}
+    {% for doc in collection.docs %}
+    <url>
+      <loc>https://resumelink.cc{{ doc.url }}</loc>
+      <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+    </url>
+    {% endfor %}
   {% endfor %}
 </urlset>
