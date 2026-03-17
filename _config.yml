@@ -2,11 +2,17 @@ title: ResumeLink
 description: Human-Centric AI Career Guides 2026
 url: "https://resumelink.cc"
 
-# Сообщаем Jekyll, что папка roles — это коллекция страниц
 collections:
   roles:
     output: true
-    permalink: /roles/:path/
+    permalink: /roles/:name/
 
-# Настройки для GitHub Pages
-incremental: true
+defaults:
+  - scope:
+      path: ""
+      type: "roles"
+    values:
+      layout: "role"
+
+plugins:
+  - jekyll-sitemap
