@@ -1,13 +1,14 @@
 title: ResumeLink
 url: "https://resumelink.cc"
 
+# Принудительно заставляем GitHub зайти в папку _roles
+include:
+  - _roles
+
 collections:
   roles:
     output: true
     permalink: /roles/:name/
-
-include:
-  - _roles
 
 defaults:
   - scope:
