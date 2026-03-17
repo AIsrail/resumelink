@@ -5,18 +5,12 @@ layout: null
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://resumelink.cc/</loc>
-    <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
-    <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
-  {% for collection in site.collections %}
-    {% for doc in collection.docs %}
-    <url>
-      <loc>https://resumelink.cc{{ doc.url }}</loc>
-      <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
-      <changefreq>weekly</changefreq>
-      <priority>0.8</priority>
-    </url>
-    {% endfor %}
+  {% for doc in site.roles %}
+  <url>
+    <loc>https://resumelink.cc{{ doc.url }}</loc>
+    <priority>0.8</priority>
+  </url>
   {% endfor %}
 </urlset>
