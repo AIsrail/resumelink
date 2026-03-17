@@ -1,5 +1,6 @@
 title: ResumeLink
 url: "https://resumelink.cc"
+baseurl: ""
 
 collections:
   roles:
