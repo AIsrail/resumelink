@@ -7,8 +7,6 @@ collections:
     output: true
     permalink: /roles/:name/
 
-future: true
-
 defaults:
   - scope:
       path: ""
