@@ -1,0 +1,62 @@
+---
+layout: default
+---
+<article class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
+    <div class="flex items-center space-x-3 mb-4">
+        <span class="px-3 py-1 bg-blue-50 text-blue-700 text-sm font-medium rounded-full underline decoration-blue-200">2026 Career Guide</span>
+    </div>
+    
+    <h1 class="text-4xl font-extrabold text-slate-900 mb-6 leading-tight">
+        {{ page.h1 }}
+    </h1>
+
+    <section class="mb-10 p-6 bg-slate-50 rounded-xl border-l-4 border-blue-500">
+        <h2 class="text-lg font-bold mb-3 flex items-center">
+            <span class="mr-2">🧠</span> AI-Optimized Professional Summary
+        </h2>
+        <p class="text-slate-700 italic leading-relaxed">
+            "{{ page.summary_hack }}"
+        </p>
+    </section>
+
+    <div class="grid md:grid-cols-2 gap-8">
+        <div>
+            <h3 class="text-xl font-bold mb-4 text-slate-800">Critical Skills (Human Advantage)</h3>
+            <ul class="space-y-2">
+                {% for skill in page.judgment_skills %}
+                <li class="flex items-start">
+                    <span class="text-green-500 mr-2">✓</span>
+                    <span class="text-slate-600">{{ skill }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div>
+            <h3 class="text-xl font-bold mb-4 text-slate-800">Essential AI Tech Stack</h3>
+            <div class="flex flex-wrap gap-2">
+                {% for tool in page.ai_tools %}
+                <span class="px-3 py-1 bg-slate-100 text-slate-700 rounded-md text-sm border border-slate-200 italic">
+                    {{ tool }}
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-12 p-6 bg-amber-50 rounded-xl border border-amber-100">
+        <h3 class="text-amber-800 font-bold mb-2 flex items-center">
+            <span class="mr-2">✨</span> The "Human-Touch" Strategy (HBR Advice)
+        </h3>
+        <p class="text-amber-900 text-sm leading-relaxed">
+            {{ page.human_touch_tip }}
+        </p>
+    </div>
+
+    <div class="mt-12 text-center">
+        <a href="https://resumelink.cc" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-xl transition-all shadow-lg shadow-blue-200">
+            Create Your Human-Centric Resume Now
+        </a>
+        <p class="mt-4 text-slate-400 text-xs">No generic templates. High-impact results for 2026 market.</p>
+    </div>
+</article>
