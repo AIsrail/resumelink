@@ -7,8 +7,7 @@ collections:
     output: true
     permalink: /roles/:name/
 
-# Это заставит Jekyll игнорировать кэш и искать папки принудительно
-include: ["_roles"]
+future: true
 
 defaults:
   - scope:
