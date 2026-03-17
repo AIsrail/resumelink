@@ -6,12 +6,12 @@ collections:
     output: true
     permalink: /roles/:name/
 
-# Это заставит Jekyll "увидеть" папку, даже если он хочет её проигнорировать
-include: ["_roles"]
+include:
+  - _roles
 
 defaults:
   - scope:
       path: ""
-      type: "roles"
+      type: roles
     values:
-      layout: "role"
+      layout: role
