@@ -9,6 +9,7 @@ collections:
   roles:
     output: true
     permalink: /roles/:name/
+    directory: roles
 
 defaults:
   - scope:
