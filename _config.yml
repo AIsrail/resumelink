@@ -8,10 +8,12 @@ plugins:
 collections:
   roles:
     output: true
+    permalink: /roles/:name/
 
 defaults:
   - scope:
-      path: "roles"
+      path: ""
+      type: "roles"
     values:
       layout: "role"
 
