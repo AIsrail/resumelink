@@ -2,16 +2,17 @@ title: ResumeLink
 url: "https://resumelink.cc"
 baseurl: ""
 
-# Включаем официальный плагин
 plugins:
   - jekyll-sitemap
 
-# Настройки для твоих страниц в папке role
+collections:
+  roles:
+    output: true
+
 defaults:
   - scope:
-      path: "role"
+      path: "roles"
     values:
       layout: "role"
 
-# Оставляем красивые ссылки
 permalink: /:path/
