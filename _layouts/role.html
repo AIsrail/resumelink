@@ -1,177 +1,131 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About ResumeLink — AI Resume Builder</title>
-    <meta name="description" content="ResumeLink mission: Helping professionals create AI-driven interactive profiles. О проекте ResumeLink: ваш личный AI конструктор резюме.">
-    <meta name="keywords" content="ResumeLink mission, AI career tools, AI конструктор резюме, как работает ResumeLink">
+---
+layout: default
+---
+<style>
+    .role-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--green-dk); background: var(--mint); border: 0.5px solid var(--border); padding: 5px 12px; border-radius: 20px; margin-bottom: 20px; }
+    .role-badge::before { content:''; width:6px; height:6px; background:var(--green); border-radius:50%; }
+    .role-h1 { font-size: clamp(2rem,4vw,3rem); font-weight: 300; color: var(--forest); letter-spacing: -0.025em; line-height: 1.2; margin-bottom: 1.5rem; }
+    .role-h1 b { font-weight: 500; }
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+    /* Summary block */
+    .summary-block { background: var(--surface); border: 0.5px solid var(--border); border-left: 3px solid var(--green); border-radius: 12px; padding: 20px 24px; margin-bottom: 2rem; }
+    .summary-block-label { font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+    .summary-block p { font-size: 15px; font-style: italic; color: var(--muted); line-height: 1.7; }
 
-    <style>
-        :root {
-            --green:    #1DB368;
-            --green-dk: #0D8A4E;
-            --forest:   #0D3D28;
-            --bg:       #F2FAF6;
-            --surface:  #FFFFFF;
-            --mint:     #EAF7F0;
-            --border:   #C5E8D5;
-            --text:     #0D3D28;
-            --muted:    #5A8A70;
-            --faint:    #A8CDB9;
-        }
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: var(--bg); font-family: 'DM Sans', sans-serif; color: var(--text); min-height: 100vh; overflow-x: hidden; }
+    /* Two-col grid */
+    .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 2rem; }
+    .role-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 16px; padding: 24px; }
+    .role-card-title { font-size: 13px; font-weight: 500; color: var(--forest); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1.5px solid var(--green); display: flex; align-items: center; gap: 8px; }
+    .skill-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--muted); padding: 5px 0; border-bottom: 0.5px solid var(--border); line-height: 1.4; }
+    .skill-item:last-child { border-bottom: none; }
+    .skill-check { color: var(--green); font-size: 12px; flex-shrink: 0; margin-top: 2px; }
+    .tool-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tool-tag { background: var(--mint); border: 0.5px solid var(--border); color: var(--green-dk); font-size: 12px; padding: 5px 12px; border-radius: 6px; font-weight: 500; }
 
-        /* NAV */
-        nav { position: sticky; top: 0; z-index: 100; background: rgba(242,250,246,0.92); backdrop-filter: blur(12px); border-bottom: 0.5px solid var(--border); padding: 0 clamp(1.5rem,5vw,4rem); height: 62px; display: flex; align-items: center; justify-content: space-between; }
-        .nav-logo { font-size: 20px; font-weight: 500; color: var(--forest); letter-spacing: -0.03em; text-decoration: none; }
-        .nav-logo span { color: var(--green); }
-        .nav-links { display: flex; align-items: center; gap: 28px; }
-        .nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color .2s; }
-        .nav-links a:hover { color: var(--forest); }
-        .nav-cta { background: var(--forest); color: var(--bg) !important; padding: 8px 18px; border-radius: 8px; font-weight: 500 !important; transition: background .2s !important; }
-        .nav-cta:hover { background: var(--green-dk) !important; }
-        .nav-hamburger { display: none; cursor: pointer; flex-direction: column; gap: 4px; background: none; border: none; padding: 4px; }
-        .nav-hamburger span { width: 20px; height: 1.5px; background: var(--forest); border-radius: 2px; display: block; }
-        .nav-mobile { display: none; position: absolute; top: 62px; left: 0; right: 0; background: var(--bg); border-bottom: 0.5px solid var(--border); padding: 1rem 1.5rem; flex-direction: column; gap: 16px; z-index: 99; }
-        .nav-mobile a { font-size: 14px; color: var(--muted); text-decoration: none; }
-        .nav-mobile.open { display: flex; }
+    /* Human touch */
+    .human-touch { background: #FFFBEB; border: 0.5px solid #FDE68A; border-radius: 16px; padding: 24px; margin-bottom: 2rem; }
+    .human-touch-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; color: #92400E; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+    .human-touch p { font-size: 13px; color: #78350F; line-height: 1.65; }
 
-        /* CONTENT */
-        .page-wrap { max-width: 860px; margin: 0 auto; padding: clamp(3rem,6vw,5rem) clamp(1.5rem,5vw,2rem); }
-        .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: var(--muted); text-decoration: none; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 3rem; transition: color .2s; }
-        .back-link:hover { color: var(--forest); }
+    /* Prose content */
+    .role-prose { font-size: 14px; color: var(--muted); line-height: 1.8; margin-bottom: 2rem; }
+    .role-prose h2, .role-prose h3 { color: var(--forest); font-weight: 500; margin: 1.5rem 0 0.75rem; }
+    .role-prose p { margin-bottom: 1rem; }
+    .role-prose ul { padding-left: 1.2rem; margin-bottom: 1rem; }
+    .role-prose li { margin-bottom: 4px; }
 
-        .lang-section { margin-bottom: 4rem; }
-        .lang-section + .lang-section { padding-top: 4rem; border-top: 0.5px solid var(--border); }
-        .lang-badge { display: inline-block; font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); border: 0.5px solid var(--border); padding: 4px 10px; border-radius: 4px; margin-bottom: 20px; }
+    /* CTA */
+    .role-cta { background: var(--forest); border-radius: 20px; padding: clamp(2rem,4vw,3rem); text-align: center; margin-bottom: 3rem; position: relative; overflow: hidden; }
+    .role-cta::before { content:''; position:absolute; inset:0; background: radial-gradient(ellipse at 70% 30%, rgba(29,179,104,0.15) 0%, transparent 60%); pointer-events:none; }
+    .role-cta h2 { font-size: clamp(1.4rem,3vw,2rem); font-weight: 300; color: #fff; margin-bottom: 10px; letter-spacing: -0.02em; }
+    .role-cta h2 b { font-weight: 500; }
+    .role-cta p { font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 24px; }
+    .role-cta a { background: var(--green); color: #fff; padding: 13px 32px; border-radius: 10px; font-size: 14px; font-weight: 500; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: background .2s, transform .15s; }
+    .role-cta a:hover { background: var(--green-dk); transform: translateY(-1px); }
 
-        .page-h1 { font-size: clamp(2.2rem,4vw,3.2rem); font-weight: 300; color: var(--forest); letter-spacing: -0.025em; line-height: 1.2; margin-bottom: 1.5rem; }
-        .page-h1 em { font-family: 'Instrument Serif', serif; font-style: italic; color: var(--green); }
+    /* Related */
+    .related-title { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .1em; color: var(--faint); margin-bottom: 16px; }
+    .related-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .related-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 14px; padding: 18px 20px; text-decoration: none; transition: border-color .2s, transform .2s; display: block; }
+    .related-card:hover { border-color: var(--green); transform: translateY(-2px); }
+    .related-card h4 { font-size: 14px; font-weight: 500; color: var(--forest); margin-bottom: 6px; }
+    .related-card p { font-size: 12px; color: var(--muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .related-card .related-arrow { font-size: 11px; font-weight: 500; color: var(--green); margin-top: 10px; display: block; text-transform: uppercase; letter-spacing: .06em; }
 
-        .intro-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 16px; padding: 24px 28px; margin-bottom: 20px; font-size: 16px; font-weight: 300; color: var(--text); line-height: 1.7; }
-        .intro-card b { font-weight: 500; color: var(--green); }
+    /* Breadcrumb */
+    .breadcrumb { font-size: 12px; color: var(--faint); margin-bottom: 20px; }
+    .breadcrumb a { color: var(--green-dk); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
 
-        .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        .feature-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 16px; padding: 22px; transition: border-color .2s; }
-        .feature-card:hover { border-color: var(--green); }
-        .feature-card-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: .1em; color: var(--green-dk); margin-bottom: 10px; }
-        .feature-card p { font-size: 13px; color: var(--muted); line-height: 1.65; }
+    @media (max-width: 640px) {
+        .role-grid { grid-template-columns: 1fr; }
+        .related-grid { grid-template-columns: 1fr; }
+    }
+</style>
 
-        /* FOOTER */
-        footer { border-top: 0.5px solid var(--border); padding: 2rem clamp(1.5rem,5vw,4rem); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; max-width: 1200px; margin: 3rem auto 0; }
-        .footer-logo { font-size: 15px; font-weight: 500; color: var(--forest); text-decoration: none; letter-spacing: -0.02em; }
-        .footer-logo span { color: var(--green); }
-        .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
-        .footer-links a { font-size: 12px; color: var(--faint); text-decoration: none; transition: color .2s; }
-        .footer-links a:hover { color: var(--forest); }
-        .footer-copy { font-size: 11px; color: var(--faint); }
-
-        @media (max-width: 640px) {
-            .cards-grid { grid-template-columns: 1fr; }
-            .nav-links { display: none; }
-            .nav-hamburger { display: flex; }
-            footer { flex-direction: column; gap: 12px; }
-        }
-    </style>
-</head>
-<body>
-
-<nav>
-    <a href="/" class="nav-logo">Resume<span>Link</span></a>
-    <div class="nav-links">
-        <a href="/roles/">Guides & Careers</a>
-        <a href="/about.html">About</a>
-        <a href="mailto:info@resumelink.cc">Contact</a>
-        <a href="/" class="nav-cta">Upload Resume →</a>
-    </div>
-    <button class="nav-hamburger" onclick="document.querySelector('.nav-mobile').classList.toggle('open')" aria-label="Menu">
-        <span></span><span></span><span></span>
-    </button>
-</nav>
-<div class="nav-mobile">
-    <a href="/roles/">Guides & Careers</a>
-    <a href="/about.html">About</a>
-    <a href="mailto:info@resumelink.cc">Contact</a>
-    <a href="/" style="color:var(--green-dk);font-weight:500">Upload Resume →</a>
+<div class="breadcrumb">
+    <a href="/">ResumeLink</a> → <a href="/roles/">Guides & Careers</a> → {{ page.title }}
 </div>
 
-<div class="page-wrap">
-    <a href="/" class="back-link">← Back / На главную</a>
+<div class="role-badge">2026 Expert Guide</div>
 
-    <!-- ENGLISH -->
-    <div class="lang-section">
-        <div class="lang-badge">English</div>
-        <h1 class="page-h1">About <em>ResumeLink</em></h1>
+<h1 class="role-h1">{{ page.h1 }}</h1>
 
-        <div class="intro-card">
-            <b>ResumeLink</b> is a next-generation career tool. We believe that in 2026, a resume should be more than just a static file — it should be a living, shareable profile that works for you 24/7.
+<div class="summary-block">
+    <div class="summary-block-label">🧠 AI-Optimized Professional Summary</div>
+    <p>"{{ page.summary_hack }}"</p>
+</div>
+
+<div class="role-grid">
+    <div class="role-card">
+        <div class="role-card-title">✦ Human Advantage Skills</div>
+        {% for skill in page.judgment_skills %}
+        <div class="skill-item">
+            <span class="skill-check">✓</span>
+            <span>{{ skill }}</span>
         </div>
-
-        <div class="cards-grid">
-            <div class="feature-card">
-                <div class="feature-card-label">⚡ AI Analysis</div>
-                <p>Simply upload your file — our AI handles the rest. It structures your data according to modern ATS standards, helping you bypass automated filters and reach real recruiters.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-card-label">🔗 Instant Access</div>
-                <p>Your profile is always ready to share via link or QR code. No more attachments or formatting issues on recruiters' devices — just one clean link.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-card-label">📊 ATS Score</div>
-                <p>Understand exactly how your resume performs against automated hiring filters. Get an instant score and know where you stand before hitting "Apply".</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-card-label">🌍 Multilingual</div>
-                <p>ResumeLink auto-detects your resume language and adapts the interface accordingly. More languages are coming soon.</p>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 
-    <!-- RUSSIAN -->
-    <div class="lang-section">
-        <div class="lang-badge">Русский</div>
-        <h1 class="page-h1">О проекте <em>ResumeLink</em></h1>
-
-        <div class="intro-card">
-            <b>ResumeLink</b> — это ваш личный AI конструктор резюме нового поколения. Мы помогаем специалистам выглядеть технологично и профессионально в эпоху, когда первое впечатление формируется за секунды.
-        </div>
-
-        <div class="cards-grid">
-            <div class="feature-card">
-                <div class="feature-card-label">⚡ Умная AI-упаковка</div>
-                <p>Просто загрузите свой файл — всё остальное сделает нейросеть. Она адаптирует ваш опыт под требования HR-систем и выделяет ваши сильные стороны автоматически.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-card-label">🔗 Цифровой профиль</div>
-                <p>Ваше резюме превращается в интерактивную ссылку или QR-код. Забудьте о тяжёлых PDF-файлах, которые неудобно открывать на телефоне.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-card-label">📊 ATS Score</div>
-                <p>Мгновенная оценка соответствия вакансии. Понимайте, почему ваше резюме проходит или не проходит автоматические фильтры HR-систем.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-card-label">🌍 Мультиязычность</div>
-                <p>Сервис автоматически определяет язык резюме и адаптирует весь интерфейс. Скоро подключатся новые языки и регионы.</p>
-            </div>
+    <div class="role-card">
+        <div class="role-card-title">⚡ Target Tech Stack</div>
+        <div class="tool-wrap">
+            {% for tool in page.ai_tools %}
+            <span class="tool-tag">{{ tool }}</span>
+            {% endfor %}
         </div>
     </div>
 </div>
 
-<footer>
-    <a href="/" class="footer-logo">Resume<span>Link</span></a>
-    <div class="footer-links">
-        <a href="/roles/">Guides & Careers</a>
-        <a href="/about.html">About</a>
-        <a href="/policy.html">Privacy & Terms</a>
-        <a href="mailto:info@resumelink.cc">info@resumelink.cc</a>
-    </div>
-    <div class="footer-copy">© 2026 ResumeLink</div>
-</footer>
+{% if page.human_touch_tip and page.human_touch_tip != "" %}
+<div class="human-touch">
+    <div class="human-touch-label">✨ The "Human-Touch" Strategy</div>
+    <p>{{ page.human_touch_tip }}</p>
+</div>
+{% endif %}
 
-</body>
-</html>
+{% if content != "" %}
+<div class="role-prose">
+    {{ content }}
+</div>
+{% endif %}
+
+<div class="role-cta">
+    <h2>Ready to stand out?<br><b>Build your live profile now.</b></h2>
+    <p>Upload your resume — AI structures it into an interactive profile with ATS score and QR code in 10 seconds.</p>
+    <a href="https://resumelink.cc">📄 Upload Resume → Free</a>
+</div>
+
+{% assign related = site.roles | where_exp: "item", "item.url != page.url" | sample: 4 %}
+{% if related.size > 0 %}
+<div class="related-title">Related Career Guides</div>
+<div class="related-grid">
+    {% for role in related %}
+    <a href="{{ role.url }}" class="related-card">
+        <h4>{{ role.title }}</h4>
+        <p>{{ role.summary_hack }}</p>
+        <span class="related-arrow">View Guide →</span>
+    </a>
+    {% endfor %}
+</div>
+{% endif %}
