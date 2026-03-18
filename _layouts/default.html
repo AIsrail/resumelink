@@ -4,27 +4,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ page.title }} | ResumeLink</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="description" content="{{ page.description | default: 'AI-powered career guides and resume tools for the future of work.' }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --green:    #1DB368;
+            --green-dk: #0D8A4E;
+            --forest:   #0D3D28;
+            --bg:       #F2FAF6;
+            --surface:  #FFFFFF;
+            --mint:     #EAF7F0;
+            --border:   #C5E8D5;
+            --text:     #0D3D28;
+            --muted:    #5A8A70;
+            --faint:    #A8CDB9;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body { background: var(--bg); font-family: 'DM Sans', sans-serif; color: var(--text); min-height: 100vh; overflow-x: hidden; line-height: 1.6; }
+
+        /* NAV */
+        nav { position: sticky; top: 0; z-index: 100; background: rgba(242,250,246,0.92); backdrop-filter: blur(12px); border-bottom: 0.5px solid var(--border); padding: 0 clamp(1.5rem,5vw,4rem); height: 62px; display: flex; align-items: center; justify-content: space-between; }
+        .nav-logo { font-size: 20px; font-weight: 500; color: var(--forest); letter-spacing: -0.03em; text-decoration: none; }
+        .nav-logo span { color: var(--green); }
+        .nav-links { display: flex; align-items: center; gap: 28px; }
+        .nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color .2s; }
+        .nav-links a:hover { color: var(--forest); }
+        .nav-cta { background: var(--forest); color: var(--bg) !important; padding: 8px 18px; border-radius: 8px; font-weight: 500 !important; transition: background .2s !important; }
+        .nav-cta:hover { background: var(--green-dk) !important; }
+        .nav-hamburger { display: none; cursor: pointer; flex-direction: column; gap: 4px; background: none; border: none; padding: 4px; }
+        .nav-hamburger span { width: 20px; height: 1.5px; background: var(--forest); border-radius: 2px; display: block; }
+        .nav-mobile { display: none; position: absolute; top: 62px; left: 0; right: 0; background: var(--bg); border-bottom: 0.5px solid var(--border); padding: 1rem 1.5rem; flex-direction: column; gap: 16px; z-index: 99; }
+        .nav-mobile a { font-size: 14px; color: var(--muted); text-decoration: none; }
+        .nav-mobile.open { display: flex; }
+
+        /* MAIN */
+        main { max-width: 900px; margin: 0 auto; padding: clamp(2rem,5vw,4rem) clamp(1.5rem,5vw,2rem); }
+
+        /* FOOTER */
+        footer { border-top: 0.5px solid var(--border); padding: 2rem clamp(1.5rem,5vw,4rem); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; max-width: 1200px; margin: 3rem auto 0; }
+        .footer-logo { font-size: 15px; font-weight: 500; color: var(--forest); text-decoration: none; letter-spacing: -0.02em; }
+        .footer-logo span { color: var(--green); }
+        .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+        .footer-links a { font-size: 12px; color: var(--faint); text-decoration: none; transition: color .2s; }
+        .footer-links a:hover { color: var(--forest); }
+        .footer-copy { font-size: 11px; color: var(--faint); }
+
+        @media (max-width: 640px) {
+            .nav-links { display: none; }
+            .nav-hamburger { display: flex; }
+            footer { flex-direction: column; gap: 12px; }
+        }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans">
+<body>
 
-    <nav class="p-6 bg-white shadow-sm">
-        <div class="max-w-5xl mx-auto flex justify-between items-center">
-            <a href="/" class="text-2xl font-bold text-blue-600">ResumeLink</a>
-            <div class="space-x-4">
-                <a href="#" class="text-slate-600">Templates</a>
-                <a href="#" class="bg-blue-600 text-white px-4 py-2 rounded-lg">Create Resume</a>
-            </div>
-        </div>
-    </nav>
+<nav>
+    <a href="/" class="nav-logo">Resume<span>Link</span></a>
+    <div class="nav-links">
+        <a href="/roles/">Guides & Careers</a>
+        <a href="/about.html">About</a>
+        <a href="mailto:info@resumelink.cc">Contact</a>
+        <a href="/" class="nav-cta">Upload Resume →</a>
+    </div>
+    <button class="nav-hamburger" onclick="this.closest('nav').nextElementSibling.classList.toggle('open')" aria-label="Menu">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+<div class="nav-mobile">
+    <a href="/roles/">Guides & Careers</a>
+    <a href="/about.html">About</a>
+    <a href="mailto:info@resumelink.cc">Contact</a>
+    <a href="/" style="color:var(--green-dk);font-weight:500">Upload Resume →</a>
+</div>
 
-    <main class="max-w-5xl mx-auto py-12 px-6">
-        {{ content }}
-    </main>
+<main>
+    {{ content }}
+</main>
 
-    <footer class="mt-20 p-10 bg-slate-100 text-center text-slate-500 border-t">
-        <p>&copy; 2026 ResumeLink.cc - Human-Centric AI Career Guides.</p>
-    </footer>
+<footer>
+    <a href="/" class="footer-logo">Resume<span>Link</span></a>
+    <div class="footer-links">
+        <a href="/roles/">Guides & Careers</a>
+        <a href="/about.html">About</a>
+        <a href="/policy.html">Privacy & Terms</a>
+        <a href="mailto:info@resumelink.cc">info@resumelink.cc</a>
+    </div>
+    <div class="footer-copy">© 2026 ResumeLink</div>
+</footer>
+
+<script>
+function toggleMenu() {
+    document.querySelector('.nav-mobile').classList.toggle('open');
+}
+</script>
 
 </body>
 </html>
