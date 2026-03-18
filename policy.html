@@ -3,74 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy & Terms - ResumeLink</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <title>Privacy Policy & Terms — ResumeLink</title>
+    <meta name="description" content="ResumeLink Privacy Policy and Terms of Use. We are committed to protecting your personal information.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            background-color: #f9fafb;
+        :root {
+            --green:    #1DB368;
+            --green-dk: #0D8A4E;
+            --forest:   #0D3D28;
+            --bg:       #F2FAF6;
+            --surface:  #FFFFFF;
+            --mint:     #EAF7F0;
+            --border:   #C5E8D5;
+            --text:     #0D3D28;
+            --muted:    #5A8A70;
+            --faint:    #A8CDB9;
         }
-        .container {
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-        h1 { color: #111; font-size: 2rem; margin-bottom: 10px; }
-        h2 { color: #111; font-size: 1.25rem; margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        p { margin-bottom: 15px; font-size: 1rem; color: #4b5563; }
-        ul { margin-bottom: 20px; padding-left: 20px; }
-        li { margin-bottom: 8px; color: #4b5563; }
-        .back-link { display: inline-block; margin-bottom: 20px; color: #2563eb; text-decoration: none; font-weight: 600; }
-        .back-link:hover { text-decoration: underline; }
-        footer { margin-top: 40px; text-align: center; font-size: 0.875rem; color: #9ca3af; }
-        .highlight { color: #2563eb; font-weight: 600; }
-        a { color: #2563eb; text-decoration: none; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: var(--bg); font-family: 'DM Sans', sans-serif; color: var(--text); min-height: 100vh; overflow-x: hidden; }
+
+        /* NAV */
+        nav { position: sticky; top: 0; z-index: 100; background: rgba(242,250,246,0.92); backdrop-filter: blur(12px); border-bottom: 0.5px solid var(--border); padding: 0 clamp(1.5rem,5vw,4rem); height: 62px; display: flex; align-items: center; justify-content: space-between; }
+        .nav-logo { font-size: 20px; font-weight: 500; color: var(--forest); letter-spacing: -0.03em; text-decoration: none; }
+        .nav-logo span { color: var(--green); }
+        .nav-links { display: flex; align-items: center; gap: 28px; }
+        .nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color .2s; }
+        .nav-links a:hover { color: var(--forest); }
+        .nav-cta { background: var(--forest); color: var(--bg) !important; padding: 8px 18px; border-radius: 8px; font-weight: 500 !important; transition: background .2s !important; }
+        .nav-cta:hover { background: var(--green-dk) !important; }
+        .nav-hamburger { display: none; cursor: pointer; flex-direction: column; gap: 4px; background: none; border: none; padding: 4px; }
+        .nav-hamburger span { width: 20px; height: 1.5px; background: var(--forest); border-radius: 2px; display: block; }
+        .nav-mobile { display: none; position: absolute; top: 62px; left: 0; right: 0; background: var(--bg); border-bottom: 0.5px solid var(--border); padding: 1rem 1.5rem; flex-direction: column; gap: 16px; z-index: 99; }
+        .nav-mobile a { font-size: 14px; color: var(--muted); text-decoration: none; }
+        .nav-mobile.open { display: flex; }
+
+        /* CONTENT */
+        .page-wrap { max-width: 760px; margin: 0 auto; padding: clamp(3rem,6vw,5rem) clamp(1.5rem,5vw,2rem); }
+        .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: var(--muted); text-decoration: none; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 2.5rem; transition: color .2s; }
+        .back-link:hover { color: var(--forest); }
+
+        .policy-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 20px; padding: clamp(1.5rem,4vw,3rem); }
+        .policy-date { font-size: 11px; color: var(--faint); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 1.5rem; }
+        h1 { font-size: clamp(1.8rem,3.5vw,2.6rem); font-weight: 300; color: var(--forest); letter-spacing: -0.02em; margin-bottom: 1rem; line-height: 1.2; }
+        h1 b { font-weight: 500; }
+        .intro-text { font-size: 15px; color: var(--muted); line-height: 1.7; margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 0.5px solid var(--border); }
+
+        .policy-section { margin-bottom: 2rem; }
+        .policy-section:last-child { margin-bottom: 0; }
+        h2 { font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; color: var(--forest); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1.5px solid var(--green); display: inline-block; }
+        p { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 10px; }
+        p:last-child { margin-bottom: 0; }
+        ul { padding-left: 0; list-style: none; margin-bottom: 10px; }
+        li { font-size: 14px; color: var(--muted); line-height: 1.6; padding: 6px 0 6px 20px; position: relative; border-bottom: 0.5px solid var(--border); }
+        li:last-child { border-bottom: none; }
+        li::before { content: '→'; position: absolute; left: 0; color: var(--green); font-size: 12px; }
+        li strong { color: var(--forest); font-weight: 500; }
+        a { color: var(--green-dk); text-decoration: none; }
         a:hover { text-decoration: underline; }
+        .highlight { color: var(--green-dk); font-weight: 500; }
+
+        /* FOOTER */
+        footer { border-top: 0.5px solid var(--border); padding: 2rem clamp(1.5rem,5vw,4rem); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; max-width: 1200px; margin: 3rem auto 0; }
+        .footer-logo { font-size: 15px; font-weight: 500; color: var(--forest); text-decoration: none; letter-spacing: -0.02em; }
+        .footer-logo span { color: var(--green); }
+        .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+        .footer-links a { font-size: 12px; color: var(--faint); text-decoration: none; transition: color .2s; }
+        .footer-links a:hover { color: var(--forest); }
+        .footer-copy { font-size: 11px; color: var(--faint); }
+
+        @media (max-width: 640px) {
+            .nav-links { display: none; }
+            .nav-hamburger { display: flex; }
+            footer { flex-direction: column; gap: 12px; }
+        }
     </style>
 </head>
 <body>
 
+<nav>
+    <a href="/" class="nav-logo">Resume<span>Link</span></a>
+    <div class="nav-links">
+        <a href="/roles/">Guides & Careers</a>
+        <a href="/about.html">About</a>
+        <a href="mailto:info@resumelink.cc">Contact</a>
+        <a href="/" class="nav-cta">Upload Resume →</a>
+    </div>
+    <button class="nav-hamburger" onclick="document.querySelector('.nav-mobile').classList.toggle('open')" aria-label="Menu">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+<div class="nav-mobile">
+    <a href="/roles/">Guides & Careers</a>
+    <a href="/about.html">About</a>
+    <a href="mailto:info@resumelink.cc">Contact</a>
+    <a href="/" style="color:var(--green-dk);font-weight:500">Upload Resume →</a>
+</div>
+
+<div class="page-wrap">
     <a href="/" class="back-link">← Back to ResumeLink</a>
 
-    <div class="container">
-        <h1>Privacy Policy & Terms</h1>
-        <p>Effective Date: March 5, 2026</p>
+    <div class="policy-card">
+        <div class="policy-date">Effective Date: March 5, 2026</div>
+        <h1>Privacy Policy<br><b>& Terms of Use</b></h1>
+        <p class="intro-text">Welcome to <strong>ResumeLink</strong>. We value your trust and are committed to protecting your personal information. This document outlines how we handle your data and the terms of using our service.</p>
 
-        <p>Welcome to <strong>ResumeLink</strong>. We value your trust and are committed to protecting your personal information. This document outlines how we handle your data and the terms of using our service.</p>
+        <div class="policy-section">
+            <h2>1. Privacy & Data Processing</h2>
+            <p>ResumeLink is built with a <span class="highlight">Privacy-First</span> approach. We do not want your data — we only want to help you present it better.</p>
+            <ul>
+                <li><strong>Client-Side Processing:</strong> Most data extraction happens directly in your browser. We do not store your uploaded PDF files on our servers.</li>
+                <li><strong>No Permanent Storage:</strong> We do not maintain a database of your personal contact information. Your profile exists only as long as your unique link is active.</li>
+                <li><strong>AI Processing:</strong> We use Google Gemini AI to parse resume text. This data is processed securely and is not used by us to train models or sold to third parties.</li>
+            </ul>
+        </div>
 
-        <h2>1. Privacy & Data Processing</h2>
-        <p>ResumeLink is built with a <span class="highlight">Privacy-First</span> approach. We do not want your data; we only want to help you present it better.</p>
-        <ul>
-            <li><strong>Client-Side Processing:</strong> Most data extraction happens directly in your browser. We do not store your uploaded PDF files on our servers.</li>
-            <li><strong>No Permanent Storage:</strong> We do not maintain a database of your personal contact information. Your profile exists only as long as your unique link is active.</li>
-            <li><strong>AI Processing:</strong> We use Google Gemini AI to parse resume text. This data is processed securely and is not used by us to train models or sold to third parties.</li>
-        </ul>
+        <div class="policy-section">
+            <h2>2. How "Live Links" Work</h2>
+            <p>When you generate a link for your resume, a unique, non-guessable URL is created. <strong>Important:</strong> Anyone with access to this link can view your profile. You are responsible for where and with whom you share this URL.</p>
+        </div>
 
-        <h2>2. How "Live Links" Work</h2>
-        <p>When you generate a link for your resume, a unique, non-guessable URL is created. 
-           <strong>Important:</strong> Anyone with access to this link can view your profile. You are responsible for where and with whom you share this URL.</p>
+        <div class="policy-section">
+            <h2>3. Terms of Use</h2>
+            <ul>
+                <li><strong>Eligibility:</strong> You must have the legal right to the information you upload.</li>
+                <li><strong>Prohibited Content:</strong> You agree not to upload malicious code, illegal content, or information that violates the rights of others.</li>
+                <li><strong>As-Is Service:</strong> ResumeLink is provided "as is". While we aim for perfect AI accuracy, we are not liable for parsing errors or hiring outcomes.</li>
+            </ul>
+        </div>
 
-        <h2>3. Terms of Use</h2>
-        <ul>
-            <li><strong>Eligibility:</strong> You must have the legal right to the information you upload.</li>
-            <li><strong>Prohibited Content:</strong> You agree not to upload malicious code, illegal content, or information that violates the rights of others.</li>
-            <li><strong>As-Is Service:</strong> ResumeLink is provided "as is". While we aim for perfect AI accuracy, we are not liable for parsing errors or hiring outcomes.</li>
-        </ul>
-
-        <h2>4. Contact & Feedback</h2>
-        <p>If you have any questions about these terms or want to provide feedback, please reach out via email: 
-           <a href="mailto:sarytopdev@gmail.com">sarytopdev@gmail.com</a>.</p>
+        <div class="policy-section">
+            <h2>4. Contact & Feedback</h2>
+            <p>If you have any questions about these terms or want to provide feedback, please reach out: <a href="mailto:info@resumelink.cc">info@resumelink.cc</a></p>
+        </div>
     </div>
+</div>
 
-    <footer>
-        &copy; 2026 ResumeLink. Built with ❤️ for the professional community.
-    </footer>
+<footer>
+    <a href="/" class="footer-logo">Resume<span>Link</span></a>
+    <div class="footer-links">
+        <a href="/roles/">Guides & Careers</a>
+        <a href="/about.html">About</a>
+        <a href="/policy.html">Privacy & Terms</a>
+        <a href="mailto:info@resumelink.cc">info@resumelink.cc</a>
+    </div>
+    <div class="footer-copy">© 2026 ResumeLink</div>
+</footer>
 
 </body>
 </html>
