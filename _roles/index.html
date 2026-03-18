@@ -1,0 +1,121 @@
+---
+layout: default
+title: "Explore Guides & Careers"
+description: "140+ expert guides for AI-era professionals. Find your role, build your resume, get hired."
+---
+
+<style>
+    .explore-hero { margin-bottom: 2.5rem; }
+    .explore-eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--green-dk); background: var(--mint); border: 0.5px solid var(--border); padding: 5px 12px; border-radius: 20px; margin-bottom: 16px; }
+    .explore-eyebrow::before { content:''; width:6px; height:6px; background:var(--green); border-radius:50%; }
+    .explore-h1 { font-size: clamp(2rem,4vw,3rem); font-weight: 300; color: var(--forest); letter-spacing: -0.025em; line-height: 1.2; margin-bottom: 12px; }
+    .explore-h1 b { font-weight: 500; }
+    .explore-sub { font-size: 15px; color: var(--muted); line-height: 1.65; max-width: 540px; }
+
+    /* Search */
+    .search-wrap { margin-bottom: 2rem; position: relative; }
+    .search-input {
+        width: 100%; padding: 14px 20px 14px 44px;
+        background: var(--surface); border: 0.5px solid var(--border);
+        border-radius: 12px; font-size: 14px; color: var(--text);
+        font-family: 'DM Sans', sans-serif; outline: none;
+        transition: border-color .2s;
+    }
+    .search-input:focus { border-color: var(--green); }
+    .search-input::placeholder { color: var(--faint); }
+    .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--faint); font-size: 16px; pointer-events: none; }
+    .search-count { font-size: 12px; color: var(--faint); margin-top: 8px; }
+
+    /* Grid */
+    .roles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .role-card {
+        background: var(--surface); border: 0.5px solid var(--border);
+        border-radius: 16px; padding: 20px;
+        text-decoration: none; display: block;
+        transition: border-color .2s, transform .2s;
+    }
+    .role-card:hover { border-color: var(--green); transform: translateY(-2px); }
+    .role-card-title { font-size: 14px; font-weight: 500; color: var(--forest); margin-bottom: 8px; line-height: 1.3; }
+    .role-card-summary { font-size: 12px; color: var(--muted); line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 14px; }
+    .role-card-footer { display: flex; align-items: center; justify-content: space-between; }
+    .role-card-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+    .role-card-tag { background: var(--mint); border: 0.5px solid var(--border); color: var(--green-dk); font-size: 9px; padding: 2px 7px; border-radius: 4px; }
+    .role-card-arrow { font-size: 11px; font-weight: 500; color: var(--green); white-space: nowrap; }
+
+    /* Empty state */
+    .empty-state { text-align: center; padding: 4rem 2rem; color: var(--faint); font-size: 14px; display: none; }
+    .empty-state.visible { display: block; }
+
+    /* CTA bar */
+    .cta-bar { background: var(--forest); border-radius: 16px; padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin-top: 3rem; flex-wrap: wrap; }
+    .cta-bar-text h3 { font-size: 18px; font-weight: 300; color: #fff; margin-bottom: 4px; }
+    .cta-bar-text h3 b { font-weight: 500; }
+    .cta-bar-text p { font-size: 13px; color: rgba(255,255,255,0.5); }
+    .cta-bar-btn { background: var(--green); color: #fff; padding: 12px 28px; border-radius: 10px; font-size: 13px; font-weight: 500; text-decoration: none; white-space: nowrap; transition: background .2s, transform .15s; flex-shrink: 0; }
+    .cta-bar-btn:hover { background: var(--green-dk); transform: translateY(-1px); }
+
+    @media (max-width: 900px) { .roles-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .roles-grid { grid-template-columns: 1fr; } .cta-bar { flex-direction: column; text-align: center; } }
+</style>
+
+<div class="explore-hero">
+    <div class="explore-eyebrow">2026 Career Intelligence</div>
+    <h1 class="explore-h1">Guides &amp; <b>Careers</b></h1>
+    <p class="explore-sub">Expert guides for AI-era professionals. Each guide includes skills, tools, and strategies to help you stand out.</p>
+</div>
+
+<div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" class="search-input" id="searchInput" placeholder="Search by role, skill or tool…" oninput="filterRoles()">
+    <div class="search-count" id="searchCount">{{ site.roles | size }} guides</div>
+</div>
+
+<div class="roles-grid" id="rolesGrid">
+    {% assign sorted_roles = site.roles | sort: "title" %}
+    {% for role in sorted_roles %}
+    <a href="{{ role.url }}" class="role-card" data-title="{{ role.title | downcase }}" data-summary="{{ role.summary_hack | downcase }}" data-skills="{{ role.judgment_skills | join: ' ' | downcase }}" data-tools="{{ role.ai_tools | join: ' ' | downcase }}">
+        <div class="role-card-title">{{ role.title }}</div>
+        <div class="role-card-summary">{{ role.summary_hack }}</div>
+        <div class="role-card-footer">
+            <div class="role-card-tags">
+                {% for skill in role.judgment_skills limit:2 %}
+                <span class="role-card-tag">{{ skill }}</span>
+                {% endfor %}
+            </div>
+            <span class="role-card-arrow">View →</span>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+
+<div class="empty-state" id="emptyState">
+    No guides found for "<span id="emptyQuery"></span>"
+</div>
+
+<div class="cta-bar">
+    <div class="cta-bar-text">
+        <h3>Found your role?<br><b>Build your live profile now.</b></h3>
+        <p>Upload your resume — AI structures it in 10 seconds.</p>
+    </div>
+    <a href="https://resumelink.cc" class="cta-bar-btn">📄 Upload Resume → Free</a>
+</div>
+
+<script>
+function filterRoles() {
+    const q = document.getElementById('searchInput').value.toLowerCase().trim();
+    const cards = document.querySelectorAll('.role-card');
+    let visible = 0;
+    cards.forEach(card => {
+        const match = !q ||
+            card.dataset.title.includes(q) ||
+            card.dataset.summary.includes(q) ||
+            card.dataset.skills.includes(q) ||
+            card.dataset.tools.includes(q);
+        card.style.display = match ? '' : 'none';
+        if (match) visible++;
+    });
+    document.getElementById('searchCount').textContent = visible + ' guide' + (visible !== 1 ? 's' : '');
+    document.getElementById('emptyState').classList.toggle('visible', visible === 0);
+    if (visible === 0) document.getElementById('emptyQuery').textContent = document.getElementById('searchInput').value;
+}
+</script>
