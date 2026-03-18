@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About ResumeLink — AI Resume Builder</title>
-    <meta name="description" content="ResumeLink mission: Helping professionals create AI-driven interactive profiles. О проекте ResumeLink: ваш личный AI конструктор резюме.">
-    <meta name="keywords" content="ResumeLink mission, AI career tools, AI конструктор резюме, как работает ResumeLink">
+    <meta name="description" content="ResumeLink mission: Helping professionals create AI-driven interactive profiles.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
@@ -26,7 +25,6 @@
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: var(--bg); font-family: 'DM Sans', sans-serif; color: var(--text); min-height: 100vh; overflow-x: hidden; }
 
-        /* NAV */
         nav { position: sticky; top: 0; z-index: 100; background: rgba(242,250,246,0.92); backdrop-filter: blur(12px); border-bottom: 0.5px solid var(--border); padding: 0 clamp(1.5rem,5vw,4rem); height: 62px; display: flex; align-items: center; justify-content: space-between; }
         .nav-logo { font-size: 20px; font-weight: 500; color: var(--forest); letter-spacing: -0.03em; text-decoration: none; }
         .nav-logo span { color: var(--green); }
@@ -41,28 +39,19 @@
         .nav-mobile a { font-size: 14px; color: var(--muted); text-decoration: none; }
         .nav-mobile.open { display: flex; }
 
-        /* CONTENT */
         .page-wrap { max-width: 860px; margin: 0 auto; padding: clamp(3rem,6vw,5rem) clamp(1.5rem,5vw,2rem); }
         .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: var(--muted); text-decoration: none; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 3rem; transition: color .2s; }
         .back-link:hover { color: var(--forest); }
-
-        .lang-section { margin-bottom: 4rem; }
-        .lang-section + .lang-section { padding-top: 4rem; border-top: 0.5px solid var(--border); }
-        .lang-badge { display: inline-block; font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); border: 0.5px solid var(--border); padding: 4px 10px; border-radius: 4px; margin-bottom: 20px; }
-
         .page-h1 { font-size: clamp(2.2rem,4vw,3.2rem); font-weight: 300; color: var(--forest); letter-spacing: -0.025em; line-height: 1.2; margin-bottom: 1.5rem; }
         .page-h1 em { font-family: 'Instrument Serif', serif; font-style: italic; color: var(--green); }
-
         .intro-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 16px; padding: 24px 28px; margin-bottom: 20px; font-size: 16px; font-weight: 300; color: var(--text); line-height: 1.7; }
         .intro-card b { font-weight: 500; color: var(--green); }
-
         .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
         .feature-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 16px; padding: 22px; transition: border-color .2s; }
         .feature-card:hover { border-color: var(--green); }
         .feature-card-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: .1em; color: var(--green-dk); margin-bottom: 10px; }
         .feature-card p { font-size: 13px; color: var(--muted); line-height: 1.65; }
 
-        /* FOOTER */
         footer { border-top: 0.5px solid var(--border); padding: 2rem clamp(1.5rem,5vw,4rem); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; max-width: 1200px; margin: 3rem auto 0; }
         .footer-logo { font-size: 15px; font-weight: 500; color: var(--forest); text-decoration: none; letter-spacing: -0.02em; }
         .footer-logo span { color: var(--green); }
@@ -84,94 +73,91 @@
 <nav>
     <a href="/" class="nav-logo">Resume<span>Link</span></a>
     <div class="nav-links">
-        <a href="/roles/">Guides & Careers</a>
-        <a href="/about.html">About</a>
-        <a href="mailto:info@resumelink.cc">Contact</a>
-        <a href="/" class="nav-cta">Upload Resume →</a>
+        <a href="/roles/">Explore</a>
+        <a href="/about.html" id="nav-about">About</a>
+        <a href="mailto:info@resumelink.cc" id="nav-contact">Contact</a>
+        <a href="/" class="nav-cta" id="nav-upload">Upload →</a>
     </div>
     <button class="nav-hamburger" onclick="document.querySelector('.nav-mobile').classList.toggle('open')" aria-label="Menu">
         <span></span><span></span><span></span>
     </button>
 </nav>
 <div class="nav-mobile">
-    <a href="/roles/">Guides & Careers</a>
-    <a href="/about.html">About</a>
-    <a href="mailto:info@resumelink.cc">Contact</a>
-    <a href="/" style="color:var(--green-dk);font-weight:500">Upload Resume →</a>
+    <a href="/roles/">Explore</a>
+    <a href="/about.html" id="mob-about">About</a>
+    <a href="mailto:info@resumelink.cc" id="mob-contact">Contact</a>
+    <a href="/" id="mob-upload" style="color:var(--green-dk);font-weight:500">Upload →</a>
 </div>
 
 <div class="page-wrap">
-    <a href="/" class="back-link">← Back / На главную</a>
-
-    <!-- ENGLISH -->
-    <div class="lang-section">
-        <div class="lang-badge">English</div>
-        <h1 class="page-h1">About <em>ResumeLink</em></h1>
-
-        <div class="intro-card">
-            <b>ResumeLink</b> is a next-generation career tool. We believe that in 2026, a resume should be more than just a static file — it should be a living, shareable profile that works for you 24/7.
-        </div>
-
-        <div class="cards-grid">
-            <div class="feature-card">
-                <div class="feature-card-label">⚡ AI Analysis</div>
-                <p>Simply upload your file — our AI handles the rest. It structures your data according to modern ATS standards, helping you bypass automated filters and reach real recruiters.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-card-label">🔗 Instant Access</div>
-                <p>Your profile is always ready to share via link or QR code. No more attachments or formatting issues on recruiters' devices — just one clean link.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-card-label">📊 ATS Score</div>
-                <p>Understand exactly how your resume performs against automated hiring filters. Get an instant score and know where you stand before hitting "Apply".</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-card-label">🌍 Multilingual</div>
-                <p>ResumeLink auto-detects your resume language and adapts the interface accordingly. More languages are coming soon.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- RUSSIAN -->
-    <div class="lang-section">
-        <div class="lang-badge">Русский</div>
-        <h1 class="page-h1">О проекте <em>ResumeLink</em></h1>
-
-        <div class="intro-card">
-            <b>ResumeLink</b> — это ваш личный AI конструктор резюме нового поколения. Мы помогаем специалистам выглядеть технологично и профессионально в эпоху, когда первое впечатление формируется за секунды.
-        </div>
-
-        <div class="cards-grid">
-            <div class="feature-card">
-                <div class="feature-card-label">⚡ Умная AI-упаковка</div>
-                <p>Просто загрузите свой файл — всё остальное сделает нейросеть. Она адаптирует ваш опыт под требования HR-систем и выделяет ваши сильные стороны автоматически.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-card-label">🔗 Цифровой профиль</div>
-                <p>Ваше резюме превращается в интерактивную ссылку или QR-код. Забудьте о тяжёлых PDF-файлах, которые неудобно открывать на телефоне.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-card-label">📊 ATS Score</div>
-                <p>Мгновенная оценка соответствия вакансии. Понимайте, почему ваше резюме проходит или не проходит автоматические фильтры HR-систем.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-card-label">🌍 Мультиязычность</div>
-                <p>Сервис автоматически определяет язык резюме и адаптирует весь интерфейс. Скоро подключатся новые языки и регионы.</p>
-            </div>
-        </div>
-    </div>
+    <a href="/" class="back-link" id="back-link">← Back</a>
+    <h1 class="page-h1" id="page-title">About <em>ResumeLink</em></h1>
+    <div class="intro-card" id="intro-card"></div>
+    <div class="cards-grid" id="cards-grid"></div>
 </div>
 
 <footer>
     <a href="/" class="footer-logo">Resume<span>Link</span></a>
     <div class="footer-links">
-        <a href="/roles/">Guides & Careers</a>
-        <a href="/about.html">About</a>
-        <a href="/policy.html">Privacy & Terms</a>
+        <a href="/roles/">Explore</a>
+        <a href="/about.html" id="footer-about">About</a>
+        <a href="/policy.html" id="footer-policy">Privacy & Terms</a>
         <a href="mailto:info@resumelink.cc">info@resumelink.cc</a>
     </div>
     <div class="footer-copy">© 2026 ResumeLink</div>
 </footer>
+
+<script>
+const isEn = navigator.language.startsWith('en');
+const T = {
+    en: {
+        back: "← Back",
+        title: "About",
+        navAbout: "About", navContact: "Contact", navUpload: "Upload →",
+        footerAbout: "About", footerPolicy: "Privacy & Terms",
+        intro: '<b>ResumeLink</b> is a next-generation career tool. We believe that in 2026, a resume should be more than just a static file — it should be a living, shareable profile that works for you 24/7.',
+        cards: [
+            { label: "⚡ AI Analysis", text: "Simply upload your file — our AI handles the rest. It structures your data according to modern ATS standards, helping you bypass automated filters and reach real recruiters." },
+            { label: "🔗 Instant Access", text: "Your profile is always ready to share via link or QR code. No more attachments or formatting issues on recruiters' devices — just one clean link." },
+            { label: "📊 ATS Score", text: "Understand exactly how your resume performs against automated hiring filters. Get an instant score and know where you stand before hitting \"Apply\"." },
+            { label: "🌍 Multilingual", text: "ResumeLink auto-detects your resume language and adapts the interface accordingly. More languages are coming soon." }
+        ]
+    },
+    ru: {
+        back: "← На главную",
+        title: "О проекте",
+        navAbout: "О сервисе", navContact: "Контакт", navUpload: "Загрузить →",
+        footerAbout: "О сервисе", footerPolicy: "Политика",
+        intro: '<b>ResumeLink</b> — это ваш личный AI конструктор резюме нового поколения. Мы помогаем специалистам выглядеть технологично и профессионально в эпоху, когда первое впечатление формируется за секунды.',
+        cards: [
+            { label: "⚡ Умная AI-упаковка", text: "Просто загрузите свой файл — всё остальное сделает нейросеть. Она адаптирует ваш опыт под требования HR-систем и выделяет ваши сильные стороны автоматически." },
+            { label: "🔗 Цифровой профиль", text: "Ваше резюме превращается в интерактивную ссылку или QR-код. Забудьте о тяжёлых PDF-файлах, которые неудобно открывать на телефоне." },
+            { label: "📊 ATS Score", text: "Мгновенная оценка соответствия вакансии. Понимайте, почему ваше резюме проходит или не проходит автоматические фильтры HR-систем." },
+            { label: "🌍 Мультиязычность", text: "Сервис автоматически определяет язык резюме и адаптирует весь интерфейс. Скоро подключатся новые языки и регионы." }
+        ]
+    }
+};
+
+const C = isEn ? T.en : T.ru;
+
+document.getElementById('back-link').textContent = C.back;
+document.getElementById('page-title').innerHTML = C.title + ' <em>ResumeLink</em>';
+document.getElementById('nav-about').textContent = C.navAbout;
+document.getElementById('nav-contact').textContent = C.navContact;
+document.getElementById('nav-upload').textContent = C.navUpload;
+document.getElementById('mob-about').textContent = C.navAbout;
+document.getElementById('mob-contact').textContent = C.navContact;
+document.getElementById('mob-upload').textContent = C.navUpload;
+document.getElementById('footer-about').textContent = C.footerAbout;
+document.getElementById('footer-policy').textContent = C.footerPolicy;
+document.getElementById('intro-card').innerHTML = C.intro;
+document.getElementById('cards-grid').innerHTML = C.cards.map(card => `
+    <div class="feature-card">
+        <div class="feature-card-label">${card.label}</div>
+        <p>${card.text}</p>
+    </div>
+`).join('');
+</script>
 
 </body>
 </html>
