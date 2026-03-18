@@ -1,37 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ResumeLink — AI Resume Builder</title>
-    <meta name="description" content="AI-powered interactive resume builder. Transform your resume into a stylish digital profile with QR code in 10 seconds.">
-    <meta name="keywords" content="AI resume builder, interactive resume, ATS score, digital CV, AI конструктор резюме">
-
+    <title>ResumeLink — AI Resume Builder | AI конструктор резюме</title>
+    <meta name="description" content="AI-powered interactive resume builder. Умный AI конструктор резюме: преврати файл в стильный профиль с QR-кодом за 10 секунд.">
+    <meta name="keywords" content="AI resume builder, AI конструктор резюме, интерактивное резюме, ATS score, digital CV">
     <meta property="og:title" content="ResumeLink — AI-Powered Interactive Profiles">
-    <meta property="og:description" content="Transform your resume into a stylish digital profile with QR code in 10 seconds.">
-    <meta property="og:image" content="https://resumelink.cc/favicon/apple-touch-icon.png">
+    <meta property="og:description" content="Transform your resume into a stylish digital profile. AI конструктор резюме нового поколения.">
+    <meta property="og:image" content="https://resumelink.cc/ogimage.png">
     <meta property="og:url" content="https://resumelink.cc">
-
-    <script>
-    // Переключаем мета-теги на русский если браузер русский
-    if (navigator.language.startsWith('ru')) {
-        document.documentElement.lang = 'ru';
-        document.title = 'ResumeLink — AI конструктор резюме';
-        document.querySelector('meta[name="description"]').content = 'Умный AI конструктор резюме: преврати файл в стильный профиль с QR-кодом за 10 секунд.';
-        document.querySelector('meta[property="og:description"]').content = 'AI конструктор резюме нового поколения. Преврати файл в стильный профиль за 10 секунд.';
-    }
-    </script>
-    
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "ResumeLink",
-      "description": "AI tool to transform PDF resumes into interactive profiles",
-      "applicationCategory": "BusinessApplication",
-      "offers": { "@type": "Offer", "price": "0" }
-    }
-    </script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"ResumeLink","description":"AI tool to transform PDF resumes into interactive profiles","applicationCategory":"BusinessApplication","offers":{"@type":"Offer","price":"0"}}</script>
 
     <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
@@ -39,9 +18,9 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
     <link rel="manifest" href="/favicon/site.webmanifest">
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -49,629 +28,801 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
-        body { background: #0a0a0a; font-family: 'Outfit', sans-serif; color: white; min-height: 100vh; margin: 0; overflow-x: hidden; }
-        .grid-layout { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; grid-auto-rows: min-content; }
-        .card-item { background: #161616; border: 1px solid #262626; border-radius: 32px; padding: 1.8rem; transition: all 0.4s; position: relative; word-break: break-word; }
-        .card-item:hover { transform: scale(1.02); border-color: #10b981; }
-        .name-fix { font-weight: 900; line-height: 1.2 !important; display: block; padding: 0.15em 0; letter-spacing: -0.02em; }
+        :root {
+            --green:    #1DB368;
+            --green-dk: #0D8A4E;
+            --forest:   #0D3D28;
+            --bg:       #F2FAF6;
+            --surface:  #FFFFFF;
+            --mint:     #EAF7F0;
+            --border:   #C5E8D5;
+            --text:     #0D3D28;
+            --muted:    #5A8A70;
+            --faint:    #A8CDB9;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body { background: var(--bg); font-family: 'DM Sans', sans-serif; color: var(--text); min-height: 100vh; overflow-x: hidden; }
 
-        .glow-wrapper {
-            position: relative;
-            display: inline-block;
-            padding: 3px;
-            border-radius: 28px;
-            overflow: hidden;
-            z-index: 10;
+        /* NAV */
+        nav { position: sticky; top: 0; z-index: 100; background: rgba(242,250,246,0.92); backdrop-filter: blur(12px); border-bottom: 0.5px solid var(--border); padding: 0 clamp(1.5rem,5vw,4rem); height: 62px; display: flex; align-items: center; justify-content: space-between; }
+        .nav-logo { font-size: 20px; font-weight: 500; color: var(--forest); letter-spacing: -0.03em; text-decoration: none; }
+        .nav-logo span { color: var(--green); }
+        .nav-links { display: flex; align-items: center; gap: 28px; }
+        .nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color .2s; }
+        .nav-links a:hover { color: var(--forest); }
+        .nav-cta { background: var(--forest); color: var(--bg) !important; padding: 8px 18px; border-radius: 8px; font-weight: 500 !important; transition: background .2s !important; }
+        .nav-cta:hover { background: var(--green-dk) !important; }
+        .nav-hamburger { display: none; cursor: pointer; flex-direction: column; gap: 4px; background: none; border: none; padding: 4px; }
+        .nav-hamburger span { width: 20px; height: 1.5px; background: var(--forest); border-radius: 2px; display: block; }
+        .nav-mobile { display: none; position: absolute; top: 62px; left: 0; right: 0; background: var(--bg); border-bottom: 0.5px solid var(--border); padding: 1rem 1.5rem; flex-direction: column; gap: 16px; z-index: 99; }
+        .nav-mobile a { font-size: 14px; color: var(--muted); text-decoration: none; }
+        .nav-mobile.open { display: flex; }
+
+        /* HERO */
+        #hero { padding: clamp(4rem,8vw,6rem) clamp(1.5rem,5vw,4rem) clamp(3rem,6vw,5rem); max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+        .hero-eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--green-dk); background: var(--mint); border: 0.5px solid var(--border); padding: 5px 12px; border-radius: 20px; margin-bottom: 20px; }
+        .hero-eyebrow::before { content:''; width:6px; height:6px; background:var(--green); border-radius:50%; }
+        h1 { font-size: clamp(2.4rem,4.5vw,3.6rem); font-weight: 300; line-height: 1.18; color: var(--forest); letter-spacing: -0.025em; margin-bottom: 18px; }
+        h1 b { font-weight: 500; }
+        h1 em { font-family: 'Instrument Serif', serif; font-style: italic; color: var(--green); font-weight: 400; }
+        .hero-sub { font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 440px; margin-bottom: 32px; }
+        .hero-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+        .btn-primary { background: var(--forest); color: var(--bg); padding: 13px 28px; border-radius: 10px; font-size: 14px; font-weight: 500; border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: background .2s, transform .15s; font-family: 'DM Sans', sans-serif; }
+        .btn-primary:hover { background: var(--green-dk); transform: translateY(-1px); }
+        .btn-ghost { color: var(--muted); font-size: 13px; text-decoration: none; transition: color .2s; }
+        .btn-ghost:hover { color: var(--forest); }
+        .hero-note { margin-top: 20px; font-size: 11px; color: var(--faint); }
+
+        /* profile preview card */
+        .hero-visual { position: relative; }
+        .profile-preview { background: var(--surface); border: 0.5px solid var(--border); border-radius: 20px; padding: 24px; box-shadow: 0 4px 24px rgba(13,61,40,0.07); }
+        .pp-header { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+        .pp-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--mint); border: 0.5px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; color: var(--forest); flex-shrink: 0; }
+        .pp-name { font-size: 15px; font-weight: 500; color: var(--forest); }
+        .pp-role { font-size: 11px; color: var(--muted); margin-top: 1px; }
+        .pp-score { margin-left: auto; text-align: right; }
+        .pp-score-n { font-size: 22px; font-weight: 500; color: var(--green); line-height: 1; }
+        .pp-score-l { font-size: 9px; color: var(--faint); text-transform: uppercase; letter-spacing: .08em; }
+        .pp-bar-row { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-bottom: 4px; }
+        .pp-bar-track { background: var(--mint); border-radius: 3px; height: 4px; margin-bottom: 10px; }
+        .pp-bar-fill { background: var(--green); height: 4px; border-radius: 3px; }
+        .pp-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 14px; }
+        .pp-tag { background: var(--mint); border: 0.5px solid var(--border); color: var(--green-dk); font-size: 10px; padding: 3px 8px; border-radius: 5px; }
+        .pp-url { font-size: 10px; color: var(--green); font-weight: 500; }
+        .float-chip { position: absolute; background: var(--surface); border: 0.5px solid var(--border); border-radius: 30px; padding: 6px 12px; font-size: 11px; font-weight: 500; color: var(--forest); display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 12px rgba(13,61,40,0.08); white-space: nowrap; }
+        .float-chip::before { content:''; width:6px; height:6px; background:var(--green); border-radius:50%; flex-shrink:0; }
+        .chip-top { top: -14px; right: 20px; animation: float 3s ease-in-out infinite; }
+        .chip-bot { bottom: -14px; left: 10px; animation: float 3s ease-in-out infinite .8s; }
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+
+        /* STATS */
+        #stats { background: var(--forest); padding: 3rem clamp(1.5rem,5vw,4rem); }
+        .stats-inner { max-width: 1200px; margin: 0 auto; display: flex; }
+        .stat-item { flex: 1; text-align: center; padding: 1rem; border-right: 0.5px solid rgba(255,255,255,0.1); }
+        .stat-item:last-child { border-right: none; }
+        .stat-n { font-size: clamp(2rem,4vw,2.8rem); font-weight: 300; color: #fff; letter-spacing: -0.03em; line-height: 1; margin-bottom: 6px; }
+        .stat-n em { font-family: 'Instrument Serif', serif; font-style: italic; color: var(--green); }
+        .stat-l { font-size: 12px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: .08em; }
+
+        /* FEATURES */
+        #features { padding: clamp(4rem,7vw,6rem) clamp(1.5rem,5vw,4rem); max-width: 1200px; margin: 0 auto; }
+        .section-label { font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--green-dk); margin-bottom: 12px; }
+        .section-title { font-size: clamp(1.8rem,3.5vw,2.8rem); font-weight: 300; color: var(--forest); letter-spacing: -0.025em; margin-bottom: 16px; max-width: 600px; line-height: 1.25; }
+        .section-title b { font-weight: 500; }
+        .section-sub { font-size: 15px; color: var(--muted); max-width: 520px; line-height: 1.7; margin-bottom: 3rem; }
+        .features-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+        .feature-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 16px; padding: 24px; transition: border-color .2s, transform .2s; }
+        .feature-card:hover { border-color: var(--green); transform: translateY(-2px); }
+        .feat-icon { width: 40px; height: 40px; background: var(--mint); border-radius: 10px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .feat-title { font-size: 15px; font-weight: 500; color: var(--forest); margin-bottom: 8px; }
+        .feat-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+        /* HOW IT WORKS */
+        #how { background: var(--forest); padding: clamp(4rem,7vw,6rem) clamp(1.5rem,5vw,4rem); }
+        .how-inner { max-width: 1200px; margin: 0 auto; }
+        .how-inner .section-label { color: rgba(29,179,104,0.8); }
+        .how-inner .section-title { color: #fff; }
+        .how-inner .section-sub { color: rgba(255,255,255,0.5); }
+        .steps-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+        .step-card { background: rgba(255,255,255,0.05); border: 0.5px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 28px 24px; transition: background .2s, border-color .2s; }
+        .step-card:hover { background: rgba(255,255,255,0.08); border-color: rgba(29,179,104,0.4); }
+        .step-num { width: 44px; height: 44px; border-radius: 50%; border: 0.5px solid rgba(29,179,104,0.4); background: rgba(29,179,104,0.1); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 500; color: var(--green); margin-bottom: 18px; }
+        .step-title { font-size: 15px; font-weight: 500; color: #fff; margin-bottom: 8px; }
+        .step-desc { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.65; }
+
+        /* LOADING */
+        .loading-box { background: var(--surface); border: 0.5px solid var(--border); border-radius: 24px; padding: 3rem 4rem; text-align: center; }
+        .spinner { border: 2.5px solid var(--border); border-top: 2.5px solid var(--green); border-radius: 50%; width: 44px; height: 44px; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-stage { font-size: 13px; font-weight: 500; color: var(--green); text-transform: uppercase; letter-spacing: .08em; }
+        .glow-wrapper { position: relative; display: inline-block; padding: 3px; border-radius: 18px; overflow: hidden; }
+        .glow-wrapper::before { content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background: conic-gradient(from 0deg, transparent, var(--green), #3b82f6, transparent 60%); animation: rotate-glow 4s linear infinite; z-index:0; }
+        .glow-content { background: var(--bg); border-radius: 16px; display: block; position: relative; z-index: 1; padding: 2rem 3rem; }
+        @keyframes rotate-glow { to { transform: rotate(360deg); } }
+
+        /* RESULT GRID */
+        .result-wrap { max-width: 1200px; margin: 0 auto; padding: 1.5rem clamp(1rem,3vw,2rem) 3rem; }
+        .result-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .result-logo { font-size: 20px; font-weight: 500; color: var(--forest); letter-spacing: -0.03em; text-decoration: none; }
+        .result-logo span { color: var(--green); }
+        .back-btn { font-size: 11px; font-weight: 500; color: var(--muted); border: 0.5px solid var(--border); padding: 7px 16px; border-radius: 20px; background: none; cursor: pointer; transition: border-color .2s, color .2s; font-family: 'DM Sans', sans-serif; }
+        .back-btn:hover { border-color: var(--green); color: var(--forest); }
+        .rl-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; grid-auto-rows: min-content; }
+        .card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 20px; padding: 20px; transition: border-color .2s; word-break: break-word; }
+        .card:hover { border-color: var(--green); }
+        .card-label { font-size: 9px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); margin-bottom: 12px; }
+        .card-hero { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; padding: 24px 28px; }
+        .resume-name { font-size: clamp(2rem,4vw,3rem); font-weight: 300; color: var(--forest); letter-spacing: -0.03em; line-height: 1.1; outline: none; }
+        .resume-name:focus { background: var(--mint); border-radius: 6px; padding: 2px 6px; }
+        .resume-title { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .1em; color: var(--green); margin-top: 8px; }
+        .ats-block { text-align: right; flex-shrink: 0; }
+        .ats-num { font-size: 32px; font-weight: 500; color: var(--green); line-height: 1; }
+        .ats-lbl { font-size: 9px; color: var(--faint); text-transform: uppercase; letter-spacing: .08em; margin-top: 2px; }
+        .card-summary { grid-column: span 3; }
+        .card-summary p { font-size: 16px; font-weight: 300; color: var(--text); line-height: 1.65; }
+        .card-contacts { grid-column: span 1; background: #F0F9FF; border-color: #C5DFF5; }
+        .contact-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+        .contact-row:last-child { margin-bottom: 0; }
+        .card-exp { grid-column: span 3; }
+        .exp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .exp-item { border-left: 2px solid var(--border); padding-left: 14px; transition: border-color .2s; }
+        .exp-item:hover { border-left-color: var(--green); }
+        .exp-pos { font-size: 15px; font-weight: 500; color: var(--forest); }
+        .exp-co { font-size: 11px; color: var(--green-dk); font-weight: 500; text-transform: uppercase; letter-spacing: .06em; margin: 4px 0; }
+        .exp-desc { font-size: 12px; color: var(--muted); line-height: 1.55; }
+        .card-edu { grid-column: span 1; }
+        .edu-item { padding-bottom: 12px; margin-bottom: 12px; border-bottom: 0.5px solid var(--border); }
+        .edu-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .edu-deg { font-size: 14px; font-weight: 500; color: var(--forest); }
+        .edu-school { font-size: 12px; color: var(--muted); margin-top: 2px; }
+        .edu-year { font-size: 11px; color: var(--faint); margin-top: 1px; }
+        .card-additional { grid-column: span 2; }
+        .card-additional p { font-size: 13px; color: var(--muted); line-height: 1.65; }
+        .card-misc { grid-column: span 1; }
+        .misc-section { margin-bottom: 14px; }
+        .misc-section:last-child { margin-bottom: 0; }
+        .tag-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+        .rl-tag { background: var(--mint); border: 0.5px solid var(--border); color: var(--green-dk); font-size: 10px; padding: 3px 9px; border-radius: 5px; }
+        .card-links { grid-column: span 2; display: flex; justify-content: space-between; align-items: center; }
+        .social-row { display: flex; gap: 10px; font-size: 20px; margin-bottom: 8px; }
+        .social-row a { text-decoration: none; transition: transform .2s; }
+        .social-row a:hover { transform: scale(1.15); }
+        .share-url { font-size: 10px; color: var(--green); font-weight: 500; }
+        .qr-wrap { background: var(--mint); border: 0.5px solid var(--border); border-radius: 12px; padding: 10px; flex-shrink: 0; }
+
+        /* FAB BUTTONS */
+        .fab { position: fixed; right: 20px; z-index: 1000; display: none; align-items: center; gap: 8px; color: #fff; padding: 12px 22px; border-radius: 50px; border: none; font-weight: 500; font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: transform .2s, opacity .2s; }
+        .fab:hover { transform: translateY(-2px); opacity: .92; }
+        .fab:active { transform: scale(0.96); }
+        #share-button { bottom: 20px; background: var(--green); box-shadow: 0 4px 16px rgba(29,179,104,0.35); }
+        #download-button { bottom: 72px; background: var(--forest); box-shadow: 0 4px 16px rgba(13,61,40,0.25); }
+
+        /* FOOTER */
+        .site-footer { border-top: 0.5px solid var(--border); padding: 2rem clamp(1.5rem,5vw,4rem); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; max-width: 1200px; margin: 0 auto; }
+        .footer-logo { font-size: 15px; font-weight: 500; color: var(--forest); text-decoration: none; letter-spacing: -0.02em; }
+        .footer-logo span { color: var(--green); }
+        .footer-links { display: flex; gap: 20px; }
+        .footer-links a { font-size: 12px; color: var(--faint); text-decoration: none; transition: color .2s; }
+        .footer-links a:hover { color: var(--forest); }
+        .footer-copy { font-size: 11px; color: var(--faint); }
+
+        .pdf-watermark { display: none; }
+
+        /* PRINT FIX */
+        @media print {
+            body > *:not(#rl-print-dom) { display: none !important; }
+            #rl-print-dom { display: block !important; }
         }
 
-        .glow-wrapper::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(from 0deg, transparent, #10b981, #3b82f6, transparent 60%);
-            animation: rotate-glow 4s linear infinite;
-            z-index: -1;
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .features-grid { grid-template-columns: repeat(2,1fr); }
+            .rl-grid { grid-template-columns: repeat(2,1fr); }
+            .card-hero, .card-summary, .card-exp { grid-column: 1 / -1; }
+            .card-contacts, .card-edu, .card-additional, .card-misc, .card-links { grid-column: span 1; }
         }
-
-        .glow-content {
-            background: #0a0a0a;
-            border-radius: 26px;
-            display: block;
+        @media (max-width: 768px) {
+            #hero { grid-template-columns: 1fr; }
+            .hero-visual { display: none; }
+            .steps-grid { grid-template-columns: 1fr; gap: 12px; }
+            .stats-inner { flex-direction: column; }
+            .stat-item { border-right: none; border-bottom: 0.5px solid rgba(255,255,255,0.1); }
+            .stat-item:last-child { border-bottom: none; }
+            .exp-grid { grid-template-columns: 1fr; }
         }
-
-        @keyframes rotate-glow {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        @media (max-width: 640px) {
+            .features-grid { grid-template-columns: 1fr; }
+            .rl-grid { grid-template-columns: 1fr; }
+            .card-hero, .card-summary, .card-contacts, .card-exp, .card-edu, .card-additional, .card-misc, .card-links { grid-column: span 1; }
+            .nav-links { display: none; }
+            .nav-hamburger { display: flex; }
+            .glow-content { padding: 1.5rem 2rem; }
         }
-
-        .spinner { border: 3px solid #222; border-top: 3px solid #10b981; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @media (max-width: 1024px) { .grid-layout { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 640px) { .grid-layout { grid-template-columns: 1fr; } }
-
-		/* В обычном браузере этот текст нам не нужен, поэтому прячем его */
-.pdf-watermark {
-    display: none;
-}
-
-.tally-feedback {
-    text-align: center;
-    margin-top: 32px;
-    padding: 20px;
-}
-.tally-feedback p {
-    font-size: 11px;
-    color: #444;
-    margin-bottom: 10px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-}
-.tally-feedback a {
-    display: inline-block;
-    background: #10b981;
-    color: #fff;
-    font-family: 'Outfit', sans-serif;
-    font-weight: 600;
-    font-size: 14px;
-    padding: 12px 28px;
-    border-radius: 50px;
-    text-decoration: none;
-    transition: background 0.2s, transform 0.15s;
-}
-.tally-feedback a:hover {
-    background: #059669;
-    transform: scale(1.04);
-}
-
     </style>
 </head>
 <body>
-    <div id="root"></div>
 
-    <script type="text/babel">
-        const { useState, useEffect } = React;
-        const pdfjs = window['pdfjs-dist/build/pdf'];
-        pdfjs.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
-        const WORKER_URL = "https://resumelink-worker.aisrail.workers.dev";
-
-        function App() {
-            const [resumeData, setResumeData] = useState(null);
-            const [loading, setLoading] = useState(false);
-            const [loadingStage, setLoadingStage] = useState(0); 
-            const [step, setStep] = useState('setup');
-            const [savedId, setSavedId] = useState(null);
-
-            const isEn = navigator.language.startsWith('en');
-            const T = {
-                en: {
-                    mainTitle: "Transform your boring resume into a stylish interactive profile",
-                    uploadBtn: "Upload Resume",
-                    backBtn: "← Back",
-                    atsScore: "ATS Score",
-                    contact: "For cooperation:",
-                    footerEng: "Empowering professionals with AI-driven visual storytelling.",
-                    steps: [
-                        { t: "UPLOAD", d: "Upload your file in any format." },
-                        { t: "AI MAGIC", d: "AI structures data and calculates ATS." },
-                        { t: "SHARE", d: "Get your link and personal QR code." }
-                    ],
-                    stages: ["Analyzing text...", "Extracting data...", "Generating blocks...", "Creating QR code...", "Optimizing mobile layout...", "Finalizing interactive elements...", "Almost ready..."]
-                },
-                ru: {
-                    mainTitle: "Преврати скучное резюме в стильный интерактивный профиль",
-                    uploadBtn: "Загрузить резюме",
-                    backBtn: "← Назад",
-                    atsScore: "ATS Score",
-                    contact: "По вопросам сотрудничества:",
-                    footerEng: "Empowering professionals with AI-driven visual storytelling.",
-                    steps: [
-                        { t: "ЗАГРУЗКА", d: "Загрузи файл в любом формате." },
-                        { t: "AI МАГИЯ", d: "Нейросеть структурирует данные и считает ATS." },
-                        { t: "ПОДЕЛИТЬСЯ", d: "Получи ссылку и личный QR-код." }
-                    ],
-                    stages: ["Анализируем текст...", "Извлекаем данные...", "Генерируем блоки...", "Создаём QR-код...", "Оптимизируем мобильную верстку...", "Настраиваем интерактив...", "Почти готово..."]
-                }
-            };
-
-            const curr = isEn ? T.en : T.ru;
-
-            useEffect(() => {
-                const params = new URLSearchParams(window.location.search);
-                const id = params.get('id');
-                if (id) {
-                    setLoading(true);
-                    fetch(`${WORKER_URL}/${id}`).then(res => res.json()).then(data => {
-                        setResumeData(data);
-                        if (window.__RL_SET_RESUME_DATA__) window.__RL_SET_RESUME_DATA__(data);
-                        setSavedId(id);
-                        setStep('result');
-                        setLoading(false);
-                    }).catch(() => setLoading(false));
-                }
-            }, []);
-
-            useEffect(() => {
-                let interval;
-                if (loading) {
-                    interval = setInterval(() => {
-                        setLoadingStage(prev => (prev < curr.stages.length - 1 ? prev + 1 : prev));
-                    }, 2500);
-                }
-                return () => clearInterval(interval);
-            }, [loading, curr.stages.length]);
-
-            const autoPublish = async (data) => {
-                try {
-                    const res = await fetch(WORKER_URL, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(data)
-                    });
-                    const result = await res.json();
-                    setSavedId(result.id);
-                    const newUrl = `${window.location.origin}${window.location.pathname}?id=${result.id}`;
-                    window.history.pushState({ path: newUrl }, '', newUrl);
-                } catch (err) { console.error(err); }
-            };
-
-            const processAI = async (text) => {
-                if (!text || text.trim().length < 20) {
-                    alert(isEn ? "No readable text found" : "Текст не найден (возможно, это скан)");
-                    setLoading(false);
-                    return;
-                }
-                try {
-                    const prompt = `Analyze text and extract into JSON. Target language: Use the same language as the source text. 
-                    Task: Create a professional interactive profile. 
-                    MANDATORY FOR NAME: If target language is English, format the "name" field as "First Name Last Name" only (omit patronymic). If Russian, keep full name.
-                    MANDATORY FOR BLOCKS: If the text contains enough information, generate additional blocks in "additional" array (e.g., "Key Achievements", "Professional Strengths"). If no specific info exists, do NOT create it.
-                    JSON structure: {
-                        "labels": {"summary": "", "experience": "", "education": "", "contacts": "", "languages": "", "hobbies": "", "links": ""}, 
-                        "name": "", "title": "", "contacts": {"p": "", "e": "", "l": ""}, 
-                        "socials": {"li": "", "gh": "", "tg": ""}, "summary": "", "atsScore": 85, 
-                        "experience": [{"c": "", "p": "", "t": "", "d": ""}], 
-                        "education": [{"s": "", "d": "", "y": ""}], 
-                        "languages": [], "hobbies": [], 
-                        "additional": [{"title": "", "content": ""}]
-                    }`;
-
-                    const res = await fetch(`${WORKER_URL}/generate`, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ prompt: prompt + " Text: " + text.substring(0, 9000) })
-                    });
-
-                    const data = await res.json();
-                    if (data.error || !data.candidates || !data.candidates[0]) {
-                        throw new Error(data.error?.message || "AI Error");
-                    }
-
-                    const rawText = data.candidates[0].content.parts[0].text;
-                    const startIdx = rawText.indexOf('{');
-                    const endIdx = rawText.lastIndexOf('}');
-                    if (startIdx === -1 || endIdx === -1) throw new Error("Invalid JSON");
-                    
-                    const jsonStr = rawText.substring(startIdx, endIdx + 1);
-                    const parsedData = JSON.parse(jsonStr);
-                    
-                    parsedData.experience = parsedData.experience || [];
-                    parsedData.education = parsedData.education || [];
-                    parsedData.additional = parsedData.additional || [];
-
-                    setResumeData(parsedData);
-                    if (window.__RL_SET_RESUME_DATA__) window.__RL_SET_RESUME_DATA__(parsedData);
-                    await autoPublish(parsedData);
-                    setStep('result');
-                } catch (err) { 
-                    console.error(err);
-                    alert(isEn ? "Analysis error. Check Worker settings." : "Ошибка анализа. Проверьте настройки Воркера."); 
-                }
-                setLoading(false);
-            };
-
-            const handleFile = async (e) => {
-                if (loading) return;
-                const file = e.target.files[0];
-                if (!file) return;
-                setLoading(true);
-                setLoadingStage(0);
-                try {
-                    let text = "";
-                    const ext = file.name.split('.').pop().toLowerCase();
-                    if (ext === "pdf") {
-                        const pdf = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise;
-                        for (let i = 1; i <= Math.min(pdf.numPages, 5); i++) {
-                            const page = await pdf.getPage(i);
-                            const content = await page.getTextContent();
-                            text += content.items.map(s => s.str).join(" ") + " ";
-                        }
-                    } else if (ext === "docx") {
-                        const arrayBuffer = await file.arrayBuffer();
-                        const result = await window.mammoth.extractRawText({ arrayBuffer: arrayBuffer });
-                        text = result.value; 
-                    } else if (ext === "txt") {
-                        text = await file.text();
-                    } else {
-                        alert(isEn ? "Format not supported" : "Формат не поддерживается");
-                        setLoading(false);
-                        return;
-                    }
-                    await processAI(text);
-                } catch (err) { 
-                    console.error(err);
-                    setLoading(false); 
-                }
-            };
-
-            if (step === 'setup') return (
-                <div className="max-w-4xl mx-auto px-4 py-20 text-center flex flex-col min-h-screen">
-                    <div className="flex-grow">
-                        <h1 className="text-6xl sm:text-8xl font-black mb-6 italic tracking-tighter inline-block bg-gradient-to-r from-emerald-400 to-blue-500 bg-clip-text text-transparent">ResumeLink</h1>
-                        <p className="text-gray-400 mb-12 text-xl sm:text-2xl font-light italic">{curr.mainTitle}</p>
-                        
-                        <div className="inline-block mb-20">
-                            {loading ? (
-                                <div className="p-10 sm:p-20 bg-[#161616] border border-white/5 rounded-[40px] space-y-6">
-                                    <div className="spinner mx-auto"></div>
-                                    <p className="text-emerald-500 font-bold animate-pulse uppercase text-sm">{curr.stages[loadingStage]}</p>
-                                </div>
-                            ) : (
-                                <div className="glow-wrapper">
-                                    <div className="glow-content p-8 sm:p-20">
-                                        <label className="bg-emerald-600 hover:bg-emerald-500 px-8 sm:px-16 py-6 rounded-2xl font-bold cursor-pointer inline-block text-lg shadow-xl transition-all">
-                                            {curr.uploadBtn} <input type="file" onChange={handleFile} className="hidden" accept=".pdf,.docx,.txt" />
-                                        </label>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-                            {curr.steps.map((s, i) => (
-                                <div key={i} className="bg-[#111] p-8 rounded-3xl border border-white/5">
-                                    <div className="text-emerald-500 font-black mb-2 italic">0{i+1}</div>
-                                    <h4 className="font-bold text-sm mb-2 uppercase tracking-widest">{s.t}</h4>
-                                    <p className="text-gray-500 text-xs leading-relaxed">{s.d}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                    <footer className="mt-20 pt-10 border-t border-white/5 space-y-4">
-                        <div className="tally-feedback no-print">
-                            <p>{isEn ? 'Help us improve' : 'Помогите нам стать лучше'}</p>
-                            <a href="https://tally.so/r/RG4vBl" target="_blank" rel="noopener">
-                                {isEn ? 'Leave feedback ⚡' : 'Оставить отзыв ⚡'}
-                            </a>
-                        </div>
-                        <p className="text-gray-600 text-sm italic">{curr.footerEng}</p>
-                        <div className="text-gray-500 text-[10px] uppercase tracking-widest font-bold">
-    <a href="/about.html" className="hover:text-emerald-500 transition-colors mr-4 underline underline-offset-4">{isEn ? "About" : "О сервисе"}</a>
-    {curr.contact} <a href="mailto:sarytopdev@gmail.com" className="text-emerald-500 ml-1">sarytopdev@gmail.com</a>
-			</div>
-                    </footer>
-                </div>
-            );
-
-            const L = resumeData.labels || {};
-            return (
-                <div className="max-w-6xl mx-auto px-4 py-10 space-y-8">
-                    <div className="flex justify-between items-center">
-                        <h1 className="text-3xl font-black bg-gradient-to-r from-emerald-400 to-blue-500 bg-clip-text text-transparent italic">ResumeLink</h1>
-                        <button onClick={() => {window.location.search=""; setStep('setup');}} className="text-gray-600 text-[10px] font-bold uppercase border border-white/5 px-5 py-2 rounded-full font-bold uppercase">{curr.backBtn}</button>
-                    </div>
-                    <div className="grid-layout">
-                        <div className="card-item col-span-full flex flex-col md:flex-row justify-between items-center bg-[#111] p-10">
-                            <div>
-                                <h2 className="text-4xl md:text-[56px] name-fix tracking-tighter" contentEditable="true" suppressContentEditableWarning={true}>{resumeData.name}</h2>
-                                <p className="text-emerald-400 font-bold uppercase tracking-widest text-[14px] mt-4">{resumeData.title}</p>
-                            </div>
-                            <div className="text-right">
-                                <div className="text-emerald-500 text-2xl font-black">{resumeData.atsScore}%</div>
-                                <p className="text-[12px] text-gray-500 uppercase font-bold">{curr.atsScore}</p>
-                            </div>
-                        </div>
-
-                        {resumeData.summary && (
-                            <div className="card-item col-span-1 md:col-span-3">
-                                <h3 className="text-blue-400 text-[12px] font-bold uppercase mb-6 tracking-widest">{L.summary}</h3>
-                                <p className="text-[22px] font-medium text-gray-200">{resumeData.summary}</p>
-                            </div>
-                        )}
-
-                        <div className="card-item bg-blue-500/5 border-blue-500/20">
-                            <h3 className="text-blue-400 text-[12px] font-bold uppercase mb-6 tracking-widest">{L.contacts}</h3>
-                            <div className="space-y-4 text-[17px]">
-                                {resumeData.contacts?.p && <p>📱 {resumeData.contacts.p}</p>}
-                                {resumeData.contacts?.e && <p>✉️ {resumeData.contacts.e}</p>}
-                                {resumeData.contacts?.l && <p>📍 {resumeData.contacts.l}</p>}
-                            </div>
-                        </div>
-
-                        {resumeData.experience?.length > 0 && (
-                            <div className="card-item col-span-1 md:col-span-3">
-                                <h3 className="text-blue-400 text-[10px] font-bold uppercase mb-8 tracking-widest">{L.experience}</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                                    {resumeData.experience.map((ex, i) => (
-                                        <div key={i} className="border-l-2 border-emerald-500/20 pl-5">
-                                            <h4 className="font-bold text-[18px]">{ex.p}</h4>
-                                            <p className="text-emerald-500 text-[14px] font-bold uppercase my-2">{ex.c} | {ex.t}</p>
-                                            <p className="text-gray-400 text-[14px] leading-relaxed">{ex.d}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {resumeData.education?.length > 0 && (
-                            <div className="card-item">
-                                <h3 className="text-blue-400 text-[12px] font-bold uppercase mb-8 tracking-widest">{L.education}</h3>
-                                <div className="space-y-6">
-                                    {resumeData.education.map((ed, i) => (
-                                        <div key={i} className="border-b border-white/5 pb-4 last:border-0">
-                                            <p className="font-bold text-[17px]">{ed.d}</p>
-                                            <p className="text-gray-400 text-[14px] mt-1">{ed.s} ({ed.y})</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {resumeData.additional?.map((block, i) => block?.title && (
-                            <div key={i} className="card-item col-span-1 md:col-span-2">
-                                <h3 className="text-blue-400 text-[12px] font-bold uppercase mb-6 tracking-widest">{block.title}</h3>
-                                <p className="text-[16px] text-gray-300 leading-relaxed">{block.content}</p>
-                            </div>
-                        ))}
-
-                        {(resumeData.languages?.length > 0 || resumeData.hobbies?.length > 0) && (
-                            <div className="card-item">
-                                {resumeData.languages?.length > 0 && (
-                                    <div className="mb-8">
-                                        <h3 className="text-blue-400 text-[12px] font-bold uppercase mb-4 tracking-widest">{L.languages}</h3>
-                                        <p className="text-gray-300 text-sm">{resumeData.languages.join(", ")}</p>
-                                    </div>
-                                )}
-                                {resumeData.hobbies?.length > 0 && (
-                                    <div>
-                                        <h3 className="text-blue-400 text-[12px] font-bold uppercase mb-4 tracking-widest">{L.hobbies}</h3>
-                                        <p className="text-gray-300 text-sm">{resumeData.hobbies.join(", ")}</p>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-
-                        <div className="card-item col-span-1 md:col-span-2 flex items-center justify-between bg-gradient-to-br from-[#111] to-[#1a1a1a]">
-                            <div className="space-y-4 w-full">
-                                <h3 className="text-blue-400 text-[12px] font-bold uppercase tracking-widest">{L.links}</h3>
-                                <div className="flex gap-3 text-2xl">
-                                    <a href={resumeData.socials?.li || "#"} target="_blank">🔗</a>
-                                    <a href={resumeData.socials?.gh || "#"} target="_blank">🐙</a>
-                                    <a href={resumeData.socials?.tg || "#"} target="_blank">✈️</a>
-                                </div>
-                            </div>
-                            <div className="bg-white p-2 rounded-2xl shrink-0">
-                                <img src={`https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(window.location.href)}`} alt="QR" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            );
-        }
-        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-    </script>
-
-<div class="no-print">
-    <button id="share-button" class="share-btn">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
-      <span>Share Profile</span>
-    </button>
-
-    <button id="download-button" onclick="printResume()" class="download-btn">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-      <span>Download PDF</span>
-    </button>
-</div>
-
-<footer class="rl-site-footer no-print">
-    <p>&copy; 2026 ResumeLink | <a href="/policy.html" style="color: #10b981; text-decoration: none;">Privacy & Terms</a></p>
-    <div style="margin-top: 10px; color: #444;">
-        Built with <a href="https://resumelink.cc" style="color: #10b981; text-decoration: none; font-weight: bold;">ResumeLink.cc</a> — AI mobile-first resumes
+<nav>
+    <a href="/" class="nav-logo">Resume<span>Link</span></a>
+    <div class="nav-links">
+        <a href="#features" id="nav-roles">140+ Ролей</a>
+        <a href="/about.html" id="nav-about">О сервисе</a>
+        <a href="mailto:info@resumelink.cc" id="nav-contact">Контакт</a>
+        <a href="#hero" class="nav-cta" id="nav-upload">Загрузить →</a>
     </div>
-</footer>
-
-<div class="pdf-watermark">
-    Created via ResumeLink.cc — Interactive mobile version available online
+    <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+<div class="nav-mobile" id="mobileMenu">
+    <a href="#features" onclick="toggleMenu()" id="mob-roles">140+ Ролей</a>
+    <a href="/about.html" id="mob-about">О сервисе</a>
+    <a href="mailto:info@resumelink.cc" id="mob-contact">Контакт</a>
+    <a href="#hero" onclick="toggleMenu()" id="mob-upload" style="color:var(--green-dk);font-weight:500">Загрузить →</a>
 </div>
 
-<style>
-  /* СТИЛИ КНОПОК НА САЙТЕ */
-  .share-btn, .download-btn {
-    position: fixed; right: 20px; z-index: 1000; align-items: center; gap: 8px;
-    color: white; padding: 12px 24px; border-radius: 50px; border: none;
-    font-weight: 600; cursor: pointer; transition: transform 0.2s, background 0.2s;
-    font-family: 'Outfit', sans-serif; display: none;
+<div id="root"></div>
+
+<button id="share-button" class="fab">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+    <span id="share-label">Поделиться</span>
+</button>
+<button id="download-button" class="fab" onclick="printResume()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    <span id="download-label">PDF</span>
+</button>
+<div class="pdf-watermark">Created via ResumeLink.cc — Interactive version available online</div>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+const pdfjs = window['pdfjs-dist/build/pdf'];
+pdfjs.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+const WORKER_URL = "https://resumelink-worker.aisrail.workers.dev";
+
+const T = {
+  en: {
+    eyebrow:"AI-Powered · 2026", h1a:"Build your", h1em:"AI resume", h1b:"in", h1c:"10 seconds",
+    sub:"Upload PDF or DOCX — AI creates an interactive profile with ATS score, personal link and QR code. No Word, no templates.",
+    uploadBtn:"Upload Resume", howLink:"How it works ↓", heroNote:"PDF · DOCX · TXT · Free · No signup",
+    backBtn:"← Back", atsLabel:"ATS Score", shareLabel:"Share", downloadLabel:"PDF",
+    stages:["Analyzing text…","Extracting data…","Generating blocks…","Creating QR…","Optimizing layout…","Finalizing…","Almost ready…"],
+    stats:[["10s","To your live profile"],["140+","Guides & Careers"],["ATS✓","Pass HR filters"],["$0","Free to start"]],
+    featLabel:"Features", featH1:"Everything you need,", featH2:"nothing extra",
+    featSub:"ResumeLink is not just a file converter. It's a full platform for your professional presence.",
+    feats:[
+      {i:"⚡",t:"AI analysis in seconds",d:"Neural net structures your experience to ATS standards and highlights your strengths automatically."},
+      {i:"🔗",t:"Live link & QR code",d:"Your profile is always accessible via link or QR. Forget heavy PDFs that won't open on mobile."},
+      {i:"📊",t:"ATS Score",d:"Instant match score for any vacancy. Understand why your resume passes or fails automated filters."},
+      {i:"📱",t:"Mobile-first design",d:"Perfect on any device — recruiter opens it on phone, laptop, or tablet without quality loss."},
+      {i:"🖨️",t:"Download PDF",d:"Need a classic document? One click — a beautifully formatted PDF ready for HR."},
+      {i:"🌍",t:"Multilingual",d:"Service auto-detects the resume language. More languages coming soon."}
+    ],
+    howLabel:"How it works", howH1:"Three steps", howH2:"to a live profile",
+    howSub:"No signup, no settings. Just file → result.",
+    steps:[
+      {n:"01",t:"Upload file",d:"PDF, DOCX or TXT — any format. Click the button and pick your file. No registration needed."},
+      {n:"02",t:"AI does magic",d:"Neural net analyzes text, structures data into blocks and calculates your ATS score in seconds."},
+      {n:"03",t:"Share it",d:"Get your personal link and QR code. Send to a recruiter, add to LinkedIn, or download PDF."}
+    ],
+    navRoles:"140+ Careers", navAbout:"About", navContact:"Contact", navUpload:"Upload →",
+    footerAbout:"About", footerRoles:"Careers", footerPolicy:"Privacy & Terms",
+    chipTop:"Profile published", chipBot:"QR ready",
+    skillsMatch:"Skills match", keywords:"Keywords",
+    previewName:"Anya Kim", previewRole:"AI Product Manager",
+  },
+  ru: {
+    eyebrow:"AI-Powered · 2026", h1a:"Построй своё", h1em:"AI-резюме", h1b:"за", h1c:"10 секунд",
+    sub:"Загрузи PDF или DOCX — ИИ создаст интерактивный профиль с ATS-оценкой, личной ссылкой и QR-кодом. Никакого Word, никаких шаблонов.",
+    uploadBtn:"Загрузить резюме", howLink:"Как это работает ↓", heroNote:"PDF · DOCX · TXT · Бесплатно · Без регистрации",
+    backBtn:"← Назад", atsLabel:"ATS Score", shareLabel:"Поделиться", downloadLabel:"PDF",
+    stages:["Анализируем текст…","Извлекаем данные…","Генерируем блоки…","Создаём QR-код…","Оптимизируем верстку…","Настраиваем интерактив…","Почти готово…"],
+    stats:[["10с","До готового профиля"],["140+","Гайды и профессии"],["ATS✓","Проходи автофильтры HR"],["0₽","Бесплатно для старта"]],
+    featLabel:"Возможности", featH1:"Всё что нужно,", featH2:"ничего лишнего",
+    featSub:"ResumeLink — не просто конвертер файлов. Это полноценная платформа для вашего профессионального присутствия.",
+    feats:[
+      {i:"⚡",t:"AI-анализ за секунды",d:"Нейросеть структурирует опыт под ATS-стандарты и выделяет ваши сильные стороны автоматически."},
+      {i:"🔗",t:"Живая ссылка и QR",d:"Ваш профиль всегда доступен по ссылке или QR-коду. Забудьте про тяжёлые PDF, которые не открываются на телефоне."},
+      {i:"📊",t:"ATS Score",d:"Мгновенная оценка соответствия вакансии. Понимайте, почему ваше резюме проходит или не проходит фильтры."},
+      {i:"📱",t:"Mobile-first дизайн",d:"Профиль отлично выглядит на любом устройстве — рекрутер открывает его с телефона, ноутбука или планшета."},
+      {i:"🖨️",t:"Скачать PDF",d:"Нужен классический документ? Один клик — готовый, красиво свёрстанный PDF для HR-отдела."},
+      {i:"🌍",t:"Мультиязычность",d:"Сервис автоматически определяет язык резюме. Скоро подключатся новые языки."}
+    ],
+    howLabel:"Как это работает", howH1:"Три шага", howH2:"до живого профиля",
+    howSub:"Никакой регистрации, никаких настроек. Просто файл → результат.",
+    steps:[
+      {n:"01",t:"Загрузи файл",d:"PDF, DOCX или TXT — любой формат. Нажми кнопку и выбери файл. Никакой регистрации не нужно."},
+      {n:"02",t:"AI делает магию",d:"Нейросеть анализирует текст, структурирует данные по блокам и рассчитывает ATS-score за несколько секунд."},
+      {n:"03",t:"Поделись",d:"Получи личную ссылку и QR-код. Отправь рекрутеру в Telegram, добавь в LinkedIn или скачай PDF."}
+    ],
+    navRoles:"140+ Ролей", navAbout:"О сервисе", navContact:"Контакт", navUpload:"Загрузить →",
+    footerAbout:"О сервисе", footerRoles:"Профессии", footerPolicy:"Privacy & Terms",
+    chipTop:"Профиль опубликован", chipBot:"QR-код готов",
+    skillsMatch:"Соответствие", keywords:"Ключевые слова",
+    previewName:"Аня Ким", previewRole:"AI Product Manager",
   }
-  .share-btn { bottom: 20px; background: #10b981; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); }
-  .download-btn { bottom: 80px; background: #3b82f6; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
-  .share-btn:active, .download-btn:active { transform: scale(0.95); }
-  
-  .rl-site-footer { margin-top: 60px; text-align: center; padding: 40px 20px; font-size: 14px; color: #666; border-top: 1px solid #1a1a1a; }
-
-  /* ЕДИНЫЙ ИДЕАЛЬНЫЙ БЛОК ДЛЯ ПЕЧАТИ */
-  @media print {
-    /* Скрываем весь сайт — показываем только #rl-print-dom */
-    body > *:not(#rl-print-dom) { display: none !important; }
-    #rl-print-dom { display: block !important; }
-    /* Tally вложена в React-дерево — скрываем явно */
-    .tally-feedback { display: none !important; }
-  }
-	
-</style>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const shareBtn = document.getElementById('share-button');
-    shareBtn.addEventListener('click', async () => {
-        const shareData = { title: 'ResumeLink Profile', text: 'Оцени моё интерактивное резюме!', url: window.location.href };
-        try {
-            if (navigator.share) { await navigator.share(shareData); }
-            else {
-                await navigator.clipboard.writeText(window.location.href);
-                const span = shareBtn.querySelector('span');
-                span.innerText = 'Link Copied!';
-                setTimeout(() => { span.innerText = 'Share Profile'; }, 2000);
-            }
-        } catch (err) { console.error('Error:', err); }
-    });
-});
-
-window.__RL_SET_RESUME_DATA__ = function(data) {
-    window.__RL_RESUME_DATA__ = data;
-    const shareBtn = document.getElementById('share-button');
-    const downloadBtn = document.getElementById('download-button');
-    if (shareBtn) shareBtn.style.display = 'flex';
-    if (downloadBtn) downloadBtn.style.display = 'flex';
 };
 
-function printResume() {
-    const data = window.__RL_RESUME_DATA__;
-    if (!data) { alert('Resume data is loading, please wait a moment and try again.'); return; }
+function App() {
+  const [resumeData, setResumeData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [loadingStage, setLoadingStage] = useState(0);
+  const [step, setStep] = useState('setup');
 
-    const e = (s) => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    const L = data.labels || {};
-    const pageUrl = window.location.href;
+  const isEn = navigator.language.startsWith('en');
+  const C = isEn ? T.en : T.ru;
 
-    const nameParts = (data.name || '').trim().split(' ');
-    const firstName = nameParts.slice(0, -1).join(' ') || nameParts[0] || '';
-    const lastName  = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';
+  // update nav & button labels
+  useEffect(() => {
+    const map = {
+      'nav-roles': C.navRoles, 'nav-about': C.navAbout,
+      'nav-contact': C.navContact, 'nav-upload': C.navUpload,
+      'mob-roles': C.navRoles, 'mob-about': C.navAbout,
+      'mob-contact': C.navContact, 'mob-upload': C.navUpload,
+      'share-label': C.shareLabel, 'download-label': C.downloadLabel
+    };
+    Object.entries(map).forEach(([id, txt]) => { const el = document.getElementById(id); if (el) el.textContent = txt; });
+  }, []);
 
-    const contacts = [];
-    if (data.contacts?.p) contacts.push('<span>' + e(data.contacts.p) + '</span>');
-    if (data.contacts?.e) contacts.push('<span>' + e(data.contacts.e) + '</span>');
-    if (data.contacts?.l) contacts.push('<span>' + e(data.contacts.l) + '</span>');
-    const contactBar = contacts.join('<span class="rl-sep">|</span>');
+  // load from ?id=
+  useEffect(() => {
+    const id = new URLSearchParams(location.search).get('id');
+    if (!id) return;
+    setLoading(true);
+    fetch(`${WORKER_URL}/${id}`)
+      .then(r => r.json())
+      .then(data => {
+        setResumeData(data);
+        if (window.__RL_SET_RESUME_DATA__) window.__RL_SET_RESUME_DATA__(data);
+        setStep('result'); setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
 
-    const eduHtml = (data.education || []).map(ed => `
-        <div class="rl-edu-item">
-            <div class="rl-edu-degree">${e(ed.d)}</div>
-            <div class="rl-edu-school">${e(ed.s)}</div>
-            <div class="rl-edu-year">${e(ed.y)}</div>
-        </div>`).join('');
+  // loading ticker
+  useEffect(() => {
+    if (!loading) return;
+    const iv = setInterval(() => setLoadingStage(p => p < C.stages.length - 1 ? p + 1 : p), 2500);
+    return () => clearInterval(iv);
+  }, [loading]);
 
-    const langsHtml = (data.languages || []).map(l => `<div class="rl-lang-item">— ${e(l)}</div>`).join('');
+  const autoPublish = async (data) => {
+    try {
+      const r = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) });
+      const res = await r.json();
+      window.history.pushState({}, '', `${location.origin}${location.pathname}?id=${res.id}`);
+    } catch(e) { console.error(e); }
+  };
 
-    const hobbiesHtml = (data.hobbies || []).length > 0
-        ? `<div class="rl-section"><div class="rl-section-title">${e(L.hobbies || 'Hobbies')}</div><div class="rl-lang-item">${e((data.hobbies||[]).join(', '))}</div></div>` : '';
+  const processAI = async (text) => {
+    if (!text || text.trim().length < 20) {
+      alert(isEn ? "No readable text found" : "Текст не найден (возможно, это скан)");
+      setLoading(false); return;
+    }
+    try {
+      const prompt = `Analyze text and extract into JSON. Target language: Use the same language as the source text.
+Task: Create a professional interactive profile.
+MANDATORY FOR NAME: If English — "First Last" only. If Russian — keep full name.
+MANDATORY FOR BLOCKS: Generate additional blocks only if info exists.
+JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","languages":"","hobbies":"","links":""},"name":"","title":"","contacts":{"p":"","e":"","l":""},"socials":{"li":"","gh":"","tg":""},"summary":"","atsScore":85,"experience":[{"c":"","p":"","t":"","d":""}],"education":[{"s":"","d":"","y":""}],"languages":[],"hobbies":[],"additional":[{"title":"","content":""}]}`;
+      const r = await fetch(`${WORKER_URL}/generate`, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ prompt: prompt + " Text: " + text.substring(0,9000) })
+      });
+      const data = await r.json();
+      if (data.error || !data.candidates?.[0]) throw new Error(data.error?.message || "AI Error");
+      const raw = data.candidates[0].content.parts[0].text;
+      const s = raw.indexOf('{'), e = raw.lastIndexOf('}');
+      if (s === -1 || e === -1) throw new Error("Invalid JSON");
+      const parsed = JSON.parse(raw.substring(s, e+1));
+      parsed.experience = parsed.experience || [];
+      parsed.education  = parsed.education  || [];
+      parsed.additional = parsed.additional || [];
+      setResumeData(parsed);
+      if (window.__RL_SET_RESUME_DATA__) window.__RL_SET_RESUME_DATA__(parsed);
+      await autoPublish(parsed);
+      setStep('result');
+    } catch(err) {
+      console.error(err);
+      alert(isEn ? "Analysis error. Check Worker settings." : "Ошибка анализа. Проверьте настройки Воркера.");
+    }
+    setLoading(false);
+  };
 
-    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${encodeURIComponent(pageUrl)}`;
-    const sidebarQr = `<div class="rl-section rl-qr-section">
-        <div class="rl-section-title">Online Profile</div>
-        <img class="rl-qr-img" src="${qrUrl}" alt="QR">
-        <div class="rl-qr-url">${e(pageUrl)}</div>
-    </div>`;
+  const handleFile = async (ev) => {
+    if (loading) return;
+    const file = ev.target.files[0]; if (!file) return;
+    setLoading(true); setLoadingStage(0);
+    try {
+      let text = "";
+      const ext = file.name.split('.').pop().toLowerCase();
+      if (ext === "pdf") {
+        const pdf = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise;
+        for (let i = 1; i <= Math.min(pdf.numPages, 5); i++) {
+          const page = await pdf.getPage(i);
+          const content = await page.getTextContent();
+          text += content.items.map(s => s.str).join(" ") + " ";
+        }
+      } else if (ext === "docx") {
+        const res = await window.mammoth.extractRawText({ arrayBuffer: await file.arrayBuffer() });
+        text = res.value;
+      } else if (ext === "txt") {
+        text = await file.text();
+      } else {
+        alert(isEn ? "Format not supported" : "Формат не поддерживается");
+        setLoading(false); return;
+      }
+      await processAI(text);
+    } catch(err) { console.error(err); setLoading(false); }
+  };
 
-    const expHtml = (data.experience || []).map(ex => `
-        <div class="rl-exp-entry">
-            <div class="rl-exp-header"><span class="rl-exp-title">${e(ex.p)}</span><span class="rl-exp-period">${e(ex.t)}</span></div>
-            <div class="rl-exp-company">${e(ex.c)}</div>
-            <div class="rl-exp-desc">${e(ex.d)}</div>
-            <div class="rl-exp-divider"></div>
-        </div>`).join('');
-
-    const additionalHtml = (data.additional || []).filter(b => b && b.title).map(b => `
-        <div class="rl-section" style="margin-top:10pt">
-            <div class="rl-section-title">${e(b.title)}</div>
-            <div class="rl-additional-text">${e(b.content)}</div>
-        </div>`).join('');
-
-    // Создаем элемент стилей отдельно для корректного применения цветов при печати
-    const styleEl = document.createElement('style');
-    styleEl.id = 'rl-print-styles';
-    styleEl.innerHTML = `
-        @page { size: A4 portrait; margin: 0; }
-        * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-sizing: border-box; margin: 0; padding: 0; }
-        #rl-print-dom { font-family: 'Outfit', sans-serif; color: #0f172a; width: 210mm; background: #fff; }
-        .rl-header { display: flex; justify-content: space-between; align-items: center; padding: 18pt 22pt 14pt 18pt; border-bottom: 2pt solid #475569; background: #fff; }
-        .rl-name-first { font-size: 26pt; font-weight: 300; line-height: 1.1; display: block; color: #1e293b; }
-        .rl-name-last  { font-size: 26pt; font-weight: 800; line-height: 1.1; display: block; color: #3b82f6; }
-        .rl-job-title  { font-size: 7pt; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #64748b; margin-top: 5pt; }
-        .rl-photo { width: 64pt; height: 64pt; border-radius: 50%; background: #dbeafe; flex-shrink: 0; }
-        .rl-contacts { display: flex; align-items: center; justify-content: center; background: #2d3f55; padding: 7pt 0; width: 100%; }
-        .rl-contacts span { color: #e2e8f0; font-size: 6.5pt; white-space: nowrap; padding: 0 10pt; }
-        .rl-sep { color: #64748b !important; padding: 0 2pt !important; }
-        .rl-body { display: table; width: 210mm; table-layout: fixed; border-collapse: collapse; }
-        .rl-sidebar { display: table-cell; width: 62mm; background: #e8f0fe; vertical-align: top; padding: 16pt 14pt 24pt 14pt; border-right: 1pt solid #bfcfe8; }
-        .rl-main    { display: table-cell; width: 148mm; background: #fff; vertical-align: top; padding: 14pt 18pt 24pt 18pt; }
-        .rl-section { margin-bottom: 14pt; break-inside: avoid; page-break-inside: avoid; }
-        .rl-section-title { font-size: 6.5pt; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: #1e293b; border-bottom: 2pt solid #3b82f6; padding-bottom: 4pt; margin-bottom: 9pt; }
-        .rl-edu-item { margin-bottom: 10pt; break-inside: avoid; }
-        .rl-edu-degree { font-size: 7.5pt; font-weight: 700; color: #1e293b; }
-        .rl-edu-school { font-size: 6.5pt; color: #475569; margin-top: 1pt; }
-        .rl-edu-year   { font-size: 6pt; color: #64748b; margin-top: 1pt; }
-        .rl-lang-item { font-size: 7pt; color: #334155; padding: 2pt 0; }
-        .rl-qr-section { margin-top: 4pt; }
-        .rl-qr-img { width: 72pt; height: 72pt; display: block; margin: 0 0 5pt 0; }
-        .rl-qr-url { font-size: 5pt; color: #3b82f6; word-break: break-all; line-height: 1.4; }
-        .rl-summary { font-size: 8pt; font-style: italic; line-height: 1.65; color: #334155; margin-bottom: 14pt; }
-        .rl-exp-entry { break-inside: avoid; page-break-inside: avoid; margin-bottom: 2pt; }
-        .rl-exp-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1pt; }
-        .rl-exp-title   { font-size: 8.5pt; font-weight: 700; color: #1e293b; }
-        .rl-exp-period  { font-size: 7pt; font-weight: 600; color: #3b82f6; white-space: nowrap; margin-left: 8pt; }
-        .rl-exp-company { font-size: 7pt; color: #64748b; margin-bottom: 4pt; }
-        .rl-exp-desc    { font-size: 7pt; color: #475569; line-height: 1.55; }
-        .rl-exp-divider { border-top: 0.5pt solid #bfcfe8; margin: 8pt 0; }
-        .rl-exp-entry:last-child .rl-exp-divider { display: none; }
-        .rl-additional-text { font-size: 7.5pt; color: #334155; line-height: 1.55; }
-        .rl-watermark { position: fixed; bottom: 0; left: 0; right: 0; font-size: 5.5pt; color: #94a3b8; text-align: center; border-top: 0.5pt solid #e2e8f0; padding: 3pt 0; background: #fff; font-family: 'Outfit', sans-serif; letter-spacing: 0.05em; }
-    `;
-
-    const html = `<div id="rl-print-dom">
-    <div class="rl-header">
+  /* ── LANDING ── */
+  if (step === 'setup') return (
+    <div>
+      <section id="hero">
         <div>
-            <span class="rl-name-first">${e(firstName)}</span>
-            <span class="rl-name-last">${e(lastName)}</span>
-            <div class="rl-job-title">${e(data.title)}</div>
+          <div className="hero-eyebrow">{C.eyebrow}</div>
+          <h1>{C.h1a}<br/><em>{C.h1em}</em><br/>{C.h1b} <b>{C.h1c}</b></h1>
+          <p className="hero-sub">{C.sub}</p>
+          <div className="hero-actions">
+            {loading ? (
+              <div className="loading-box">
+                <div className="spinner"></div>
+                <div className="loading-stage">{C.stages[loadingStage]}</div>
+              </div>
+            ) : (
+              <div className="glow-wrapper">
+                <div className="glow-content">
+                  <label className="btn-primary" style={{fontSize:'15px',padding:'14px 32px',cursor:'pointer'}}>
+                    📄 {C.uploadBtn}
+                    <input type="file" onChange={handleFile} style={{display:'none'}} accept=".pdf,.docx,.txt"/>
+                  </label>
+                </div>
+              </div>
+            )}
+            {!loading && <a href="#how" className="btn-ghost">{C.howLink}</a>}
+          </div>
+          <p className="hero-note">{C.heroNote}</p>
         </div>
-        <div class="rl-photo"></div>
-    </div>
-    <div class="rl-contacts">${contactBar}</div>
-    <div class="rl-body">
-        <div class="rl-sidebar">
-            ${eduHtml ? `<div class="rl-section"><div class="rl-section-title">${e(L.education || 'Education')}</div>${eduHtml}</div>` : ''}
-            ${langsHtml ? `<div class="rl-section"><div class="rl-section-title">${e(L.languages || 'Languages')}</div>${langsHtml}</div>` : ''}
-            ${hobbiesHtml}
-            ${sidebarQr}
+        <div className="hero-visual">
+          <div className="float-chip chip-top">{C.chipTop}</div>
+          <div className="profile-preview">
+            <div className="pp-header">
+              <div className="pp-avatar">AK</div>
+              <div>
+                <div className="pp-name">{C.previewName}</div>
+		<div className="pp-role">{C.previewRole}</div>
+              </div>
+              <div className="pp-score">
+                <div className="pp-score-n">92%</div>
+                <div className="pp-score-l">{C.atsLabel}</div>
+              </div>
+            </div>
+            <div className="pp-bar-row"><span>{C.skillsMatch}</span><span>88%</span></div>
+            <div className="pp-bar-track"><div className="pp-bar-fill" style={{width:'88%'}}></div></div>
+            <div className="pp-bar-row"><span>{C.keywords}</span><span>94%</span></div>
+            <div className="pp-bar-track"><div className="pp-bar-fill" style={{width:'94%'}}></div></div>
+            <div className="pp-tags">
+              <span className="pp-tag">GPT-4</span><span className="pp-tag">Figma</span>
+              <span className="pp-tag">SQL</span><span className="pp-tag">Agile</span>
+            </div>
+            <div className="pp-url">resumelink.cc/?id=a7k9x</div>
+          </div>
+          <div className="float-chip chip-bot">{C.chipBot}</div>
         </div>
-        <div class="rl-main">
-            ${data.summary ? `<div class="rl-summary">${e(data.summary)}</div>` : ''}
-            ${expHtml ? `<div class="rl-section"><div class="rl-section-title">${e(L.experience || 'Experience')}</div>${expHtml}</div>` : ''}
-            ${additionalHtml}
-        </div>
-    </div>
-    <div class="rl-watermark">Made with ResumeLink.cc &nbsp;·&nbsp; <span style="color:#3b82f6">${e(pageUrl)}</span></div>
-    </div>`;
+      </section>
 
-    const wrapper = document.createElement('div');
-    wrapper.innerHTML = html;
-    const printDom = wrapper.firstElementChild;
-    
-    document.head.appendChild(styleEl);
-    document.body.appendChild(printDom);
-    
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-        window.print();
-        setTimeout(() => { 
-            if (printDom?.parentNode) printDom.parentNode.removeChild(printDom); 
-            if (styleEl?.parentNode) styleEl.parentNode.removeChild(styleEl);
-        }, 1500);
-    }));
+      <div id="stats">
+        <div className="stats-inner">
+          {C.stats.map(([n,l],i) => (
+            <div key={i} className="stat-item">
+              <div className="stat-n"><em>{n}</em></div>
+              <div className="stat-l">{l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <section id="features">
+        <div className="section-label">{C.featLabel}</div>
+        <h2 className="section-title">{C.featH1}<br/><b>{C.featH2}</b></h2>
+        <p className="section-sub">{C.featSub}</p>
+        <div className="features-grid">
+          {C.feats.map((f,i) => (
+            <div key={i} className="feature-card">
+              <div className="feat-icon">{f.i}</div>
+              <div className="feat-title">{f.t}</div>
+              <div className="feat-desc">{f.d}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section id="how">
+        <div className="how-inner">
+          <div className="section-label">{C.howLabel}</div>
+          <h2 className="section-title">{C.howH1}<br/><b>{C.howH2}</b></h2>
+          <p className="section-sub">{C.howSub}</p>
+          <div className="steps-grid">
+            {C.steps.map((s,i) => (
+              <div key={i} className="step-card">
+                <div className="step-num">{s.n}</div>
+                <div className="step-title">{s.t}</div>
+                <div className="step-desc">{s.d}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <footer className="site-footer">
+        <a href="/" className="footer-logo">Resume<span>Link</span></a>
+        <div className="footer-links">
+          <a href="/about.html">{C.footerAbout}</a>
+          <a href="/roles/">{C.footerRoles}</a>
+          <a href="/policy.html">{C.footerPolicy}</a>
+          <a href="mailto:info@resumelink.cc">info@resumelink.cc</a>
+        </div>
+        <div className="footer-copy">© 2026 ResumeLink</div>
+      </footer>
+    </div>
+  );
+
+  /* ── RESULT ── */
+  const L = resumeData.labels || {};
+  return (
+    <div className="result-wrap">
+      <div className="result-topbar">
+        <a href="/" className="result-logo">Resume<span>Link</span></a>
+        <button className="back-btn" onClick={() => { window.history.pushState({},'',location.pathname); setStep('setup'); setResumeData(null); }}>
+          {C.backBtn}
+        </button>
+      </div>
+      <div className="rl-grid">
+        <div className="card card-hero">
+          <div>
+            <div className="resume-name" contentEditable suppressContentEditableWarning>{resumeData.name}</div>
+            <div className="resume-title">{resumeData.title}</div>
+          </div>
+          <div className="ats-block">
+            <div className="ats-num">{resumeData.atsScore}%</div>
+            <div className="ats-lbl">{C.atsLabel}</div>
+          </div>
+        </div>
+
+        {resumeData.summary && (
+          <div className="card card-summary">
+            <div className="card-label">{L.summary}</div>
+            <p>{resumeData.summary}</p>
+          </div>
+        )}
+
+        <div className="card card-contacts">
+          <div className="card-label">{L.contacts}</div>
+          {resumeData.contacts?.p && <div className="contact-row">📱 {resumeData.contacts.p}</div>}
+          {resumeData.contacts?.e && <div className="contact-row">✉️ {resumeData.contacts.e}</div>}
+          {resumeData.contacts?.l && <div className="contact-row">📍 {resumeData.contacts.l}</div>}
+        </div>
+
+        {resumeData.experience?.length > 0 && (
+          <div className="card card-exp">
+            <div className="card-label">{L.experience}</div>
+            <div className="exp-grid">
+              {resumeData.experience.map((ex,i) => (
+                <div key={i} className="exp-item">
+                  <div className="exp-pos">{ex.p}</div>
+                  <div className="exp-co">{ex.c} · {ex.t}</div>
+                  <div className="exp-desc">{ex.d}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {resumeData.education?.length > 0 && (
+          <div className="card card-edu">
+            <div className="card-label">{L.education}</div>
+            {resumeData.education.map((ed,i) => (
+              <div key={i} className="edu-item">
+                <div className="edu-deg">{ed.d}</div>
+                <div className="edu-school">{ed.s}</div>
+                <div className="edu-year">{ed.y}</div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {resumeData.additional?.map((block,i) => block?.title && (
+          <div key={i} className="card card-additional">
+            <div className="card-label">{block.title}</div>
+            <p>{block.content}</p>
+          </div>
+        ))}
+
+        {(resumeData.languages?.length > 0 || resumeData.hobbies?.length > 0) && (
+          <div className="card card-misc">
+            {resumeData.languages?.length > 0 && (
+              <div className="misc-section">
+                <div className="card-label">{L.languages}</div>
+                <div className="tag-row">{resumeData.languages.map((l,i) => <span key={i} className="rl-tag">{l}</span>)}</div>
+              </div>
+            )}
+            {resumeData.hobbies?.length > 0 && (
+              <div className="misc-section">
+                <div className="card-label">{L.hobbies}</div>
+                <div className="tag-row">{resumeData.hobbies.map((h,i) => <span key={i} className="rl-tag">{h}</span>)}</div>
+              </div>
+            )}
+          </div>
+        )}
+
+        <div className="card card-links">
+          <div>
+            <div className="card-label">{L.links}</div>
+            <div className="social-row">
+              <a href={resumeData.socials?.li || "#"} target="_blank">🔗</a>
+              <a href={resumeData.socials?.gh || "#"} target="_blank">🐙</a>
+              <a href={resumeData.socials?.tg || "#"} target="_blank">✈️</a>
+            </div>
+            <div className="share-url">{location.href}</div>
+          </div>
+          <div className="qr-wrap">
+            <img src={`https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(location.href)}`} alt="QR" style={{display:'block',width:'72px',height:'72px'}}/>
+          </div>
+        </div>
+      </div>
+
+      <footer className="site-footer" style={{marginTop:'3rem'}}>
+        <a href="/" className="footer-logo">Resume<span>Link</span></a>
+        <div className="footer-links">
+          <a href="/policy.html">{C.footerPolicy}</a>
+          <a href="mailto:info@resumelink.cc">info@resumelink.cc</a>
+        </div>
+        <div className="footer-copy">© 2026 ResumeLink</div>
+      </footer>
+    </div>
+  );
 }
 
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
 </script>
-	
+
+<script>
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+window.__RL_SET_RESUME_DATA__ = function(data) {
+  window.__RL_RESUME_DATA__ = data;
+  ['share-button','download-button'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'flex';
+  });
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('share-button');
+  if (!btn) return;
+  btn.addEventListener('click', async () => {
+    const isEn = navigator.language.startsWith('en');
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: 'ResumeLink Profile', url: location.href });
+      } else {
+        await navigator.clipboard.writeText(location.href);
+        const lbl = document.getElementById('share-label');
+        lbl.textContent = isEn ? 'Copied!' : 'Скопировано!';
+        setTimeout(() => { lbl.textContent = isEn ? 'Share' : 'Поделиться'; }, 2000);
+      }
+    } catch(e) { console.error(e); }
+  });
+});
+
+function printResume() {
+  const data = window.__RL_RESUME_DATA__;
+  if (!data) { alert('Please wait and try again.'); return; }
+  const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const L = data.labels || {};
+  const pageUrl = location.href;
+  const parts = (data.name||'').trim().split(' ');
+  const firstName = parts.slice(0,-1).join(' ') || parts[0] || '';
+  const lastName  = parts.length > 1 ? parts[parts.length-1] : '';
+  const contacts = [
+    data.contacts?.p && '<span>'+esc(data.contacts.p)+'</span>',
+    data.contacts?.e && '<span>'+esc(data.contacts.e)+'</span>',
+    data.contacts?.l && '<span>'+esc(data.contacts.l)+'</span>'
+  ].filter(Boolean).join('<span class="rl-sep">|</span>');
+
+  const eduHtml = (data.education||[]).map(ed=>`<div class="rl-edu-item"><div class="rl-edu-degree">${esc(ed.d)}</div><div class="rl-edu-school">${esc(ed.s)}</div><div class="rl-edu-year">${esc(ed.y)}</div></div>`).join('');
+  const langsHtml = (data.languages||[]).map(l=>`<div class="rl-lang-item">— ${esc(l)}</div>`).join('');
+  const hobbiesHtml = (data.hobbies||[]).length > 0 ? `<div class="rl-section"><div class="rl-section-title">${esc(L.hobbies||'Hobbies')}</div><div class="rl-lang-item">${esc((data.hobbies||[]).join(', '))}</div></div>` : '';
+  const expHtml = (data.experience||[]).map(ex=>`<div class="rl-exp-entry"><div class="rl-exp-header"><span class="rl-exp-title">${esc(ex.p)}</span><span class="rl-exp-period">${esc(ex.t)}</span></div><div class="rl-exp-company">${esc(ex.c)}</div><div class="rl-exp-desc">${esc(ex.d)}</div><div class="rl-exp-divider"></div></div>`).join('');
+  const addHtml = (data.additional||[]).filter(b=>b&&b.title).map(b=>`<div class="rl-section"><div class="rl-section-title">${esc(b.title)}</div><div class="rl-additional-text">${esc(b.content)}</div></div>`).join('');
+
+  const styleEl = document.createElement('style');
+  styleEl.id = 'rl-print-styles';
+  styleEl.innerHTML = `
+    @page{size:A4 portrait;margin:0}
+    *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;box-sizing:border-box;margin:0;padding:0}
+    #rl-print-dom{font-family:'DM Sans',sans-serif;color:#0D3D28;width:210mm;background:#fff}
+    .rl-header{display:flex;justify-content:space-between;align-items:center;padding:18pt 22pt 14pt 18pt;border-bottom:1.5pt solid #C5E8D5;background:#F2FAF6}
+    .rl-name-first{font-size:26pt;font-weight:300;line-height:1.1;display:block;color:#0D3D28}
+    .rl-name-last{font-size:26pt;font-weight:600;line-height:1.1;display:block;color:#1DB368}
+    .rl-job-title{font-size:7pt;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:#5A8A70;margin-top:5pt}
+    .rl-photo{width:56pt;height:56pt;border-radius:50%;background:#EAF7F0;border:1pt solid #C5E8D5;flex-shrink:0}
+    .rl-contacts{display:flex;align-items:center;justify-content:center;background:#0D3D28;padding:7pt 0;width:100%}
+    .rl-contacts span{color:#EAF7F0;font-size:6.5pt;white-space:nowrap;padding:0 10pt}
+    .rl-sep{color:#5A8A70!important;padding:0 2pt!important}
+    .rl-body{display:table;width:210mm;table-layout:fixed;border-collapse:collapse}
+    .rl-sidebar{display:table-cell;width:62mm;background:#F2FAF6;vertical-align:top;padding:16pt 14pt 24pt 14pt;border-right:1pt solid #C5E8D5}
+    .rl-main{display:table-cell;width:148mm;background:#fff;vertical-align:top;padding:14pt 18pt 24pt 18pt}
+    .rl-section{margin-bottom:14pt;break-inside:avoid;page-break-inside:avoid}
+    .rl-section-title{font-size:6.5pt;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#0D3D28;border-bottom:1.5pt solid #1DB368;padding-bottom:4pt;margin-bottom:9pt}
+    .rl-edu-item{margin-bottom:10pt;break-inside:avoid}
+    .rl-edu-degree{font-size:7.5pt;font-weight:600;color:#0D3D28}
+    .rl-edu-school{font-size:6.5pt;color:#5A8A70;margin-top:1pt}
+    .rl-edu-year{font-size:6pt;color:#A8CDB9;margin-top:1pt}
+    .rl-lang-item{font-size:7pt;color:#5A8A70;padding:2pt 0}
+    .rl-qr-section{margin-top:4pt}
+    .rl-qr-img{width:72pt;height:72pt;display:block;margin:0 0 5pt}
+    .rl-qr-url{font-size:5pt;color:#1DB368;word-break:break-all;line-height:1.4}
+    .rl-summary{font-size:8pt;font-style:italic;line-height:1.65;color:#5A8A70;margin-bottom:14pt}
+    .rl-exp-entry{break-inside:avoid;page-break-inside:avoid;margin-bottom:2pt}
+    .rl-exp-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1pt}
+    .rl-exp-title{font-size:8.5pt;font-weight:600;color:#0D3D28}
+    .rl-exp-period{font-size:7pt;font-weight:500;color:#1DB368;white-space:nowrap;margin-left:8pt}
+    .rl-exp-company{font-size:7pt;color:#5A8A70;margin-bottom:4pt}
+    .rl-exp-desc{font-size:7pt;color:#5A8A70;line-height:1.55}
+    .rl-exp-divider{border-top:.5pt solid #C5E8D5;margin:8pt 0}
+    .rl-exp-entry:last-child .rl-exp-divider{display:none}
+    .rl-additional-text{font-size:7.5pt;color:#5A8A70;line-height:1.55}
+    .rl-watermark{position:fixed;bottom:0;left:0;right:0;font-size:5.5pt;color:#A8CDB9;text-align:center;border-top:.5pt solid #C5E8D5;padding:3pt 0;background:#fff;font-family:'DM Sans',sans-serif;letter-spacing:.05em}
+  `;
+
+  const html = `<div id="rl-print-dom">
+    <div class="rl-header">
+      <div>
+        <span class="rl-name-first">${esc(firstName)}</span>
+        <span class="rl-name-last">${esc(lastName)}</span>
+        <div class="rl-job-title">${esc(data.title)}</div>
+      </div>
+      <div class="rl-photo"></div>
+    </div>
+    <div class="rl-contacts">${contacts}</div>
+    <div class="rl-body">
+      <div class="rl-sidebar">
+        ${eduHtml ? `<div class="rl-section"><div class="rl-section-title">${esc(L.education||'Education')}</div>${eduHtml}</div>` : ''}
+        ${langsHtml ? `<div class="rl-section"><div class="rl-section-title">${esc(L.languages||'Languages')}</div>${langsHtml}</div>` : ''}
+        ${hobbiesHtml}
+        <div class="rl-section rl-qr-section">
+          <div class="rl-section-title">Online Profile</div>
+          <img class="rl-qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${encodeURIComponent(pageUrl)}" alt="QR">
+          <div class="rl-qr-url">${esc(pageUrl)}</div>
+        </div>
+      </div>
+      <div class="rl-main">
+        ${data.summary ? `<div class="rl-summary">${esc(data.summary)}</div>` : ''}
+        ${expHtml ? `<div class="rl-section"><div class="rl-section-title">${esc(L.experience||'Experience')}</div>${expHtml}</div>` : ''}
+        ${addHtml}
+      </div>
+    </div>
+    <div class="rl-watermark">Made with ResumeLink.cc · <span style="color:#1DB368">${esc(pageUrl)}</span></div>
+  </div>`;
+
+  const wrap = document.createElement('div');
+  wrap.innerHTML = html;
+  const dom = wrap.firstElementChild;
+  document.head.appendChild(styleEl);
+  document.body.appendChild(dom);
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    window.print();
+    setTimeout(() => {
+      dom?.parentNode?.removeChild(dom);
+      styleEl?.parentNode?.removeChild(styleEl);
+    }, 1500);
+  }));
+}
+</script>
+
 </body>
 </html>
