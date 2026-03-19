@@ -426,6 +426,9 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
       if (window.__RL_SET_RESUME_DATA__) window.__RL_SET_RESUME_DATA__(parsed);
       await autoPublish(parsed);
       setStep('result');
+      // +1 к счётчику профилей
+      const cur = parseInt(localStorage.getItem('rl_count') || '0');
+      localStorage.setItem('rl_count', String(cur + 1));
     } catch(err) {
       console.error(err);
       alert(isEn ? "Analysis error. Check Worker settings." : "Ошибка анализа. Проверьте настройки Воркера.");
@@ -436,6 +439,19 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
   const handleFile = async (ev) => {
     if (loading) return;
     const file = ev.target.files[0]; if (!file) return;
+
+    // Check profile limit for free users
+    const isPro = localStorage.getItem('rl_pro') === 'true';
+    const count = parseInt(localStorage.getItem('rl_count') || '0');
+    if (!isPro && count >= 3) {
+        alert(isEn
+            ? 'Free limit reached (3 profiles). Upgrade to Pro for up to 50 profiles.'
+            : 'Достигнут лимит бесплатных профилей (3). Улучши до Pro для создания до 50 профилей.'
+        );
+        window.location.href = '/pricing.html';
+        return;
+    }
+
     setLoading(true); setLoadingStage(0);
     try {
       let text = "";
