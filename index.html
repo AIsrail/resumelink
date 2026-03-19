@@ -197,6 +197,10 @@
         .fab:active { transform: scale(0.96); }
         #share-button { bottom: 20px; background: var(--green); box-shadow: 0 4px 16px rgba(29,179,104,0.35); }
         #download-button { bottom: 72px; background: var(--forest); box-shadow: 0 4px 16px rgba(13,61,40,0.25); }
+        #theme-selector { position: fixed; right: 20px; bottom: 132px; z-index: 1000; display: none; gap: 6px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 8px; box-shadow: 0 4px 16px rgba(13,61,40,0.12); }
+        .theme-dot { width: 22px; height: 22px; border-radius: 50%; cursor: pointer; border: 2.5px solid transparent; transition: border-color .2s, transform .2s; }
+        .theme-dot:hover { transform: scale(1.15); }
+        .theme-dot.active { border-color: var(--forest); }
 
         /* FOOTER */
         .site-footer { border-top: 0.5px solid var(--border); padding: 2rem clamp(1.5rem,5vw,4rem); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; max-width: 1200px; margin: 0 auto; }
@@ -249,7 +253,7 @@
         <a href="/roles/" id="nav-roles">140+ Ролей</a>
         <a href="/about.html" id="nav-about">О сервисе</a>
 	<a href="/pricing.html" id="nav-pricing">Тарифы</a>
-        <a href="mailto:info@resumelink.cc" id="nav-contact">Контакт</a>
+        <a href="/cdn-cgi/l/email-protection#5d34333b321d2f382e28303831343336733e3e" id="nav-contact">Контакт</a>
         <a href="#hero" class="nav-cta" id="nav-upload">Загрузить →</a>
     </div>
     <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">
@@ -260,7 +264,7 @@
     <a href="/roles/" onclick="toggleMenu()" id="mob-roles">140+ Ролей</a>
     <a href="/about.html" id="mob-about">О сервисе</a>
     <a href="/pricing.html" id="mob-pricing">Тарифы</a>
-    <a href="mailto:info@resumelink.cc" id="mob-contact">Контакт</a>
+    <a href="/cdn-cgi/l/email-protection#e881868e87a89a8d9b9d858d84818683c68b8b" id="mob-contact">Контакт</a>
     <a href="#hero" onclick="toggleMenu()" id="mob-upload" style="color:var(--green-dk);font-weight:500">Загрузить →</a>
 </div>
 
@@ -274,9 +278,15 @@
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
     <span id="download-label">PDF</span>
 </button>
+<div id="theme-selector">
+    <div class="theme-dot" data-theme="charcoal" style="background:#1A1A1A" onclick="selectTheme('charcoal')" title="Charcoal"></div>
+    <div class="theme-dot pro-theme" data-theme="green" style="background:#1DB368" onclick="selectTheme('green')" title="Forest Green"></div>
+    <div class="theme-dot pro-theme" data-theme="navy" style="background:#1E3A8A" onclick="selectTheme('navy')" title="Navy Blue"></div>
+    <div class="theme-dot pro-theme" data-theme="amber" style="background:#D4870A" onclick="selectTheme('amber')" title="Warm Amber"></div>
+</div>
 <div class="pdf-watermark">Created via ResumeLink.cc — Interactive version available online</div>
 
-<script type="text/babel">
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/babel">
 const { useState, useEffect } = React;
 const pdfjs = window['pdfjs-dist/build/pdf'];
 pdfjs.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
@@ -734,6 +744,22 @@ function toggleMenu() {
 
 window.__RL_SET_RESUME_DATA__ = function(data) {
   window.__RL_RESUME_DATA__ = data;
+  const isPro = localStorage.getItem('rl_pro') === 'true';
+  const defaultTheme = isPro ? 'green' : 'charcoal';
+  if (!localStorage.getItem('rl_theme')) {
+    localStorage.setItem('rl_theme', defaultTheme);
+  }
+  const selector = document.getElementById('theme-selector');
+  if (selector) {
+    selector.style.display = 'flex';
+    selector.querySelectorAll('.pro-theme').forEach(d => {
+      d.style.display = isPro ? 'block' : 'none';
+    });
+    const current = localStorage.getItem('rl_theme') || defaultTheme;
+    selector.querySelectorAll('.theme-dot').forEach(d => {
+      d.classList.toggle('active', d.dataset.theme === current);
+    });
+  }
   ['share-button','download-button'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = 'flex';
@@ -758,10 +784,25 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+function selectTheme(theme) {
+  localStorage.setItem('rl_theme', theme);
+  document.querySelectorAll('.theme-dot').forEach(d => {
+    d.classList.toggle('active', d.dataset.theme === theme);
+  });
+}
+
 function printResume() {
   const data = window.__RL_RESUME_DATA__;
   if (!data) { alert('Please wait and try again.'); return; }
   const isPro = localStorage.getItem('rl_pro') === 'true';
+  const theme = localStorage.getItem('rl_theme') || (isPro ? 'green' : 'charcoal');
+  const themes = {
+    green:    { header:'#F2FAF6', headerBorder:'#C5E8D5', nameLast:'#1DB368', contacts:'#0D3D28', contactsText:'#EAF7F0', sidebar:'#F2FAF6', sidebarBorder:'#C5E8D5', accent:'#1DB368', lineColor:'#EAF7F0', qrUrl:'#1DB368' },
+    navy:     { header:'#EEF3FF', headerBorder:'#C5D5F5', nameLast:'#1E3A8A', contacts:'#1E3A8A', contactsText:'#EEF3FF', sidebar:'#EEF3FF', sidebarBorder:'#C5D5F5', accent:'#3B82F6', lineColor:'#DBEAFE', qrUrl:'#3B82F6' },
+    amber:    { header:'#FFFBF0', headerBorder:'#F5DFA0', nameLast:'#78480A', contacts:'#78480A', contactsText:'#FFFBF0', sidebar:'#FFFBF0', sidebarBorder:'#F5DFA0', accent:'#D4870A', lineColor:'#FEF0C7', qrUrl:'#D4870A' },
+    charcoal: { header:'#F8F8F6', headerBorder:'#D0D0C8', nameLast:'#1A1A1A', contacts:'#1A1A1A', contactsText:'#F0F0F0', sidebar:'#F0F0EC', sidebarBorder:'#D0D0C8', accent:'#888888', lineColor:'#E0E0DC', qrUrl:'#888888' }
+  };
+  const th = themes[theme] || themes.charcoal;
   const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   const L = data.labels || {};
   const pageUrl = location.href;
@@ -786,19 +827,19 @@ function printResume() {
     @page{size:A4 portrait;margin:0}
     *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;box-sizing:border-box;margin:0;padding:0}
     #rl-print-dom{font-family:'DM Sans',sans-serif;color:#0D3D28;width:210mm;background:#fff}
-    .rl-header{display:flex;justify-content:space-between;align-items:center;padding:18pt 22pt 14pt 18pt;border-bottom:1.5pt solid #C5E8D5;background:#F2FAF6}
+    .rl-header{display:flex;justify-content:space-between;align-items:center;padding:18pt 22pt 14pt 18pt;border-bottom:1.5pt solid ${th.headerBorder};background:${th.header}}
     .rl-name-first{font-size:26pt;font-weight:300;line-height:1.1;display:block;color:#0D3D28}
-    .rl-name-last{font-size:26pt;font-weight:600;line-height:1.1;display:block;color:#1DB368}
+    .rl-name-last{font-size:26pt;font-weight:600;line-height:1.1;display:block;color:${th.nameLast}}
     .rl-job-title{font-size:7pt;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:#5A8A70;margin-top:5pt}
-    .rl-photo{width:56pt;height:56pt;border-radius:50%;background:#EAF7F0;border:1pt solid #C5E8D5;flex-shrink:0}
-    .rl-contacts{display:flex;align-items:center;justify-content:center;background:#0D3D28;padding:7pt 0;width:100%}
-    .rl-contacts span{color:#EAF7F0;font-size:6.5pt;white-space:nowrap;padding:0 10pt}
+    .rl-photo{width:56pt;height:56pt;border-radius:50%;background:${th.lineColor};border:1pt solid ${th.headerBorder};flex-shrink:0}
+    .rl-contacts{display:flex;align-items:center;justify-content:center;background:${th.contacts};padding:7pt 0;width:100%}
+    .rl-contacts span{color:${th.contactsText};font-size:6.5pt;white-space:nowrap;padding:0 10pt}
     .rl-sep{color:#5A8A70!important;padding:0 2pt!important}
     .rl-body{display:table;width:210mm;table-layout:fixed;border-collapse:collapse}
-    .rl-sidebar{display:table-cell;width:62mm;background:#F2FAF6;vertical-align:top;padding:16pt 14pt 24pt 14pt;border-right:1pt solid #C5E8D5}
+    .rl-sidebar{display:table-cell;width:62mm;background:${th.sidebar};vertical-align:top;padding:16pt 14pt 24pt 14pt;border-right:1pt solid ${th.sidebarBorder}}
     .rl-main{display:table-cell;width:148mm;background:#fff;vertical-align:top;padding:14pt 18pt 24pt 18pt}
     .rl-section{margin-bottom:14pt;break-inside:avoid;page-break-inside:avoid}
-    .rl-section-title{font-size:6.5pt;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#0D3D28;border-bottom:1.5pt solid #1DB368;padding-bottom:4pt;margin-bottom:9pt}
+    .rl-section-title{font-size:6.5pt;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#0D3D28;border-bottom:1.5pt solid ${th.accent};padding-bottom:4pt;margin-bottom:9pt}
     .rl-edu-item{margin-bottom:10pt;break-inside:avoid}
     .rl-edu-degree{font-size:7.5pt;font-weight:600;color:#0D3D28}
     .rl-edu-school{font-size:6.5pt;color:#5A8A70;margin-top:1pt}
@@ -806,18 +847,18 @@ function printResume() {
     .rl-lang-item{font-size:7pt;color:#5A8A70;padding:2pt 0}
     .rl-qr-section{margin-top:4pt}
     .rl-qr-img{width:72pt;height:72pt;display:block;margin:0 0 5pt}
-    .rl-qr-url{font-size:5pt;color:#1DB368;word-break:break-all;line-height:1.4}
+    .rl-qr-url{font-size:5pt;color:${th.qrUrl};word-break:break-all;line-height:1.4}
     .rl-summary{font-size:8pt;font-style:italic;line-height:1.65;color:#5A8A70;margin-bottom:14pt}
     .rl-exp-entry{break-inside:avoid;page-break-inside:avoid;margin-bottom:2pt}
     .rl-exp-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1pt}
     .rl-exp-title{font-size:8.5pt;font-weight:600;color:#0D3D28}
-    .rl-exp-period{font-size:7pt;font-weight:500;color:#1DB368;white-space:nowrap;margin-left:8pt}
+    .rl-exp-period{font-size:7pt;font-weight:500;color:${th.accent};white-space:nowrap;margin-left:8pt}
     .rl-exp-company{font-size:7pt;color:#5A8A70;margin-bottom:4pt}
     .rl-exp-desc{font-size:7pt;color:#5A8A70;line-height:1.55}
-    .rl-exp-divider{border-top:.5pt solid #C5E8D5;margin:8pt 0}
+    .rl-exp-divider{border-top:.5pt solid ${th.sidebarBorder};margin:8pt 0}
     .rl-exp-entry:last-child .rl-exp-divider{display:none}
     .rl-additional-text{font-size:7.5pt;color:#5A8A70;line-height:1.55}
-    .rl-watermark{position:fixed;bottom:0;left:0;right:0;font-size:5.5pt;color:#A8CDB9;text-align:center;border-top:.5pt solid #C5E8D5;padding:3pt 0;background:#fff;font-family:'DM Sans',sans-serif;letter-spacing:.05em}
+    .rl-watermark{position:fixed;bottom:0;left:0;right:0;font-size:5.5pt;color:#A8CDB9;text-align:center;border-top:.5pt solid ${th.sidebarBorder};padding:3pt 0;background:#fff;font-family:'DM Sans',sans-serif;letter-spacing:.05em}
   `;
 
   const html = `<div id="rl-print-dom">
