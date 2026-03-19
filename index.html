@@ -863,17 +863,15 @@ document.head.appendChild(styleEl);
 document.body.appendChild(printDom);
 
 // Ждём загрузки QR-кода перед печатью
-const qrImg = printDom.querySelector('.rl-qr-img');
-const doPrint = () => {
+// Ждём загрузки QR и печатаем
+setTimeout(() => {
     window.print();
     setTimeout(() => {
         printDom?.parentNode?.removeChild(printDom);
         styleEl?.parentNode?.removeChild(styleEl);
     }, 1500);
-};
-if (qrImg) {
-    qrImg.onload = doPrint;
-    qrImg.onerror = doPrint;
+}, 1200);
+
     // Если уже загружен
     if (qrImg.complete) doPrint();
 } else {
