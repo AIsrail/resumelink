@@ -63,10 +63,13 @@
         .btn-pro{background:var(--green);color:#fff}
         .btn-pro:hover{background:var(--green-dk);transform:translateY(-1px)}
         .faq-label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);margin-bottom:16px}
-        .faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:3rem}
+        .faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:2rem}
         .faq-item{background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:18px 20px}
         .faq-q{font-size:13px;font-weight:500;color:var(--forest);margin-bottom:7px}
         .faq-a{font-size:12px;color:var(--muted);line-height:1.65}
+        .kofi-block{text-align:center;padding:2rem;background:var(--surface);border:0.5px solid var(--border);border-radius:16px;margin-bottom:3rem}
+        .kofi-btn{display:inline-flex;align-items:center;gap:8px;background:#FF5E5B;color:#fff;padding:11px 24px;border-radius:10px;font-size:14px;font-weight:500;text-decoration:none;transition:opacity .2s}
+        .kofi-btn:hover{opacity:.85}
         footer{border-top:0.5px solid var(--border);padding:2rem clamp(1.5rem,5vw,4rem);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;max-width:1200px;margin:0 auto}
         .footer-logo{font-size:15px;font-weight:500;color:var(--forest);text-decoration:none;letter-spacing:-0.02em}
         .footer-logo span{color:var(--green)}
@@ -109,6 +112,7 @@
     <div class="plans-grid" id="plansGrid"></div>
     <div class="faq-label" id="faq-label">Frequently asked questions</div>
     <div class="faq-grid" id="faqGrid"></div>
+    <div class="kofi-block" id="kofi-block"></div>
 </div>
 
 <footer>
@@ -132,6 +136,7 @@ if (urlParams.get('pro') === 'activated') {
 }
 
 const isEn = navigator.language.startsWith('en');
+
 const T = {
     en: {
         eyebrow: 'Simple pricing',
@@ -142,6 +147,11 @@ const T = {
         footerAbout:'About', footerPolicy:'Privacy & Terms', footerPricing:'Pricing',
         faqLabel: 'Frequently asked questions',
         popular: 'Most Popular',
+        kofi: {
+            title: 'Like what we\'re building?',
+            sub: 'Buy us a coffee — it helps keep ResumeLink free for everyone.',
+            btn: '☕ Buy a coffee'
+        },
         plans: [
             {
                 badge:'Free', name:'Starter',
@@ -190,6 +200,11 @@ const T = {
         footerAbout:'О сервисе', footerPolicy:'Политика', footerPricing:'Тарифы',
         faqLabel: 'Часто задаваемые вопросы',
         popular: 'Популярный',
+        kofi: {
+            title: 'Нравится что мы делаем?',
+            sub: 'Угости нас кофе — это помогает держать ResumeLink бесплатным для всех.',
+            btn: '☕ Угостить кофе'
+        },
         plans: [
             {
                 badge:'Бесплатно', name:'Старт',
@@ -233,16 +248,19 @@ const T = {
 
 const C = isEn ? T.en : T.ru;
 
-// Nav
+// Nav labels
 const navMap = {
-    'nav-explore':C.navExplore,'nav-about':C.navAbout,'nav-pricing':C.navPricing,
-    'nav-contact':C.navContact,'nav-upload':C.navUpload,
-    'mob-explore':C.navExplore,'mob-about':C.navAbout,'mob-pricing':C.navPricing,
-    'mob-contact':C.navContact,'mob-upload':C.navUpload,
-    'footer-explore':C.navExplore,'footer-about':C.footerAbout,
-    'footer-pricing':C.footerPricing,'footer-policy':C.footerPolicy
+    'nav-explore':C.navExplore, 'nav-about':C.navAbout, 'nav-pricing':C.navPricing,
+    'nav-contact':C.navContact, 'nav-upload':C.navUpload,
+    'mob-explore':C.navExplore, 'mob-about':C.navAbout, 'mob-pricing':C.navPricing,
+    'mob-contact':C.navContact, 'mob-upload':C.navUpload,
+    'footer-explore':C.navExplore, 'footer-about':C.footerAbout,
+    'footer-pricing':C.footerPricing, 'footer-policy':C.footerPolicy
 };
-Object.entries(navMap).forEach(([id,txt])=>{const el=document.getElementById(id);if(el)el.textContent=txt});
+Object.entries(navMap).forEach(([id,txt]) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = txt;
+});
 
 // Hero
 document.getElementById('eyebrow').textContent = C.eyebrow;
@@ -251,9 +269,9 @@ document.getElementById('hero-sub').textContent = C.heroSub;
 document.getElementById('faq-label').textContent = C.faqLabel;
 
 // Plans
-document.getElementById('plansGrid').innerHTML = C.plans.map(plan=>`
-    <div class="plan-card ${plan.featured?'featured':''}">
-        ${plan.popular?`<div class="popular-badge">✦ ${C.popular}</div>`:''}
+document.getElementById('plansGrid').innerHTML = C.plans.map(plan => `
+    <div class="plan-card ${plan.featured ? 'featured' : ''}">
+        ${plan.popular ? `<div class="popular-badge">✦ ${C.popular}</div>` : ''}
         <div class="plan-badge">${plan.badge}</div>
         <div class="plan-name">${plan.name}</div>
         <div class="plan-price">
@@ -263,21 +281,29 @@ document.getElementById('plansGrid').innerHTML = C.plans.map(plan=>`
         <div class="plan-desc">${plan.desc}</div>
         <hr class="plan-divider">
         <ul class="plan-features">
-            ${plan.features.map(f=>`
-                <li><span class="${f.ok?'check':'cross'}">${f.ok?'✓':'✗'}</span>${f.text}</li>
+            ${plan.features.map(f => `
+                <li><span class="${f.ok ? 'check' : 'cross'}">${f.ok ? '✓' : '✗'}</span>${f.text}</li>
             `).join('')}
         </ul>
-        <a href="${plan.btnHref}" class="plan-btn ${plan.btnClass}" ${plan.btnHref.startsWith('http')?'target="_blank"':''}>${plan.btn}</a>
+        <a href="${plan.btnHref}" class="plan-btn ${plan.btnClass}" ${plan.btnHref.startsWith('http') ? 'target="_blank"' : ''}>${plan.btn}</a>
     </div>
 `).join('');
 
 // FAQ
-document.getElementById('faqGrid').innerHTML = C.faqs.map(f=>`
+document.getElementById('faqGrid').innerHTML = C.faqs.map(f => `
     <div class="faq-item">
         <div class="faq-q">${f.q}</div>
         <div class="faq-a">${f.a}</div>
     </div>
 `).join('');
+
+// Ko-fi block
+document.getElementById('kofi-block').innerHTML = `
+    <div style="font-size:28px;margin-bottom:10px">☕</div>
+    <div style="font-size:16px;font-weight:500;color:var(--forest);margin-bottom:6px">${C.kofi.title}</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.6;max-width:400px;margin-left:auto;margin-right:auto">${C.kofi.sub}</div>
+    <a href="https://ko-fi.com/ontoguzlabs" target="_blank" class="kofi-btn">${C.kofi.btn}</a>
+`;
 </script>
 </body>
 </html>
