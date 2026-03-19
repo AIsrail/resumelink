@@ -853,15 +853,32 @@ function printResume() {
   const wrap = document.createElement('div');
   wrap.innerHTML = html;
   const dom = wrap.firstElementChild;
-  document.head.appendChild(styleEl);
-  document.body.appendChild(dom);
-  requestAnimationFrame(() => requestAnimationFrame(() => {
+  // Удаляем старый print-dom если остался
+const old = document.getElementById('rl-print-dom');
+if (old) old.parentNode?.removeChild(old);
+const oldStyle = document.getElementById('rl-print-styles');
+if (oldStyle) oldStyle.parentNode?.removeChild(oldStyle);
+
+document.head.appendChild(styleEl);
+document.body.appendChild(printDom);
+
+// Ждём загрузки QR-кода перед печатью
+const qrImg = printDom.querySelector('.rl-qr-img');
+const doPrint = () => {
     window.print();
     setTimeout(() => {
-      dom?.parentNode?.removeChild(dom);
-      styleEl?.parentNode?.removeChild(styleEl);
+        printDom?.parentNode?.removeChild(printDom);
+        styleEl?.parentNode?.removeChild(styleEl);
     }, 1500);
-  }));
+};
+if (qrImg) {
+    qrImg.onload = doPrint;
+    qrImg.onerror = doPrint;
+    // Если уже загружен
+    if (qrImg.complete) doPrint();
+} else {
+    requestAnimationFrame(() => requestAnimationFrame(doPrint));
+}
 }
 </script>
 
