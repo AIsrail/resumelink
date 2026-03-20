@@ -791,9 +791,13 @@ function selectTheme(theme) {
   });
 }
 
+let __rl_printing = false;
 function printResume() {
+  if (__rl_printing) return;
+  __rl_printing = true;
+  setTimeout(() => { __rl_printing = false; }, 3000);
   const data = window.__RL_RESUME_DATA__;
-  if (!data) { alert('Please wait and try again.'); return; }
+  if (!data) { __rl_printing = false; alert('Please wait and try again.'); return; }
   const isPro = localStorage.getItem('rl_pro') === 'true';
   const theme = localStorage.getItem('rl_theme') || (isPro ? 'green' : 'charcoal');
   const themes = {
