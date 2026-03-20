@@ -944,6 +944,13 @@ if (oldStyle) oldStyle.parentNode?.removeChild(oldStyle);
 document.head.appendChild(styleEl);
 document.body.appendChild(dom);
 setTimeout(() => {
+    if (isPro && theme !== 'charcoal') {
+        const isEn = navigator.language.startsWith('en');
+        const msg = isEn
+            ? '🎨 Color PDF tip: In the print dialog, set "Color" (not Grayscale) and enable "Background graphics" for best results.'
+            : '🎨 Совет: В диалоге печати выбери "Цветная печать" и включи "Фон" для цветного PDF.';
+        alert(msg);
+    }
     window.print();
     setTimeout(() => {
         dom?.parentNode?.removeChild(dom);
