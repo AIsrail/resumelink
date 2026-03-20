@@ -274,7 +274,7 @@
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
     <span id="share-label">Поделиться</span>
 </button>
-<button id="download-button" class="fab" onclick="printResume()">
+<button id="download-button" class="fab">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
     <span id="download-label">PDF</span>
 </button>
@@ -745,9 +745,8 @@ function toggleMenu() {
 window.__RL_SET_RESUME_DATA__ = function(data) {
   window.__RL_RESUME_DATA__ = data;
   const isPro = localStorage.getItem('rl_pro') === 'true';
-  const defaultTheme = isPro ? 'green' : 'charcoal';
   if (!localStorage.getItem('rl_theme')) {
-    localStorage.setItem('rl_theme', defaultTheme);
+    localStorage.setItem('rl_theme', isPro ? 'green' : 'charcoal');
   }
   const selector = document.getElementById('theme-selector');
   if (selector) {
@@ -755,7 +754,7 @@ window.__RL_SET_RESUME_DATA__ = function(data) {
     selector.querySelectorAll('.pro-theme').forEach(d => {
       d.style.display = isPro ? 'block' : 'none';
     });
-    const current = localStorage.getItem('rl_theme') || defaultTheme;
+    const current = localStorage.getItem('rl_theme') || 'charcoal';
     selector.querySelectorAll('.theme-dot').forEach(d => {
       d.classList.toggle('active', d.dataset.theme === current);
     });
@@ -782,6 +781,15 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } catch(e) { console.error(e); }
   });
+
+  const dlBtn = document.getElementById('download-button');
+  if (dlBtn && !dlBtn.dataset.bound) {
+    dlBtn.dataset.bound = 'true';
+    dlBtn.addEventListener('click', () => {
+      const frozenTheme = localStorage.getItem('rl_theme') || 'charcoal';
+      printResume(frozenTheme);
+    });
+  }
 });
 
 function selectTheme(theme) {
@@ -791,15 +799,13 @@ function selectTheme(theme) {
   });
 }
 
-let __rl_printing = false;
-function printResume() {
-  if (__rl_printing) return;
-  __rl_printing = true;
-  setTimeout(() => { __rl_printing = false; }, 3000);
+function printResume(frozenTheme) {
+  if (window.__RL_PRINTING__) return;
+  window.__RL_PRINTING__ = true;
   const data = window.__RL_RESUME_DATA__;
-  if (!data) { __rl_printing = false; alert('Please wait and try again.'); return; }
+  if (!data) { window.__RL_PRINTING__ = false; alert('Please wait and try again.'); return; }
   const isPro = localStorage.getItem('rl_pro') === 'true';
-  const theme = localStorage.getItem('rl_theme') || (isPro ? 'green' : 'charcoal');
+  const theme = frozenTheme || localStorage.getItem('rl_theme') || (isPro ? 'green' : 'charcoal');
   const themes = {
     green:    { header:'#F2FAF6', headerBorder:'#C5E8D5', nameLast:'#1DB368', contacts:'#0D3D28', contactsText:'#EAF7F0', sidebar:'#F2FAF6', sidebarBorder:'#C5E8D5', accent:'#1DB368', lineColor:'#EAF7F0', qrUrl:'#1DB368' },
     navy:     { header:'#EEF3FF', headerBorder:'#C5D5F5', nameLast:'#1E3A8A', contacts:'#1E3A8A', contactsText:'#EEF3FF', sidebar:'#EEF3FF', sidebarBorder:'#C5D5F5', accent:'#3B82F6', lineColor:'#DBEAFE', qrUrl:'#3B82F6' },
@@ -911,6 +917,7 @@ setTimeout(() => {
     setTimeout(() => {
         dom?.parentNode?.removeChild(dom);
         styleEl?.parentNode?.removeChild(styleEl);
+        window.__RL_PRINTING__ = false;
     }, 1500);
 }, 1200);
 }
