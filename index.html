@@ -150,7 +150,8 @@
         .back-btn:hover { border-color: var(--green); color: var(--forest); }
         .rl-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; grid-auto-rows: min-content; }
         .card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 20px; padding: 20px; transition: border-color .2s, transform .2s, box-shadow .2s, font-size .2s; word-break: break-word; }
-.card:hover { border-color: var(--green); transform: translateY(-2px); box-shadow: 0 4px 20px rgba(29,179,104,0.1); font-size: 105%; }
+.card:hover { border-color: var(--green); transform: translateY(-2px); box-shadow: 0 4px 20px rgba(29,179,104,0.1); }
+.card:hover * { font-size: 105% !important; }
         .card:hover { border-color: var(--green); transform: translateY(-2px); box-shadow: 0 4px 20px rgba(29,179,104,0.1); }
         .card-label { font-size: 9px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); margin-bottom: 12px; }
         .card-hero { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; padding: 24px 28px; }
@@ -592,7 +593,7 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
           <a href="/about.html">{C.footerAbout}</a>
           <a href="/roles/">{C.footerRoles}</a>
           <a href="/policy.html">{C.footerPolicy}</a>
-          <a href="https://mail.google.com/mail/?view=cm&to=info@resumelink.cc&su=ResumeLink%20inquiry" target="_blank">info@resumelink.cc</a>
+          <a href="#" onclick="navigator.clipboard.writeText('info@resumelink.cc');alert('Email скопирован!');return false;">info@resumelink.cc</a>
         </div>
         <div className="footer-copy">© 2026 ResumeLink</div>
       </footer>
@@ -727,7 +728,7 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
         <a href="/" className="footer-logo">Resume<span>Link</span></a>
         <div className="footer-links">
           <a href="/policy.html">{C.footerPolicy}</a>
-          <a href="https://mail.google.com/mail/?view=cm&to=info@resumelink.cc&su=ResumeLink%20inquiry" target="_blank">info@resumelink.cc</a>
+          <a href="#" onclick="navigator.clipboard.writeText('info@resumelink.cc');alert('Email скопирован!');return false;">info@resumelink.cc</a>
         </div>
         <div className="footer-copy">© 2026 ResumeLink</div>
       </footer>
