@@ -149,8 +149,8 @@
         .back-btn { font-size: 11px; font-weight: 500; color: var(--muted); border: 0.5px solid var(--border); padding: 7px 16px; border-radius: 20px; background: none; cursor: pointer; transition: border-color .2s, color .2s; font-family: 'DM Sans', sans-serif; }
         .back-btn:hover { border-color: var(--green); color: var(--forest); }
         .rl-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; grid-auto-rows: min-content; }
-        .card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 20px; padding: 20px; transition: border-color .2s; word-break: break-word; }
-        .card:hover { border-color: var(--green); }
+        .card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 20px; padding: 20px; transition: border-color .2s, transform .2s, box-shadow .2s; word-break: break-word; }
+        .card:hover { border-color: var(--green); transform: translateY(-2px); box-shadow: 0 4px 20px rgba(29,179,104,0.1); }
         .card-label { font-size: 9px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); margin-bottom: 12px; }
         .card-hero { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; padding: 24px 28px; }
         .resume-name { font-size: clamp(2rem,4vw,3rem); font-weight: 300; color: var(--forest); letter-spacing: -0.03em; line-height: 1.1; outline: none; }
@@ -250,7 +250,7 @@
 <nav>
     <a href="/" class="nav-logo">Resume<span>Link</span></a>
     <div class="nav-links">
-        <a href="/roles/" id="nav-roles">140+ Ролей</a>
+        <a href="/roles/" id="nav-roles">Ресурсы</a>
         <a href="/about.html" id="nav-about">О сервисе</a>
 	<a href="/pricing.html" id="nav-pricing">Тарифы</a>
         <a href="/cdn-cgi/l/email-protection#5d34333b321d2f382e28303831343336733e3e" id="nav-contact">Контакт</a>
@@ -261,7 +261,7 @@
     </button>
 </nav>
 <div class="nav-mobile" id="mobileMenu">
-    <a href="/roles/" onclick="toggleMenu()" id="mob-roles">140+ Ролей</a>
+    <a href="/roles/" onclick="toggleMenu()" id="mob-roles">Ресурсы</a>
     <a href="/about.html" id="mob-about">О сервисе</a>
     <a href="/pricing.html" id="mob-pricing">Тарифы</a>
     <a href="/cdn-cgi/l/email-protection#e881868e87a89a8d9b9d858d84818683c68b8b" id="mob-contact">Контакт</a>
@@ -875,9 +875,9 @@ function printResume(frozenTheme) {
     #rl-print-dom .rl-contacts{display:flex;align-items:center;justify-content:center;background:var(--rl-contacts-bg)!important;padding:7pt 0;width:100%}
     #rl-print-dom .rl-contacts span{color:var(--rl-contacts-text)!important;font-size:6.5pt;white-space:nowrap;padding:0 10pt}
     #rl-print-dom .rl-sep{color:#5A8A70!important;padding:0 2pt!important}
-    #rl-print-dom .rl-body{display:table;width:210mm;table-layout:fixed;border-collapse:collapse}
-    #rl-print-dom .rl-sidebar{display:table-cell;width:62mm;background:var(--rl-sidebar-bg)!important;vertical-align:top;padding:16pt 14pt 24pt 14pt;border-right:1pt solid var(--rl-sidebar-border)!important}
-    #rl-print-dom .rl-main{display:table-cell;width:148mm;background:#fff;vertical-align:top;padding:14pt 18pt 24pt 18pt}
+    #rl-print-dom .rl-body{display:table;width:210mm;min-height:240mm;table-layout:fixed;border-collapse:collapse}
+    #rl-print-dom .rl-sidebar{display:table-cell;width:62mm;background:var(--rl-sidebar-bg)!important;vertical-align:top;padding:16pt 14pt 80pt 14pt;border-right:1pt solid var(--rl-sidebar-border)!important}
+    #rl-print-dom .rl-main{display:table-cell;width:148mm;background:#fff;vertical-align:top;padding:14pt 18pt 80pt 18pt}
     #rl-print-dom .rl-section{margin-bottom:14pt;break-inside:avoid;page-break-inside:avoid}
     #rl-print-dom .rl-section-title{font-size:6.5pt;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#0D3D28;border-bottom:1.5pt solid var(--rl-primary)!important;padding-bottom:4pt;margin-bottom:9pt}
     #rl-print-dom .rl-edu-item{margin-bottom:10pt;break-inside:avoid}
@@ -898,7 +898,7 @@ function printResume(frozenTheme) {
     #rl-print-dom .rl-exp-divider{border-top:.5pt solid var(--rl-sidebar-border)!important;margin:8pt 0}
     #rl-print-dom .rl-exp-entry:last-child .rl-exp-divider{display:none}
     #rl-print-dom .rl-additional-text{font-size:7.5pt;color:#5A8A70;line-height:1.55}
-    #rl-print-dom .rl-watermark{position:fixed;bottom:0;left:0;right:0;font-size:5.5pt;color:#A8CDB9;text-align:center;border-top:.5pt solid var(--rl-sidebar-border)!important;padding:3pt 0;background:#fff;font-family:'DM Sans',sans-serif;letter-spacing:.05em}
+    #rl-print-dom .rl-watermark{display:block;width:100%;font-size:5.5pt;color:#A8CDB9;text-align:center;border-top:.5pt solid var(--rl-sidebar-border)!important;padding:4pt 0;background:#fff;font-family:'DM Sans',sans-serif;letter-spacing:.05em;margin-top:8pt}
     #rl-print-dom .rl-watermark span{color:var(--rl-primary)!important}
   `;
 
