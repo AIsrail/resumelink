@@ -741,6 +741,43 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
         </div>
       </div>
 
+{/* JOBS SECTION */}
+<div style={{background:'var(--forest)',borderRadius:'20px',padding:'24px 28px',marginTop:'2rem',marginBottom:'1rem'}}>
+  <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',gap:'1.5rem',flexWrap:'wrap'}}>
+    <div>
+      <div style={{fontSize:'16px',fontWeight:'600',color:'#fff',marginBottom:'4px'}}>
+        {isEn ? '🔍 Find Matching Jobs' : '🔍 Найти подходящие вакансии'}
+      </div>
+      <div style={{fontSize:'12px',color:'rgba(255,255,255,0.4)'}}>
+        {isEn ? `Based on your profile: "${resumeData.title}"` : `По вашему профилю: "${resumeData.title}"`}
+      </div>
+    </div>
+    <div style={{display:'flex',gap:'10px',alignItems:'center',flexWrap:'wrap'}}>
+      {/* Pro locked */}
+      <div style={{display:'flex',alignItems:'center',gap:'8px',border:'1px solid rgba(59,130,246,0.25)',background:'rgba(59,130,246,0.06)',borderRadius:'12px',padding:'10px 16px',opacity:0.6,cursor:'not-allowed',userSelect:'none'}}>
+        <span style={{fontSize:'16px'}}>🔒</span>
+        <div>
+          <div style={{fontSize:'10px',fontWeight:'700',textTransform:'uppercase',letterSpacing:'.1em',color:'#60a5fa'}}>Pro</div>
+          <div style={{fontSize:'10px',color:'rgba(255,255,255,0.4)'}}>
+            {isEn ? 'Inline job cards' : 'Карточки вакансий'}
+          </div>
+        </div>
+      </div>
+      {/* Free: Google */}
+      <a
+        href={`https://www.google.com/search?q=${encodeURIComponent((isEn ? 'vacancy ' : 'вакансия ') + resumeData.title)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{background:'var(--green)',color:'#fff',padding:'11px 22px',borderRadius:'10px',fontSize:'13px',fontWeight:'500',textDecoration:'none',whiteSpace:'nowrap',display:'inline-block'}}>
+        {isEn ? 'Search Google →' : 'Искать в Google →'}
+      </a>
+    </div>
+  </div>
+  <div style={{fontSize:'10px',color:'rgba(255,255,255,0.2)',textTransform:'uppercase',letterSpacing:'.08em',fontWeight:'600',marginTop:'16px',borderTop:'1px solid rgba(255,255,255,0.05)',paddingTop:'12px'}}>
+    {isEn ? '✨ Pro: 10 relevant vacancies right on this page — no redirects' : '✨ Pro: 10 релевантных вакансий прямо на странице — без переходов'}
+  </div>
+</div>
+
 {/* PRO UPGRADE BLOCK */}
 <div style={{background:'var(--forest)',borderRadius:'20px',padding:'28px 32px',display:'flex',alignItems:'center',justifyContent:'space-between',gap:'2rem',flexWrap:'wrap',marginTop:'2rem'}}>
   <div>
