@@ -27,6 +27,26 @@ layout: default
     .human-touch-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; color: #92400E; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
     .human-touch p { font-size: 13px; color: #78350F; line-height: 1.65; }
 
+    /* AIO Content blocks */
+    .aio-section { margin-bottom: 2rem; }
+    .aio-section h2 { font-size: 18px; font-weight: 500; color: var(--forest); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 0.5px solid var(--border); }
+    .aio-section h3 { font-size: 15px; font-weight: 500; color: var(--forest); margin: 16px 0 8px; }
+    .aio-section p { font-size: 14px; color: var(--muted); line-height: 1.8; margin-bottom: 12px; }
+    .aio-section ul { padding-left: 1.2rem; margin-bottom: 12px; }
+    .aio-section ul li { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 6px; }
+
+    /* FAQ */
+    .faq-block { margin-bottom: 2rem; }
+    .faq-block h2 { font-size: 18px; font-weight: 500; color: var(--forest); margin-bottom: 16px; }
+    .faq-item { border: 0.5px solid var(--border); border-radius: 12px; padding: 16px 20px; margin-bottom: 10px; background: var(--surface); }
+    .faq-item h3 { font-size: 14px; font-weight: 500; color: var(--forest); margin-bottom: 6px; }
+    .faq-item p { font-size: 13px; color: var(--muted); line-height: 1.65; margin: 0; }
+
+    /* Resume tip block */
+    .resume-tip { background: var(--mint); border: 0.5px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 2rem; }
+    .resume-tip-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; color: var(--green-dk); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+    .resume-tip p { font-size: 13px; color: var(--forest); line-height: 1.65; margin: 0; }
+
     /* Prose content */
     .role-prose { font-size: 14px; color: var(--muted); line-height: 1.8; margin-bottom: 2rem; }
     .role-prose h2, .role-prose h3 { color: var(--forest); font-weight: 500; margin: 1.5rem 0 0.75rem; }
@@ -67,9 +87,14 @@ layout: default
     <a href="/">ResumeLink</a> → <a href="/roles/">Guides & Careers</a> → {{ page.title }}
 </div>
 
-<div class="role-badge">2026 Expert Guide</div>
+<div class="role-badge">{{ page.category }} · 2026 Guide</div>
 
 <h1 class="role-h1">{{ page.h1 }}</h1>
+
+<!-- Answer-First intro paragraph for AI crawlers -->
+<div class="aio-section">
+    <p>{{ page.summary_hack }} This guide covers everything you need to know about <strong>{{ page.title }}</strong> in 2026 — from key skills and tools to resume tips and how to stand out to recruiters.</p>
+</div>
 
 <div class="summary-block">
     <div class="summary-block-label">🧠 AI-Optimized Professional Summary</div>
@@ -79,12 +104,19 @@ layout: default
 <div class="role-grid">
     <div class="role-card">
         <div class="role-card-title">✦ Human Advantage Skills</div>
-        {% for skill in page.judgment_skills %}
-        <div class="skill-item">
-            <span class="skill-check">✓</span>
-            <span>{{ skill }}</span>
-        </div>
-        {% endfor %}
+        {% if page.judgment_skills.first %}
+            {% for skill in page.judgment_skills %}
+            <div class="skill-item">
+                <span class="skill-check">✓</span>
+                <span>{{ skill }}</span>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="skill-item">
+                <span class="skill-check">✓</span>
+                <span>{{ page.judgment_skills }}</span>
+            </div>
+        {% endif %}
     </div>
 
     <div class="role-card">
@@ -104,14 +136,78 @@ layout: default
 </div>
 {% endif %}
 
+<!-- AIO Content: What is this role -->
+<div class="aio-section">
+    <h2>What is a {{ page.title }} in 2026?</h2>
+    <p>A <strong>{{ page.title }}</strong> combines human expertise with AI tools to deliver results faster and more accurately than traditional methods. In 2026, this role has evolved significantly — professionals are expected to work alongside AI systems, not compete with them.</p>
+    <p>{{ page.summary_hack }}</p>
+</div>
+
+<!-- AIO Content: Key skills breakdown -->
+{% if page.judgment_skills.first %}
+<div class="aio-section">
+    <h2>Key Skills for {{ page.title }}</h2>
+    <p>To succeed as a {{ page.title }}, you need a combination of technical and human skills. Here are the most in-demand competencies recruiters look for:</p>
+    <ul>
+        {% for skill in page.judgment_skills %}
+        <li><strong>{{ skill }}</strong> — essential for day-to-day decision making and delivering measurable results.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<!-- AIO Content: Tools -->
+{% if page.ai_tools %}
+<div class="aio-section">
+    <h2>Essential Tools for {{ page.title }}</h2>
+    <p>The right tech stack separates good {{ page.title }} professionals from great ones. These are the tools that appear most frequently in job descriptions and are valued by top employers:</p>
+    <ul>
+        {% for tool in page.ai_tools %}
+        <li><strong>{{ tool }}</strong> — widely used in production environments for {{ page.title }} workflows.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<!-- Resume tip -->
+<div class="resume-tip">
+    <div class="resume-tip-label">📄 Resume Tip for {{ page.title }}</div>
+    <p>When writing your resume for a {{ page.title }} position, lead with measurable results — not just responsibilities. Recruiters spend an average of 7 seconds on a resume. Your first bullet point must answer: <em>"What did you achieve and how did AI help you do it faster?"</em></p>
+</div>
+
 {% if content != "" %}
 <div class="role-prose">
     {{ content }}
 </div>
 {% endif %}
 
+<!-- FAQ section — AIO optimized -->
+<div class="faq-block">
+    <h2>Frequently Asked Questions about {{ page.title }}</h2>
+
+    <div class="faq-item">
+        <h3>What does a {{ page.title }} do every day?</h3>
+        <p>A {{ page.title }} uses a combination of AI tools and human judgment to complete tasks efficiently. Daily work typically involves data analysis, cross-functional collaboration, and continuous optimization of workflows using tools like {% for tool in page.ai_tools limit:3 %}{{ tool }}{% unless forloop.last %}, {% endunless %}{% endfor %}.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>What skills are most important for {{ page.title }} in 2026?</h3>
+        <p>The most critical skills are {% if page.judgment_skills.first %}{% for skill in page.judgment_skills limit:3 %}{{ skill }}{% unless forloop.last %}, {% endunless %}{% endfor %}{% else %}{{ page.judgment_skills }}{% endif %}. Employers increasingly value professionals who can combine these human skills with AI tool proficiency.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>How do I write a resume for {{ page.title }}?</h3>
+        <p>Focus on quantified achievements, not just responsibilities. List your experience with relevant tools ({{ page.ai_tools | join: ", " }}), and include specific metrics where possible. Use ResumeLink to transform your resume into an interactive profile with an ATS score — this helps ensure your resume passes automated HR filters.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>Is {{ page.title }} a good career in 2026?</h3>
+        <p>Yes. Roles that combine human judgment with AI tools are among the fastest growing in 2026. The key is developing skills that AI cannot easily replicate — critical thinking, ethics, communication, and domain expertise — while staying current with the latest tools.</p>
+    </div>
+</div>
+
 <div class="role-cta">
-    <h2>Ready to stand out?<br><b>Build your live profile now.</b></h2>
+    <h2>Ready to stand out?<br><b>Build your live {{ page.title }} profile now.</b></h2>
     <p>Upload your resume — AI structures it into an interactive profile with ATS score and QR code in 10 seconds.</p>
     <a href="https://resumelink.cc">📄 Upload Resume → Free</a>
 </div>
