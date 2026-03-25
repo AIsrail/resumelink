@@ -1046,7 +1046,7 @@ function printResume(frozenTheme) {
   const data = window.__RL_RESUME_DATA__;
   if (!data) { window.__RL_PRINTING__ = false; alert('Please wait and try again.'); return; }
   const isPro = localStorage.getItem('rl_pro') === 'true';
-  const theme = frozenTheme || localStorage.getItem('rl_theme') || (isPro ? 'green' : 'charcoal');
+  const theme = isPro ? (frozenTheme || localStorage.getItem('rl_theme') || 'green') : 'charcoal';
   const themes = {
     green:    { header:'#F2FAF6', headerBorder:'#C5E8D5', nameLast:'#1DB368', contacts:'#0D3D28', contactsText:'#EAF7F0', sidebar:'#F2FAF6', sidebarBorder:'#C5E8D5', accent:'#1DB368', lineColor:'#EAF7F0', qrUrl:'#1DB368' },
     navy:     { header:'#EEF3FF', headerBorder:'#C5D5F5', nameLast:'#1E3A8A', contacts:'#1E3A8A', contactsText:'#EEF3FF', sidebar:'#EEF3FF', sidebarBorder:'#C5D5F5', accent:'#3B82F6', lineColor:'#DBEAFE', qrUrl:'#3B82F6' },
