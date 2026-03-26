@@ -1010,7 +1010,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (dlBtn && !dlBtn.dataset.bound) {
     dlBtn.dataset.bound = 'true';
     dlBtn.addEventListener('click', () => {
-      const frozenTheme = localStorage.getItem('rl_theme') || 'charcoal';
+      const isPro = localStorage.getItem('rl_pro') === 'true';
+      const frozenTheme = isPro ? (localStorage.getItem('rl_theme') || 'green') : 'charcoal';
       printResume(frozenTheme);
     });
   }
