@@ -1242,9 +1242,9 @@ function printResume(frozenTheme) {
     #rl-print-dom .rl-contacts{display:flex;align-items:center;justify-content:center;background:var(--rl-contacts-bg)!important;padding:7pt 0;width:100%}
     #rl-print-dom .rl-contacts span{color:var(--rl-contacts-text)!important;font-size:6.5pt;white-space:nowrap;padding:0 10pt}
     #rl-print-dom .rl-sep{color:#5A8A70!important;padding:0 2pt!important}
-    #rl-print-dom .rl-body{display:table;width:210mm;min-height:240mm;table-layout:fixed;border-collapse:collapse}
-    #rl-print-dom .rl-sidebar{display:table-cell;width:62mm;background:var(--rl-sidebar-bg)!important;vertical-align:top;padding:16pt 14pt 80pt 14pt;border-right:1pt solid var(--rl-sidebar-border)!important}
-    #rl-print-dom .rl-main{display:table-cell;width:148mm;background:#fff;vertical-align:top;padding:14pt 18pt 80pt 18pt}
+    #rl-print-dom .rl-body{display:table;width:210mm;table-layout:fixed;border-collapse:collapse}
+    #rl-print-dom .rl-sidebar{display:table-cell;width:62mm;background:var(--rl-sidebar-bg)!important;vertical-align:top;padding:16pt 14pt 24pt 14pt;border-right:1pt solid var(--rl-sidebar-border)!important}
+    #rl-print-dom .rl-main{display:table-cell;width:148mm;background:#fff;vertical-align:top;padding:14pt 18pt 24pt 18pt}
     #rl-print-dom .rl-section{margin-bottom:14pt;break-inside:avoid;page-break-inside:avoid}
     #rl-print-dom .rl-section-title{font-size:6.5pt;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#0D3D28;border-bottom:1.5pt solid var(--rl-primary)!important;padding-bottom:4pt;margin-bottom:9pt}
     #rl-print-dom .rl-edu-item{margin-bottom:10pt;break-inside:avoid}
@@ -1296,7 +1296,7 @@ function printResume(frozenTheme) {
         ${addHtml}
       </div>
     </div>
-    ${isPro ? '' : `<div class="rl-watermark">Made with ResumeLink.cc · <span>${esc(pageUrl)}</span></div>`}
+    ${isPro ? '' : `<div class="rl-watermark">✦ Made with <b>ResumeLink.cc</b> · Get your own profile free → <span>${esc(pageUrl)}</span></div>`}
   </div>`;
 
 const wrap = document.createElement('div');
