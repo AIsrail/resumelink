@@ -435,43 +435,10 @@
         <div class="section-label fade-in">Join the Waitlist</div>
         <h2 class="section-title fade-in">Secure your<br><b>Early Bird spot.</b></h2>
         <p class="section-sub fade-in">Fill out the form. We'll reach out within 24 hours to confirm your spot and discuss your needs. No payment required now.</p>
-        <div class="contact-form fade-in" id="contactForm">
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>Your name</label>
-                    <input type="text" id="f-name" placeholder="John Smith">
-                </div>
-                <div class="form-group">
-                    <label>Company / Organization</label>
-                    <input type="text" id="f-company" placeholder="TalentCo Agency">
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="f-email" placeholder="john@company.com">
-                </div>
-                <div class="form-group">
-                    <label>You are a...</label>
-                    <select id="f-type">
-                        <option value="">Select type</option>
-                        <option>Recruiting Agency</option>
-                        <option>Career Coach</option>
-                        <option>University / Bootcamp</option>
-                        <option>HR Platform</option>
-                        <option>Other</option>
-                    </select>
-                </div>
-                <div class="form-group form-full">
-                    <label>What would you like to achieve?</label>
-                    <textarea id="f-message" placeholder="Tell us about your team size, how you currently share resumes, and what you'd like to improve..."></textarea>
-                </div>
-            </div>
-            <button class="form-submit" onclick="submitForm()">✦ Join Waitlist — Get 50% Off →</button>
-            <div class="form-note">No payment now · We confirm within 24h · Price locked for life</div>
-        </div>
-        <div class="form-success" id="formSuccess">
-            <div class="form-success-icon">🎉</div>
-            <h3>You're on the waitlist!</h3>
-            <p>We'll confirm your Early Bird spot within 24 hours. Your 50% discount is reserved.</p>
+        <div class="contact-form fade-in">
+            <iframe data-tally-src="https://tally.so/embed/2Evvxe?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="400" frameborder="0" marginheight="0" marginwidth="0" title="ResumeLink Business Waitlist" style="border-radius:12px"></iframe>
+            <script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
+            <div class="form-note" style="margin-top:16px">No payment now · We confirm within 24h · Price locked for life</div>
         </div>
     </div>
 </section>
@@ -496,29 +463,6 @@ function switchTab(tab) {
     document.querySelectorAll('.demo-content').forEach(c => c.classList.remove('active'));
     event.target.classList.add('active');
     document.getElementById('tab-' + tab).classList.add('active');
-}
-
-// Form submit
-function submitForm() {
-    const name = document.getElementById('f-name').value;
-    const email = document.getElementById('f-email').value;
-    const company = document.getElementById('f-company').value;
-    if (!name || !email || !company) {
-        alert('Please fill in your name, company and email.');
-        return;
-    }
-    // Send to mailto as fallback (replace with actual form handler later)
-    const subject = encodeURIComponent('ResumeLink Business Inquiry - ' + company);
-    const body = encodeURIComponent(
-        'Name: ' + name + '\n' +
-        'Company: ' + company + '\n' +
-        'Email: ' + email + '\n' +
-        'Type: ' + (document.getElementById('f-type').value || 'Not specified') + '\n\n' +
-        'Message:\n' + (document.getElementById('f-message').value || 'No message')
-    );
-    window.location.href = 'mailto:info@resumelink.cc?subject=' + subject + '&body=' + body;
-    document.getElementById('contactForm').style.display = 'none';
-    document.getElementById('formSuccess').style.display = 'block';
 }
 
 // Scroll animations - add hidden class first, then animate in
