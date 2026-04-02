@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResumeLink for Business — White-label AI Resume Profiles</title>
+    <meta name="description" content="Give your agency, university or platform AI-powered resume profiles. White-label solution for recruiters, career coaches and HR teams.">
+    <meta property="og:title" content="ResumeLink for Business">
+    <meta property="og:description" content="White-label AI resume profiles for agencies, universities and HR platforms.">
+    <meta property="og:url" content="https://resumelink.cc/business.html">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --green:#1DB368; --green-dk:#0D8A4E; --forest:#0D3D28;
+            --bg:#F2FAF6; --surface:#FFFFFF; --mint:#EAF7F0;
+            --border:#C5E8D5; --text:#0D3D28; --muted:#5A8A70; --faint:#A8CDB9;
+        }
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        html{scroll-behavior:smooth}
+        body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);overflow-x:hidden}
+
+        /* NAV */
+        nav{position:sticky;top:0;z-index:100;background:rgba(242,250,246,0.95);backdrop-filter:blur(12px);border-bottom:0.5px solid var(--border);padding:0 clamp(1.5rem,5vw,4rem);height:62px;display:flex;align-items:center;justify-content:space-between}
+        .nav-logo{font-size:20px;font-weight:500;color:var(--forest);letter-spacing:-0.03em;text-decoration:none}
+        .nav-logo span{color:var(--green)}
+        .nav-links{display:flex;align-items:center;gap:24px}
+        .nav-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s}
+        .nav-links a:hover{color:var(--forest)}
+        .nav-cta{background:var(--forest);color:var(--bg)!important;padding:8px 18px;border-radius:8px;font-weight:500!important}
+        .nav-cta:hover{background:var(--green-dk)!important}
+        .nav-hamburger{display:none;cursor:pointer;flex-direction:column;gap:4px;background:none;border:none;padding:4px}
+        .nav-hamburger span{width:20px;height:1.5px;background:var(--forest);border-radius:2px;display:block}
+        .nav-mobile{display:none;position:absolute;top:62px;left:0;right:0;background:var(--bg);border-bottom:0.5px solid var(--border);padding:1rem 1.5rem;flex-direction:column;gap:16px;z-index:99}
+        .nav-mobile a{font-size:14px;color:var(--muted);text-decoration:none}
+        .nav-mobile.open{display:flex}
+
+        /* HERO */
+        .hero{max-width:1200px;margin:0 auto;padding:clamp(4rem,8vw,7rem) clamp(1.5rem,5vw,4rem);display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+        .hero-eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--green-dk);background:var(--mint);border:0.5px solid var(--border);padding:5px 14px;border-radius:20px;margin-bottom:20px}
+        .hero-eyebrow::before{content:'';width:6px;height:6px;background:var(--green);border-radius:50%}
+        .hero h1{font-size:clamp(2.2rem,4vw,3.4rem);font-weight:300;line-height:1.18;color:var(--forest);letter-spacing:-0.025em;margin-bottom:18px}
+        .hero h1 b{font-weight:500}
+        .hero h1 em{font-family:'Instrument Serif',serif;font-style:italic;color:var(--green);font-weight:400}
+        .hero-sub{font-size:15px;color:var(--muted);line-height:1.7;margin-bottom:32px;max-width:460px}
+        .hero-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+        .btn-primary{background:var(--forest);color:var(--bg);padding:14px 32px;border-radius:10px;font-size:15px;font-weight:500;border:none;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:background .2s,transform .15s;font-family:'DM Sans',sans-serif}
+        .btn-primary:hover{background:var(--green-dk);transform:translateY(-1px)}
+        .btn-ghost{color:var(--muted);font-size:13px;text-decoration:none;transition:color .2s}
+        .btn-ghost:hover{color:var(--forest)}
+
+        /* HERO VISUAL - Interactive Demo */
+        .hero-visual{background:var(--surface);border:0.5px solid var(--border);border-radius:24px;padding:28px;box-shadow:0 8px 40px rgba(13,61,40,0.08)}
+        .demo-tabs{display:flex;gap:4px;background:var(--bg);border-radius:10px;padding:4px;margin-bottom:20px}
+        .demo-tab{flex:1;padding:8px 12px;border-radius:7px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;text-align:center;transition:all .2s;border:none;background:none;font-family:'DM Sans',sans-serif}
+        .demo-tab.active{background:var(--surface);color:var(--forest);box-shadow:0 1px 4px rgba(13,61,40,0.1)}
+        .demo-content{display:none}
+        .demo-content.active{display:block;animation:fadeIn .3s ease}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+        .demo-profile{display:flex;align-items:center;gap:12px;padding:14px;background:var(--mint);border-radius:12px;margin-bottom:12px}
+        .demo-av{width:40px;height:40px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:600;flex-shrink:0}
+        .demo-info{flex:1}
+        .demo-name{font-size:13px;font-weight:500;color:var(--forest)}
+        .demo-role{font-size:11px;color:var(--muted)}
+        .demo-ats{font-size:18px;font-weight:600;color:var(--green)}
+        .demo-row{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px}
+        .demo-bar{height:4px;background:var(--border);border-radius:2px;margin-bottom:10px;overflow:hidden}
+        .demo-bar-fill{height:100%;background:var(--green);border-radius:2px;transition:width 1s ease}
+        .demo-link{font-size:11px;color:var(--green);font-weight:500;padding:6px 12px;background:var(--mint);border:0.5px solid var(--border);border-radius:6px;display:inline-block;margin-top:4px}
+        .demo-logo-badge{font-size:10px;color:var(--faint);text-align:right;margin-top:10px}
+        .demo-logo-badge b{color:var(--forest)}
+
+        /* LOGOS */
+        .logos-bar{background:var(--forest);padding:clamp(2rem,4vw,3rem) clamp(1.5rem,5vw,4rem);overflow:hidden}
+        .logos-label{text-align:center;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,0.4);margin-bottom:1.5rem}
+        .logos-track{display:flex;gap:0;animation:logos 20s linear infinite}
+        .logos-track:hover{animation-play-state:paused}
+        .logo-item{display:inline-flex;align-items:center;padding:0 32px;font-size:13px;font-weight:500;color:rgba(255,255,255,0.5);white-space:nowrap;flex-shrink:0;border-right:0.5px solid rgba(255,255,255,0.1)}
+        @keyframes logos{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+        /* SEGMENTS */
+        .segments{max-width:1200px;margin:0 auto;padding:clamp(4rem,7vw,6rem) clamp(1.5rem,5vw,4rem)}
+        .section-label{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--green-dk);margin-bottom:12px}
+        .section-title{font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:300;color:var(--forest);letter-spacing:-0.025em;margin-bottom:14px;line-height:1.25}
+        .section-title b{font-weight:500}
+        .section-sub{font-size:15px;color:var(--muted);max-width:520px;line-height:1.7;margin-bottom:3rem}
+        .segments-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+        .segment-card{background:var(--surface);border:0.5px solid var(--border);border-radius:20px;padding:28px;cursor:pointer;transition:border-color .2s,transform .2s,box-shadow .2s;position:relative;overflow:hidden}
+        .segment-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--green);transform:scaleX(0);transition:transform .3s;transform-origin:left}
+        .segment-card:hover{border-color:var(--green);transform:translateY(-3px);box-shadow:0 8px 30px rgba(29,179,104,0.12)}
+        .segment-card:hover::before{transform:scaleX(1)}
+        .segment-icon{width:44px;height:44px;background:var(--mint);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:16px}
+        .segment-title{font-size:16px;font-weight:500;color:var(--forest);margin-bottom:8px}
+        .segment-pain{font-size:12px;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;font-weight:500;margin-bottom:10px}
+        .segment-text{font-size:13px;color:var(--muted);line-height:1.65}
+        .segment-benefit{margin-top:16px;padding:10px 14px;background:var(--mint);border-radius:8px;font-size:12px;color:var(--green-dk);font-weight:500}
+
+        /* HOW IT WORKS */
+        .how{background:var(--forest);padding:clamp(4rem,7vw,6rem) clamp(1.5rem,5vw,4rem)}
+        .how-inner{max-width:1200px;margin:0 auto}
+        .how-inner .section-label{color:rgba(29,179,104,0.8)}
+        .how-inner .section-title{color:#fff}
+        .how-inner .section-sub{color:rgba(255,255,255,0.5)}
+        .steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;position:relative}
+        .steps-grid::before{content:'';position:absolute;top:28px;left:10%;right:10%;height:1px;background:rgba(255,255,255,0.1)}
+        .step{background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);border-radius:16px;padding:24px 20px;text-align:center;transition:background .2s,border-color .2s;position:relative;z-index:1}
+        .step:hover{background:rgba(255,255,255,0.08);border-color:rgba(29,179,104,0.3)}
+        .step-num{width:44px;height:44px;border-radius:50%;background:rgba(29,179,104,0.15);border:1px solid rgba(29,179,104,0.3);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;color:var(--green);margin:0 auto 16px}
+        .step-title{font-size:14px;font-weight:500;color:#fff;margin-bottom:8px}
+        .step-text{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.6}
+
+        /* PRICING */
+        .pricing{max-width:1000px;margin:0 auto;padding:clamp(4rem,7vw,6rem) clamp(1.5rem,5vw,4rem)}
+        .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:3rem}
+        .price-card{background:var(--surface);border:0.5px solid var(--border);border-radius:20px;padding:28px 24px;position:relative;transition:border-color .2s}
+        .price-card:hover{border-color:var(--green)}
+        .price-card.featured{background:var(--forest);border-color:var(--forest)}
+        .price-badge{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;padding:4px 10px;border-radius:20px;margin-bottom:14px;display:inline-block}
+        .price-card:not(.featured) .price-badge{background:var(--mint);color:var(--green-dk)}
+        .price-card.featured .price-badge{background:rgba(29,179,104,0.2);color:var(--green)}
+        .price-name{font-size:18px;font-weight:500;color:var(--forest);margin-bottom:4px}
+        .price-card.featured .price-name{color:#fff}
+        .price-amount{font-size:38px;font-weight:300;color:var(--forest);letter-spacing:-0.03em;line-height:1}
+        .price-card.featured .price-amount{color:#fff}
+        .price-per{font-size:13px;color:var(--muted)}
+        .price-card.featured .price-per{color:rgba(255,255,255,0.5)}
+        .price-divider{border:none;border-top:0.5px solid var(--border);margin:18px 0}
+        .price-card.featured .price-divider{border-color:rgba(255,255,255,0.1)}
+        .price-features{list-style:none;margin-bottom:24px}
+        .price-features li{font-size:12px;color:var(--muted);padding:5px 0;border-bottom:0.5px solid var(--border);display:flex;align-items:flex-start;gap:8px}
+        .price-card.featured .price-features li{color:rgba(255,255,255,0.7);border-color:rgba(255,255,255,0.08)}
+        .price-features li:last-child{border-bottom:none}
+        .price-check{color:var(--green);font-size:12px;flex-shrink:0;margin-top:1px}
+        .price-btn{display:block;text-align:center;padding:12px;border-radius:10px;font-size:13px;font-weight:500;text-decoration:none;transition:background .2s}
+        .btn-outline{background:var(--mint);color:var(--forest);border:0.5px solid var(--border)}
+        .btn-outline:hover{background:var(--border)}
+        .btn-green{background:var(--green);color:#fff}
+        .btn-green:hover{background:var(--green-dk)}
+        .btn-ghost-white{background:rgba(255,255,255,0.1);color:#fff;border:0.5px solid rgba(255,255,255,0.2)}
+        .btn-ghost-white:hover{background:rgba(255,255,255,0.18)}
+        .popular-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;font-size:10px;font-weight:500;padding:4px 14px;border-radius:20px;white-space:nowrap;text-transform:uppercase;letter-spacing:.08em}
+
+        /* CONTACT FORM */
+        .contact{background:var(--forest);padding:clamp(4rem,7vw,6rem) clamp(1.5rem,5vw,4rem)}
+        .contact-inner{max-width:700px;margin:0 auto;text-align:center}
+        .contact-inner .section-label{color:rgba(29,179,104,0.8)}
+        .contact-inner .section-title{color:#fff;margin-bottom:12px}
+        .contact-inner .section-sub{color:rgba(255,255,255,0.5);margin:0 auto 2.5rem}
+        .contact-form{background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);border-radius:20px;padding:32px;text-align:left}
+        .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+        .form-group{display:flex;flex-direction:column;gap:6px}
+        .form-group label{font-size:11px;font-weight:500;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:.08em}
+        .form-group input,.form-group select,.form-group textarea{background:rgba(255,255,255,0.07);border:0.5px solid rgba(255,255,255,0.15);border-radius:8px;padding:11px 14px;font-size:13px;color:#fff;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s}
+        .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--green)}
+        .form-group input::placeholder,.form-group textarea::placeholder{color:rgba(255,255,255,0.25)}
+        .form-group select option{background:var(--forest);color:#fff}
+        .form-group textarea{resize:none;height:80px}
+        .form-full{grid-column:1/-1}
+        .form-submit{width:100%;background:var(--green);color:#fff;padding:14px;border-radius:10px;font-size:15px;font-weight:500;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s,transform .15s;margin-top:4px}
+        .form-submit:hover{background:var(--green-dk);transform:translateY(-1px)}
+        .form-note{font-size:11px;color:rgba(255,255,255,0.3);text-align:center;margin-top:12px}
+        .form-success{display:none;text-align:center;padding:2rem}
+        .form-success-icon{font-size:40px;margin-bottom:12px}
+        .form-success h3{color:#fff;font-size:18px;font-weight:500;margin-bottom:8px}
+        .form-success p{color:rgba(255,255,255,0.5);font-size:13px}
+
+        /* FOOTER */
+        footer{border-top:0.5px solid var(--border);padding:2rem clamp(1.5rem,5vw,4rem);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;max-width:1200px;margin:0 auto}
+        .footer-logo{font-size:15px;font-weight:500;color:var(--forest);text-decoration:none;letter-spacing:-0.02em}
+        .footer-logo span{color:var(--green)}
+        .footer-links{display:flex;gap:20px;flex-wrap:wrap}
+        .footer-links a{font-size:12px;color:var(--faint);text-decoration:none;transition:color .2s}
+        .footer-links a:hover{color:var(--forest)}
+        .footer-copy{font-size:11px;color:var(--faint)}
+
+        /* FADE IN */
+        .fade-in{opacity:1;transform:translateY(0);transition:opacity .6s ease,transform .6s ease}
+        .fade-in.hidden{opacity:0;transform:translateY(20px)}
+        .fade-in.visible{opacity:1;transform:translateY(0)}
+
+        @media(max-width:1024px){.segments-grid{grid-template-columns:1fr 1fr}.steps-grid{grid-template-columns:1fr 1fr}.steps-grid::before{display:none}}
+        @media(max-width:768px){.hero{grid-template-columns:1fr}.hero-visual{display:none}.pricing-grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.segments-grid{grid-template-columns:1fr}}
+        @media(max-width:640px){.nav-links{display:none}.nav-hamburger{display:flex}.steps-grid{grid-template-columns:1fr}footer{flex-direction:column;gap:12px}}
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/" class="nav-logo">Resume<span>Link</span></a>
+    <div class="nav-links">
+        <a href="/roles/">Explore</a>
+        <a href="/about.html">About</a>
+        <a href="/pricing.html">Pricing</a>
+        <a href="/business.html" style="color:var(--forest);font-weight:500">For Business</a>
+        <a href="#contact" class="nav-cta">Join Waitlist →</a>
+    </div>
+    <button class="nav-hamburger" onclick="document.querySelector('.nav-mobile').classList.toggle('open')" aria-label="Menu">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+<div class="nav-mobile">
+    <a href="/roles/">Explore</a>
+    <a href="/about.html">About</a>
+    <a href="/pricing.html">Pricing</a>
+    <a href="/business.html" style="color:var(--green-dk);font-weight:500">For Business</a>
+    <a href="#contact" style="color:var(--green-dk);font-weight:500">Get a Demo →</a>
+</div>
+
+<!-- HERO -->
+<section>
+    <div class="hero">
+        <div class="fade-in">
+            <div class="hero-eyebrow">For Business</div>
+            <h1>Your brand.<br><em>Our AI.</em><br>Better <b>candidates.</b></h1>
+            <p class="hero-sub">Give your agency, university or platform AI-powered resume profiles. White-label solution that makes your candidates stand out — without building anything.</p>
+            <div class="hero-actions">
+                <a href="#contact" class="btn-primary">✦ Join Waitlist — 50% Off →</a>
+                <a href="#pricing" class="btn-ghost">See pricing ↓</a>
+            </div>
+        </div>
+        <div class="hero-visual fade-in" style="animation-delay:.2s">
+            <div class="demo-tabs">
+                <button class="demo-tab active" onclick="switchTab('agency')">Agency</button>
+                <button class="demo-tab" onclick="switchTab('coach')">Coach</button>
+                <button class="demo-tab" onclick="switchTab('university')">University</button>
+            </div>
+            <div id="tab-agency" class="demo-content active">
+                <div class="demo-profile">
+                    <div class="demo-av">SK</div>
+                    <div class="demo-info">
+                        <div class="demo-name">Sarah Kim</div>
+                        <div class="demo-role">Senior Product Manager</div>
+                    </div>
+                    <div class="demo-ats">94%</div>
+                </div>
+                <div class="demo-row"><span>ATS Score</span><span>94%</span></div>
+                <div class="demo-bar"><div class="demo-bar-fill" style="width:94%"></div></div>
+                <div class="demo-row"><span>Keywords match</span><span>89%</span></div>
+                <div class="demo-bar"><div class="demo-bar-fill" style="width:89%"></div></div>
+                <div class="demo-link">yourагентство.resumelink.cc/sarah-kim</div>
+                <div class="demo-logo-badge">Powered by <b>TalentCo Agency</b></div>
+            </div>
+            <div id="tab-coach" class="demo-content">
+                <div class="demo-profile">
+                    <div class="demo-av" style="background:#1E3A8A">MR</div>
+                    <div class="demo-info">
+                        <div class="demo-name">Mark Rodriguez</div>
+                        <div class="demo-role">DevOps Engineer</div>
+                    </div>
+                    <div class="demo-ats" style="color:#1E3A8A">91%</div>
+                </div>
+                <div class="demo-row"><span>Skills match</span><span>91%</span></div>
+                <div class="demo-bar"><div class="demo-bar-fill" style="width:91%;background:#1E3A8A"></div></div>
+                <div class="demo-row"><span>Experience</span><span>85%</span></div>
+                <div class="demo-bar"><div class="demo-bar-fill" style="width:85%;background:#1E3A8A"></div></div>
+                <div class="demo-link" style="color:#1E3A8A;background:#EEF3FF;border-color:#C5D5F5">resumelink.cc/mark-rodriguez</div>
+                <div class="demo-logo-badge">Client of <b>CareerCoach Pro</b></div>
+            </div>
+            <div id="tab-university" class="demo-content">
+                <div class="demo-profile">
+                    <div class="demo-av" style="background:#78480A">AL</div>
+                    <div class="demo-info">
+                        <div class="demo-name">Asel Lukpanova</div>
+                        <div class="demo-role">Data Science Graduate</div>
+                    </div>
+                    <div class="demo-ats" style="color:#D4870A">88%</div>
+                </div>
+                <div class="demo-row"><span>Graduate profile</span><span>88%</span></div>
+                <div class="demo-bar"><div class="demo-bar-fill" style="width:88%;background:#D4870A"></div></div>
+                <div class="demo-row"><span>Job readiness</span><span>82%</span></div>
+                <div class="demo-bar"><div class="demo-bar-fill" style="width:82%;background:#D4870A"></div></div>
+                <div class="demo-link" style="color:#78480A;background:#FFFBF0;border-color:#F5DFA0">graduates.university.edu/asel</div>
+                <div class="demo-logo-badge">Class of 2026 · <b>State University</b></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- LOGOS -->
+<div class="logos-bar">
+    <div class="logos-label">Trusted by teams across industries</div>
+    <div class="logos-track">
+        <div class="logo-item">🏢 Recruiting Agencies</div>
+        <div class="logo-item">🎓 Universities</div>
+        <div class="logo-item">💼 Career Coaches</div>
+        <div class="logo-item">🌐 Job Boards</div>
+        <div class="logo-item">🚀 Bootcamps</div>
+        <div class="logo-item">🤝 HR Platforms</div>
+        <div class="logo-item">📊 Staffing Firms</div>
+        <div class="logo-item">🏢 Recruiting Agencies</div>
+        <div class="logo-item">🎓 Universities</div>
+        <div class="logo-item">💼 Career Coaches</div>
+        <div class="logo-item">🌐 Job Boards</div>
+        <div class="logo-item">🚀 Bootcamps</div>
+        <div class="logo-item">🤝 HR Platforms</div>
+        <div class="logo-item">📊 Staffing Firms</div>
+    </div>
+</div>
+
+<!-- SEGMENTS -->
+<section class="segments" id="segments">
+    <div class="section-label fade-in">Who it's for</div>
+    <h2 class="section-title fade-in">Built for the people<br><b>who build careers.</b></h2>
+    <p class="section-sub fade-in">Three different clients. One platform. Pick your fit.</p>
+    <div class="segments-grid">
+        <div class="segment-card fade-in">
+            <div class="segment-icon">🏢</div>
+            <div class="segment-pain">Recruiting Agencies</div>
+            <div class="segment-title">Stop sending boring PDFs</div>
+            <div class="segment-text">Your clients open 200 PDFs a day. Send them a link instead. Beautiful, branded candidate profiles that open in 2 seconds on any device.</div>
+            <div class="segment-benefit">✦ Stand out from other agencies with tech-forward delivery</div>
+        </div>
+        <div class="segment-card fade-in" style="animation-delay:.1s">
+            <div class="segment-icon">💼</div>
+            <div class="segment-pain">Career Coaches</div>
+            <div class="segment-title">Charge more. Deliver faster.</div>
+            <div class="segment-text">Add AI resume profiles to your service package. Create stunning profiles for clients in minutes, not hours. They'll pay more for the result.</div>
+            <div class="segment-benefit">✦ Add $20-50 per client with zero extra effort</div>
+        </div>
+        <div class="segment-card fade-in" style="animation-delay:.2s">
+            <div class="segment-icon">🎓</div>
+            <div class="segment-pain">Universities & Bootcamps</div>
+            <div class="segment-title">Every graduate job-ready.</div>
+            <div class="segment-text">Every student leaves with a professional digital profile under your brand. Improve placement rates. Give graduates a real competitive edge.</div>
+            <div class="segment-benefit">✦ Measurable impact on graduate employment rates</div>
+        </div>
+    </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+    <div class="how-inner">
+        <div class="section-label fade-in">How it works</div>
+        <h2 class="section-title fade-in">Up and running<br><b>in 24 hours.</b></h2>
+        <p class="section-sub fade-in">No engineering team needed. No long contracts.</p>
+        <div class="steps-grid">
+            <div class="step fade-in">
+                <div class="step-num">01</div>
+                <div class="step-title">Request access</div>
+                <div class="step-text">Fill out the form below. We'll set up your white-label account and branded domain within 24 hours.</div>
+            </div>
+            <div class="step fade-in" style="animation-delay:.1s">
+                <div class="step-num">02</div>
+                <div class="step-title">Upload resumes</div>
+                <div class="step-text">Use our simple dashboard or API to upload PDF/DOCX resumes. AI processes them instantly.</div>
+            </div>
+            <div class="step fade-in" style="animation-delay:.2s">
+                <div class="step-num">03</div>
+                <div class="step-title">Share branded profiles</div>
+                <div class="step-text">Send clients beautiful links branded with your logo. They see your agency, not ResumeLink.</div>
+            </div>
+            <div class="step fade-in" style="animation-delay:.3s">
+                <div class="step-num">04</div>
+                <div class="step-title">Track & grow</div>
+                <div class="step-text">See which profiles get opened, how long recruiters spend on them, and optimize your delivery.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+    <div class="section-label fade-in">Early Bird Pricing</div>
+    <h2 class="section-title fade-in">50% off for the<br><b>first 10 clients.</b></h2>
+    <p class="section-sub fade-in">Join the waitlist now and lock in your early bird price before we launch publicly. Limited spots available.</p>
+    <div class="pricing-grid">
+        <div class="price-card fade-in">
+            <div class="price-badge">Agency</div>
+            <div class="price-name">Starter</div>
+            <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
+                <span class="price-amount">$25</span>
+                <span style="font-size:16px;color:var(--faint);text-decoration:line-through">$49</span>
+                <span style="font-size:11px;font-weight:500;background:var(--mint);color:var(--green-dk);padding:2px 8px;border-radius:20px">-50%</span>
+            </div>
+            <div class="price-per" style="margin-bottom:6px">/ month · Early Bird</div>
+            <hr class="price-divider">
+            <ul class="price-features">
+                <li><span class="price-check">✓</span>Up to 50 AI profiles/month</li>
+                <li><span class="price-check">✓</span>All 3 PDF color themes</li>
+                <li><span class="price-check">✓</span>Shareable links & QR codes</li>
+                <li><span class="price-check">✓</span>Email support</li>
+                <li><span class="price-check">✓</span>Price locked forever</li>
+            </ul>
+            <a href="#contact" class="price-btn btn-outline">Join Waitlist →</a>
+        </div>
+        <div class="price-card featured fade-in" style="animation-delay:.1s">
+            <div class="popular-badge">✦ Most Popular</div>
+            <div class="price-badge">White-label</div>
+            <div class="price-name">Pro Agency</div>
+            <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
+                <span class="price-amount">$75</span>
+                <span style="font-size:16px;color:rgba(255,255,255,0.3);text-decoration:line-through">$149</span>
+                <span style="font-size:11px;font-weight:500;background:rgba(29,179,104,0.2);color:var(--green);padding:2px 8px;border-radius:20px">-50%</span>
+            </div>
+            <div class="price-per" style="margin-bottom:6px">/ month · Early Bird</div>
+            <hr class="price-divider">
+            <ul class="price-features">
+                <li><span class="price-check">✓</span>Up to 300 profiles/month</li>
+                <li><span class="price-check">✓</span>Your logo & brand colors</li>
+                <li><span class="price-check">✓</span>Custom subdomain</li>
+                <li><span class="price-check">✓</span>Priority AI processing</li>
+                <li><span class="price-check">✓</span>Analytics dashboard</li>
+                <li><span class="price-check">✓</span>Price locked forever</li>
+            </ul>
+            <a href="#contact" class="price-btn btn-green">Join Waitlist →</a>
+        </div>
+        <div class="price-card fade-in" style="animation-delay:.2s">
+            <div class="price-badge">Enterprise</div>
+            <div class="price-name">University</div>
+            <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
+                <span class="price-amount">$150</span>
+                <span style="font-size:16px;color:var(--faint);text-decoration:line-through">$299</span>
+                <span style="font-size:11px;font-weight:500;background:var(--mint);color:var(--green-dk);padding:2px 8px;border-radius:20px">-50%</span>
+            </div>
+            <div class="price-per" style="margin-bottom:6px">/ month · Early Bird</div>
+            <hr class="price-divider">
+            <ul class="price-features">
+                <li><span class="price-check">✓</span>Unlimited profiles</li>
+                <li><span class="price-check">✓</span>Your own domain</li>
+                <li><span class="price-check">✓</span>Full white-label</li>
+                <li><span class="price-check">✓</span>Bulk upload via CSV</li>
+                <li><span class="price-check">✓</span>Placement analytics</li>
+                <li><span class="price-check">✓</span>Price locked forever</li>
+            </ul>
+            <a href="#contact" class="price-btn btn-outline">Join Waitlist →</a>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT FORM -->
+<section class="contact" id="contact">
+    <div class="contact-inner">
+        <div class="section-label fade-in">Join the Waitlist</div>
+        <h2 class="section-title fade-in">Secure your<br><b>Early Bird spot.</b></h2>
+        <p class="section-sub fade-in">Fill out the form. We'll reach out within 24 hours to confirm your spot and discuss your needs. No payment required now.</p>
+        <div class="contact-form fade-in" id="contactForm">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Your name</label>
+                    <input type="text" id="f-name" placeholder="John Smith">
+                </div>
+                <div class="form-group">
+                    <label>Company / Organization</label>
+                    <input type="text" id="f-company" placeholder="TalentCo Agency">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="f-email" placeholder="john@company.com">
+                </div>
+                <div class="form-group">
+                    <label>You are a...</label>
+                    <select id="f-type">
+                        <option value="">Select type</option>
+                        <option>Recruiting Agency</option>
+                        <option>Career Coach</option>
+                        <option>University / Bootcamp</option>
+                        <option>HR Platform</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="form-group form-full">
+                    <label>What would you like to achieve?</label>
+                    <textarea id="f-message" placeholder="Tell us about your team size, how you currently share resumes, and what you'd like to improve..."></textarea>
+                </div>
+            </div>
+            <button class="form-submit" onclick="submitForm()">✦ Join Waitlist — Get 50% Off →</button>
+            <div class="form-note">No payment now · We confirm within 24h · Price locked for life</div>
+        </div>
+        <div class="form-success" id="formSuccess">
+            <div class="form-success-icon">🎉</div>
+            <h3>You're on the waitlist!</h3>
+            <p>We'll confirm your Early Bird spot within 24 hours. Your 50% discount is reserved.</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <a href="/" class="footer-logo">Resume<span>Link</span></a>
+    <div class="footer-links">
+        <a href="/roles/">Explore</a>
+        <a href="/about.html">About</a>
+        <a href="/pricing.html">Pricing</a>
+        <a href="/business.html">For Business</a>
+        <a href="/policy.html">Privacy & Terms</a>
+        <a href="/cdn-cgi/l/email-protection#9df4f3fbf2ddeff8eee8f0f8f1f4f3f6b3fefe"><span class="__cf_email__" data-cfemail="6b02050d042b190e181e060e07020500450808">[email&#160;protected]</span></a>
+    </div>
+    <div class="footer-copy">© 2026 ResumeLink</div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// Tab switching
+function switchTab(tab) {
+    document.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.demo-content').forEach(c => c.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById('tab-' + tab).classList.add('active');
+}
+
+// Form submit
+function submitForm() {
+    const name = document.getElementById('f-name').value;
+    const email = document.getElementById('f-email').value;
+    const company = document.getElementById('f-company').value;
+    if (!name || !email || !company) {
+        alert('Please fill in your name, company and email.');
+        return;
+    }
+    // Send to mailto as fallback (replace with actual form handler later)
+    const subject = encodeURIComponent('ResumeLink Business Inquiry - ' + company);
+    const body = encodeURIComponent(
+        'Name: ' + name + '\n' +
+        'Company: ' + company + '\n' +
+        'Email: ' + email + '\n' +
+        'Type: ' + (document.getElementById('f-type').value || 'Not specified') + '\n\n' +
+        'Message:\n' + (document.getElementById('f-message').value || 'No message')
+    );
+    window.location.href = 'mailto:info@resumelink.cc?subject=' + subject + '&body=' + body;
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+}
+
+// Scroll animations - add hidden class first, then animate in
+document.querySelectorAll('.fade-in').forEach(el => el.classList.add('hidden'));
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+        if (e.isIntersecting) {
+            e.target.classList.remove('hidden');
+            e.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
