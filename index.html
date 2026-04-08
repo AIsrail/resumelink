@@ -778,6 +778,81 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
         </div>
       </section>
 
+      {/* B2B PARTNERS SECTION */}
+      <section style={{background:'var(--surface)',borderTop:'0.5px solid var(--border)',padding:'clamp(4rem,7vw,6rem) clamp(1.5rem,5vw,4rem)'}}>
+        <div style={{maxWidth:'1200px',margin:'0 auto'}}>
+          <div className="hero-eyebrow" style={{marginBottom:'16px'}}>{isEn ? 'For Organizations' : 'Для организаций'}</div>
+          <h2 className="section-title">{isEn ? <>Built for teams who<br/><b>build careers at scale.</b></> : <>Для тех, кто<br/><b>строит карьеры масштабно.</b></>}</h2>
+          <p className="section-sub">{isEn ? 'Recruiting agencies, universities and career centers use ResumeLink to deliver better candidate experiences.' : 'Рекрутинговые агентства, вузы и карьерные центры используют ResumeLink для работы с кандидатами.'}</p>
+
+          {/* Interactive tabs */}
+          <div style={{display:'flex',gap:'8px',marginBottom:'24px',flexWrap:'wrap'}}>
+            {(isEn ? ['🏢 Agencies','🎓 Universities','💼 Coaches','🤝 Centers'] : ['🏢 Агентства','🎓 Вузы','💼 Коучи','🤝 Центры']).map((tab,i) => (
+              <button key={i} onClick={e => {
+                document.querySelectorAll('.partner-tab').forEach(t => t.style.background = 'var(--bg)');
+                document.querySelectorAll('.partner-tab').forEach(t => t.style.color = 'var(--muted)');
+                document.querySelectorAll('.partner-tab').forEach(t => t.style.borderColor = 'var(--border)');
+                e.target.style.background = 'var(--forest)';
+                e.target.style.color = '#fff';
+                e.target.style.borderColor = 'var(--forest)';
+                document.querySelectorAll('.partner-card').forEach((c,j) => {
+                  c.style.display = j === i ? 'block' : 'none';
+                });
+              }} className="partner-tab" style={{padding:'8px 18px',borderRadius:'20px',border:'0.5px solid var(--border)',background: i===0?'var(--forest)':'var(--bg)',color:i===0?'#fff':'var(--muted)',fontSize:'13px',fontWeight:'500',cursor:'pointer',fontFamily:'DM Sans,sans-serif',transition:'all .2s'}}>
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'14px',marginBottom:'2rem'}}>
+            {[
+              {icon:'🏢', pain: isEn?'Recruiting Agencies':'Рекрутинговые агентства', title: isEn?'Send links, not PDFs':'Ссылки вместо PDF', text: isEn?'Stop attaching files. Share beautiful candidate profiles your clients open in 2 seconds — on any device.':'Прекратите прикладывать файлы. Делитесь красивыми профилями кандидатов, которые открываются за 2 секунды.', benefit: isEn?'✦ Stand out from competing agencies':'✦ Выгляди технологично среди конкурентов'},
+              {icon:'🎓', pain: isEn?'Universities & Bootcamps':'Вузы и буткемпы', title: isEn?'Every graduate job-ready':'Каждый выпускник готов к работе', text: isEn?'Give every student a professional digital profile before they leave. Improve placement rates with shareable results.':'Дай каждому студенту цифровой профиль до выпуска. Улучши показатели трудоустройства.', benefit: isEn?'✦ Measurable impact on employment':'✦ Измеримое влияние на трудоустройство'},
+              {icon:'💼', pain: isEn?'Career Coaches':'Карьерные коучи', title: isEn?'Charge more, deliver faster':'Больше зарабатывай, быстрее доставляй', text: isEn?'Add AI profiles to your service. Create polished results for clients in minutes. They pay more when output looks premium.':'Добавь AI профили в сервис. Создавай результат за минуты. Клиенты платят больше за премиум.', benefit: isEn?'✦ Add $20–50 per client effortlessly':'✦ +$20–50 с каждого клиента'},
+              {icon:'🤝', pain: isEn?'Employment Centers':'Центры занятости', title: isEn?'Scale career support':'Масштабируй поддержку', text: isEn?'Help hundreds of job seekers at once. AI does the heavy lifting — you focus on guidance and placement.':'Помогай сотням соискателей одновременно. AI берёт рутину — ты фокусируешься на результате.', benefit: isEn?'✦ 10x your counselor capacity':'✦ Увеличь пропускную способность в 10x'},
+            ].map((p,i) => (
+              <div key={i} className="partner-card" style={{display: i===0?'block':'none',background:'var(--bg)',border:'0.5px solid var(--border)',borderRadius:'16px',padding:'22px',transition:'border-color .2s'}}>
+                <div style={{width:'40px',height:'40px',borderRadius:'10px',background:'var(--mint)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'18px',marginBottom:'12px'}}>{p.icon}</div>
+                <div style={{fontSize:'10px',fontWeight:'500',textTransform:'uppercase',letterSpacing:'.08em',color:'var(--faint)',marginBottom:'6px'}}>{p.pain}</div>
+                <div style={{fontSize:'15px',fontWeight:'500',color:'var(--forest)',marginBottom:'8px'}}>{p.title}</div>
+                <div style={{fontSize:'13px',color:'var(--muted)',lineHeight:'1.6',marginBottom:'12px'}}>{p.text}</div>
+                <div style={{fontSize:'11px',fontWeight:'500',color:'var(--green-dk)',background:'var(--mint)',padding:'5px 10px',borderRadius:'6px',display:'inline-block'}}>{p.benefit}</div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{background:'var(--forest)',borderRadius:'16px',padding:'24px 28px',display:'flex',alignItems:'center',justifyContent:'space-between',gap:'1rem',flexWrap:'wrap'}}>
+            <div>
+              <div style={{fontSize:'17px',fontWeight:'300',color:'#fff',marginBottom:'4px'}}>{isEn ? <>Interested in a partnership?<br/><b style={{fontWeight:500}}>Early Bird — 50% off.</b></> : <>Интересует партнёрство?<br/><b style={{fontWeight:500}}>Early Bird — скидка 50%.</b></>}</div>
+              <div style={{fontSize:'12px',color:'rgba(255,255,255,0.4)'}}>{isEn ? 'Limited spots · No payment now · Response within 24h' : 'Ограниченные места · Без оплаты сейчас · Ответим за 24ч'}</div>
+            </div>
+            <a href="/business.html" style={{background:'var(--green)',color:'#fff',padding:'11px 24px',borderRadius:'10px',fontSize:'13px',fontWeight:'500',textDecoration:'none',whiteSpace:'nowrap',flexShrink:0}}>{isEn ? 'Learn more →' : 'Подробнее →'}</a>
+          </div>
+        </div>
+      </section>
+
+      {/* BLOG CARDS */}
+      <section style={{padding:'clamp(4rem,7vw,6rem) clamp(1.5rem,5vw,4rem)',maxWidth:'1200px',margin:'0 auto'}}>
+        <div className="section-label">{isEn ? 'From the blog' : 'Из блога'}</div>
+        <h2 className="section-title" style={{marginBottom:'2rem'}}>{isEn ? <>Career tips &<br/><b>AI insights.</b></> : <>Советы по карьере<br/>и <b>AI инсайты.</b></>}</h2>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'16px'}}>
+          {[
+            {tag: isEn?'ATS Tips':'ATS советы', title: isEn?'Why 75% of resumes get rejected before a human sees them':'Почему 75% резюме отсеиваются до человека', text: isEn?'ATS systems are the first filter. Here\'s how to optimize your resume to pass automated screening.':'ATS системы — первый фильтр. Как оптимизировать резюме для прохождения автоматической проверки.', min:'5'},
+            {tag: isEn?'Career':'Карьера', title: isEn?'The death of the PDF resume (and what comes next)':'Смерть PDF резюме и что приходит следующим', text: isEn?'Static files are out. Interactive profiles, shareable links and QR codes are how top candidates stand out in 2026.':'Статичные файлы уходят. Интерактивные профили и QR-коды — как выделяются лучшие кандидаты в 2026.', min:'4'},
+            {tag: isEn?'Guide':'Гайд', title: isEn?'How to write a resume that passes AI screening in 2026':'Как написать резюме, проходящее AI-фильтр в 2026', text: isEn?'Keywords, formatting, structure — a practical guide to writing resumes that modern hiring systems actually love.':'Ключевые слова, форматирование, структура — практический гайд по резюме, которые любят современные HR системы.', min:'7'},
+          ].map((post,i) => (
+            <a key={i} href="/blog.html" style={{background:'var(--surface)',border:'0.5px solid var(--border)',borderRadius:'16px',padding:'22px',textDecoration:'none',display:'block',transition:'border-color .2s,transform .2s'}}
+              onMouseEnter={e=>{e.currentTarget.style.borderColor='var(--green)';e.currentTarget.style.transform='translateY(-2px)'}}
+              onMouseLeave={e=>{e.currentTarget.style.borderColor='var(--border)';e.currentTarget.style.transform='translateY(0)'}}>
+              <div style={{fontSize:'10px',fontWeight:'500',textTransform:'uppercase',letterSpacing:'.08em',color:'var(--green-dk)',background:'var(--mint)',padding:'3px 8px',borderRadius:'4px',display:'inline-block',marginBottom:'12px'}}>{post.tag}</div>
+              <div style={{fontSize:'15px',fontWeight:'500',color:'var(--forest)',marginBottom:'10px',lineHeight:'1.35'}}>{post.title}</div>
+              <div style={{fontSize:'12px',color:'var(--muted)',lineHeight:'1.6',marginBottom:'14px'}}>{post.text}</div>
+              <div style={{fontSize:'11px',color:'var(--faint)'}}>{post.min} {isEn?'min read':'мин чтения'} →</div>
+            </a>
+          ))}
+        </div>
+      </section>
+
       <footer className="site-footer">
         <a href="/" className="footer-logo">Resume<span>Link</span></a>
         <div className="footer-links">
