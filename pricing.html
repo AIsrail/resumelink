@@ -88,6 +88,8 @@
         <a href="/roles/" id="nav-explore">Explore</a>
         <a href="/about.html" id="nav-about">About</a>
         <a href="/pricing.html" id="nav-pricing" class="nav-active">Pricing</a>
+        <a href="/blog.html" id="nav-blog">Blog</a>
+        <a href="/business.html" id="nav-business">For Business</a>
         <a href="mailto:info@resumelink.cc" id="nav-contact">Contact</a>
         <a href="/" class="nav-cta" id="nav-upload">Upload →</a>
     </div>
@@ -99,6 +101,8 @@
     <a href="/roles/" id="mob-explore">Explore</a>
     <a href="/about.html" id="mob-about">About</a>
     <a href="/pricing.html" id="mob-pricing" style="color:var(--green-dk);font-weight:500">Pricing</a>
+    <a href="/blog.html" id="mob-blog">Blog</a>
+    <a href="/business.html" id="mob-business">For Business</a>
     <a href="mailto:info@resumelink.cc" id="mob-contact">Contact</a>
     <a href="/" id="mob-upload" style="color:var(--green-dk);font-weight:500">Upload →</a>
 </div>
@@ -121,13 +125,15 @@
         <a href="/roles/" id="footer-explore">Explore</a>
         <a href="/about.html" id="footer-about">About</a>
         <a href="/pricing.html" id="footer-pricing">Pricing</a>
+        <a href="/blog.html">Blog</a>
+        <a href="/business.html">For Business</a>
         <a href="/policy.html" id="footer-policy">Privacy & Terms</a>
         <a href="mailto:info@resumelink.cc">info@resumelink.cc</a>
     </div>
     <div class="footer-copy">© 2026 ResumeLink</div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // Auto-activate Pro if coming from Lemon Squeezy redirect
 const urlParams = new URLSearchParams(window.location.search);
 if (urlParams.get('pro') === 'activated') {
@@ -300,10 +306,4 @@ document.getElementById('faqGrid').innerHTML = C.faqs.map(f => `
 // Ko-fi block
 document.getElementById('kofi-block').innerHTML = `
     <div style="font-size:28px;margin-bottom:10px">☕</div>
-    <div style="font-size:16px;font-weight:500;color:var(--forest);margin-bottom:6px">${C.kofi.title}</div>
-    <div style="font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.6;max-width:400px;margin-left:auto;margin-right:auto">${C.kofi.sub}</div>
-    <a href="https://ko-fi.com/ontoguzlabs" target="_blank" class="kofi-btn">${C.kofi.btn}</a>
-`;
-</script>
-</body>
-</html>
+    <div style="font-size:16px;font-weight:500;color:var(--forest
