@@ -5,7 +5,7 @@ date: 2026-04-15
 tag: Guide
 read_time: 7
 author: ResumeLink Team
-excerpt: "Keywords, formatting, structure — a practical guide to writing resumes that modern AI hiring systems actually love. No tricks, just what works."
+excerpt: "Keywords, formatting, structure..."
 ---
 
 Hiring has changed. Most large companies now use AI-powered tools to pre-screen resumes before a human ever gets involved. Here's exactly how to write a resume that works with these systems, not against them.
