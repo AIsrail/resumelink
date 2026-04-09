@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ResumeLink — AI Resume Builder | AI конструктор резюме</title>
-    <meta name="description" content="AI-powered interactive resume builder. Умный AI конструктор резюме: преврати файл в стильный профиль с QR-кодом за 10 секунд.">
-    <meta name="keywords" content="AI resume builder, AI конструктор резюме, интерактивное резюме, ATS score, digital CV">
-    <meta property="og:title" content="ResumeLink — AI-Powered Interactive Profiles">
-    <meta property="og:description" content="Transform your resume into a stylish digital profile. AI конструктор резюме нового поколения.">
+    <title>ResumeLink — Shareable Profile + ATS Score + QR Code in 10 sec</title>
+    <meta name="description" content="Turn your resume into a shareable link with ATS Score and QR code in 10 seconds. Free, no signup. PDF · DOCX · paste text · any URL.">
+    <meta name="keywords" content="shareable resume link, ATS score, resume QR code, interactive CV, AI resume builder, digital resume">
+    <meta property="og:title" content="ResumeLink — Shareable Profile + ATS Score + QR Code">
+    <meta property="og:description" content="Turn your resume into a shareable link with ATS Score and QR code in 10 seconds. Free, no signup required.">
     <meta property="og:image" content="https://resumelink.cc/ogimage.png">
     <meta property="og:url" content="https://resumelink.cc">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"ResumeLink","description":"AI tool to transform PDF resumes into interactive profiles","applicationCategory":"BusinessApplication","offers":{"@type":"Offer","price":"0"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"ResumeLink","description":"Turn your resume into a shareable link with ATS Score and QR code in 10 seconds. Free, no signup.","applicationCategory":"BusinessApplication","offers":{"@type":"Offer","price":"0"}}</script>
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -18,7 +18,7 @@
   "name": "ResumeLink",
   "url": "https://resumelink.cc",
   "logo": "https://resumelink.cc/ogimage.png",
-  "description": "AI-powered tool to transform PDF and DOCX resumes into interactive mobile-friendly profiles with ATS score, personal link and QR code. Free, no signup required.",
+  "description": "Turn any resume into a shareable link with ATS Score, QR code and cover letter generator. Free, no signup required.",
   "email": "info@resumelink.cc",
   "sameAs": [
     "https://resumelink.cc/about.html",
@@ -93,6 +93,19 @@
         .btn-ghost { color: var(--muted); font-size: 13px; text-decoration: none; transition: color .2s; }
         .btn-ghost:hover { color: var(--forest); }
         .hero-note { margin-top: 20px; font-size: 11px; color: var(--faint); text-align: center; }
+
+        /* UPLOAD TABS */
+        .upload-tabs { display: flex; gap: 4px; background: var(--bg); border: 0.5px solid var(--border); border-radius: 10px; padding: 3px; margin-bottom: 14px; }
+        .upload-tab { flex: 1; padding: 7px 10px; border-radius: 7px; border: none; background: none; font-size: 12px; font-weight: 500; color: var(--muted); cursor: pointer; transition: all .2s; font-family: 'DM Sans', sans-serif; white-space: nowrap; }
+        .upload-tab.active { background: var(--forest); color: #fff; }
+        .upload-tab:hover:not(.active) { color: var(--forest); }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .paste-area { width: 100%; min-height: 90px; background: var(--bg); border: 0.5px solid var(--border); border-radius: 10px; padding: 10px 12px; font-size: 13px; color: var(--text); font-family: 'DM Sans', sans-serif; resize: vertical; line-height: 1.6; transition: border-color .2s; }
+        .paste-area:focus { outline: none; border-color: var(--green); }
+        .url-input { width: 100%; background: var(--bg); border: 0.5px solid var(--border); border-radius: 10px; padding: 10px 12px; font-size: 13px; color: var(--text); font-family: 'DM Sans', sans-serif; transition: border-color .2s; }
+        .url-input:focus { outline: none; border-color: var(--green); }
+        .url-hint { font-size: 10px; color: var(--faint); text-align: center; line-height: 1.5; }
 
         /* profile preview card */
         .hero-visual { position: relative; }
@@ -198,11 +211,13 @@
         .loading-stage { font-size: 13px; font-weight: 500; color: var(--green); text-transform: uppercase; letter-spacing: .08em; }
         .glow-wrapper { position: relative; display: inline-block; padding: 3px; border-radius: 18px; overflow: hidden; }
         .glow-wrapper::before { content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background: conic-gradient(from 0deg, transparent, var(--green), #3b82f6, transparent 60%); animation: rotate-glow 4s linear infinite; z-index:0; }
-        .glow-content { background: var(--bg); border-radius: 16px; display: block; position: relative; z-index: 1; padding: 2.5rem 4rem; text-align: center; }
+        .glow-content { background: var(--bg); border-radius: 16px; display: block; position: relative; z-index: 1; padding: 2rem 2.5rem; text-align: center; min-width: 320px; }
         @keyframes rotate-glow { to { transform: rotate(360deg); } }
-        .upload-btn-wrap { display: flex; flex-direction: column; align-items: center; gap: 12px; }
-        .upload-btn-main { background: var(--green); color: #fff; padding: 18px 48px; border-radius: 14px; font-size: 18px; font-weight: 600; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; font-family: 'DM Sans', sans-serif; animation: pulse-green 2s ease-in-out infinite; transition: transform .15s, background .2s; }
+        .upload-btn-wrap { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
+        .upload-btn-main { background: var(--green); color: #fff; padding: 14px 36px; border-radius: 14px; font-size: 16px; font-weight: 600; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; font-family: 'DM Sans', sans-serif; animation: pulse-green 2s ease-in-out infinite; transition: transform .15s, background .2s; }
         .upload-btn-main:hover { background: var(--green-dk); transform: translateY(-2px); animation: none; box-shadow: 0 8px 24px rgba(29,179,104,0.4); }
+        .upload-btn-secondary { background: var(--forest); color: #fff; padding: 12px 28px; border-radius: 12px; font-size: 14px; font-weight: 500; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-family: 'DM Sans', sans-serif; transition: background .2s, transform .15s; width: 100%; justify-content: center; }
+        .upload-btn-secondary:hover { background: var(--green-dk); transform: translateY(-1px); }
         @keyframes pulse-green { 0%,100%{box-shadow:0 0 0 0 rgba(29,179,104,0.4)} 50%{box-shadow:0 0 0 12px rgba(29,179,104,0)} }
         .upload-counter { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
         .upload-counter::before { content:''; width:6px; height:6px; background:var(--green); border-radius:50%; animation: blink 1.5s ease-in-out infinite; flex-shrink:0; }
@@ -210,18 +225,6 @@
 
         /* RESULT GRID */
         .result-wrap { max-width: 1200px; margin: 0 auto; padding: 1.5rem clamp(1rem,3vw,2rem) 3rem; }
-        .roast-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:2000; align-items:center; justify-content:center; padding:1rem; }
-        .roast-modal.open { display:flex; }
-        .roast-box { background:var(--forest); border-radius:20px; padding:28px; max-width:560px; width:100%; max-height:80vh; overflow-y:auto; position:relative; }
-        .roast-close { position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.1); border:none; color:#fff; width:28px; height:28px; border-radius:50%; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; }
-        .roast-title { font-size:18px; font-weight:500; color:#fff; margin-bottom:4px; }
-        .roast-sub { font-size:12px; color:rgba(255,255,255,0.5); margin-bottom:20px; }
-        .roast-content { font-size:13px; color:rgba(255,255,255,0.85); line-height:1.7; white-space:pre-wrap; }
-        .roast-loading { text-align:center; padding:2rem; }
-        .roast-spinner { border:2px solid rgba(255,255,255,0.2); border-top:2px solid var(--green); border-radius:50%; width:32px; height:32px; animation:spin 1s linear infinite; margin:0 auto 12px; }
-        .roast-cta { margin-top:20px; padding-top:16px; border-top:0.5px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
-        .roast-cta-text { font-size:12px; color:rgba(255,255,255,0.5); }
-        .roast-cta-btn { background:var(--green); color:#fff; padding:9px 20px; border-radius:8px; font-size:13px; font-weight:500; text-decoration:none; white-space:nowrap; }
         .result-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
         .result-logo { font-size: 20px; font-weight: 500; color: var(--forest); letter-spacing: -0.03em; text-decoration: none; }
         .result-logo span { color: var(--green); }
@@ -322,8 +325,8 @@
             .card-hero, .card-summary, .card-contacts, .card-exp, .card-edu, .card-additional, .card-misc, .card-links { grid-column: span 1; }
             .nav-links { display: none; }
             .nav-hamburger { display: flex; }
-            .glow-content { padding: 1.5rem 2rem; }
-            .upload-btn-main { font-size: 15px; padding: 14px 32px; }
+            .glow-content { padding: 1.5rem 1.5rem; min-width: 280px; }
+            .upload-btn-main { font-size: 15px; padding: 12px 24px; }
         }
     </style>
 </head>
@@ -353,19 +356,22 @@
 </div>
 
 <div id="root"><main aria-hidden="true" style="display:none">
-  <h1>ResumeLink — AI Resume Builder | AI конструктор резюме</h1>
-  <p>Transform your PDF or DOCX resume into an interactive profile with ATS score, personal link and QR code in 10 seconds. Free, no signup required.</p>
+  <h1>ResumeLink — Shareable Resume Link + ATS Score + QR Code in 10 sec</h1>
+  <p>Turn your resume into a shareable link with ATS Score and QR code in 10 seconds. Upload PDF/DOCX, paste text, or enter any public URL. Free, no signup required.</p>
   <h2>How it works</h2>
   <ol>
-    <li>Upload your resume — PDF, DOCX or TXT format, any file</li>
+    <li>Upload file, paste text, or enter a public URL</li>
     <li>AI analyzes and structures your experience to ATS standards</li>
-    <li>Get a personal shareable link and QR code instantly</li>
+    <li>Get a shareable link, ATS Score and QR code instantly</li>
   </ol>
   <h2>Features</h2>
   <ul>
-    <li>AI ATS Score — instant match score for any vacancy</li>
+    <li>Shareable link — resumelink.cc/?id=yourcode</li>
+    <li>ATS Score — instant match score for any vacancy</li>
+    <li>QR code — ready to share or print</li>
+    <li>Cover letter generator — AI writes it based on your resume</li>
+    <li>Job search — find matching vacancies right on your profile page</li>
     <li>Mobile-first interactive profile, perfect on any device</li>
-    <li>Personal QR code and shareable link</li>
     <li>One-click PDF download with clean formatting</li>
     <li>Multilingual — auto-detects resume language</li>
     <li>Privacy-first — no file storage, client-side processing</li>
@@ -388,52 +394,44 @@
     <div class="theme-dot pro-theme" data-theme="navy" style="background:#1E3A8A" onclick="selectTheme('navy')" title="Navy Blue"></div>
     <div class="theme-dot pro-theme" data-theme="amber" style="background:#D4870A" onclick="selectTheme('amber')" title="Warm Amber"></div>
 </div>
-
-<div class="roast-modal" id="roastModal">
-  <div class="roast-box">
-    <button class="roast-close" onclick="document.getElementById('roastModal').classList.remove('open')">✕</button>
-    <div class="roast-title">🔥 Resume Roast</div>
-    <div class="roast-sub">Honest AI feedback — no sugarcoating</div>
-    <div id="roastBody">
-      <div class="roast-loading">
-        <div class="roast-spinner"></div>
-        <div style="color:rgba(255,255,255,0.5);font-size:13px">Analyzing your resume...</div>
-      </div>
-    </div>
-  </div>
-</div>
 <div class="pdf-watermark">Created via ResumeLink.cc — Interactive version available online</div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/babel">
-const { useState, useEffect } = React;
+const { useState, useEffect, useRef } = React;
 const pdfjs = window['pdfjs-dist/build/pdf'];
 pdfjs.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 const WORKER_URL = "https://resumelink-worker.aisrail.workers.dev";
 
 const T = {
   en: {
-    eyebrow:"AI-Powered · 2026", h1a:"Build your", h1em:"AI resume", h1b:"in", h1c:"10 seconds",
-    sub:"Upload PDF or DOCX — AI creates an interactive profile with ATS score, personal link and QR code. No Word, no templates.",
-    uploadBtn:"Upload Resume", howLink:"How it works ↓", heroNote:"PDF · DOCX · TXT · Free · No signup",
+    eyebrow:"75% of resumes never reach a human — ATS filters them out",
+    h1a:"Your resume as a", h1em:"shareable link", h1b:"with", h1c:"ATS Score + QR",
+    sub:"Upload file, paste text, or enter any public URL — AI builds your interactive profile in 10 seconds. Free, no signup.",
+    tabFile:"📄 Upload file", tabPaste:"📋 Paste text", tabUrl:"🔗 Enter URL",
+    uploadBtn:"Choose file", pasteBtn:"Analyze text", urlBtn:"Analyze URL",
+    pastePlaceholder:"Paste resume text, LinkedIn profile text, or any bio here…",
+    urlPlaceholder:"https://yoursite.com/about  or any public page",
+    urlHint:"Works with personal sites, portfolios, public profiles. LinkedIn may require pasting text instead.",
+    howLink:"How it works ↓", heroNote:"PDF · DOCX · TXT · Paste · URL · Free · No signup",
     backBtn:"← Back", atsLabel:"ATS Score", shareLabel:"Share", downloadLabel:"PDF",
     stages:["Analyzing text…","Extracting data…","Generating blocks…","Creating QR…","Optimizing layout…","Finalizing…","Almost ready…"],
-    stats:[["10s","To your live profile"],["140+","Guides & Careers"],["ATS✓","Pass HR filters"],["$0","Free to start"]],
+    stats:[["10s","To your shareable link"],["ATS✓","Pass HR filters"],["QR","Scan & share instantly"],["$0","Free to start"]],
     featLabel:"Features", featH1:"Everything you need,", featH2:"nothing extra",
-    featSub:"ResumeLink is not just a file converter. It's a full platform for your professional presence.",
+    featSub:"Not just a file converter — a full platform for your professional presence online.",
     feats:[
-      {i:"⚡",t:"AI analysis in seconds",d:"Neural net structures your experience to ATS standards and highlights your strengths automatically."},
-      {i:"🔗",t:"Live link & QR code",d:"Your profile is always accessible via link or QR. Forget heavy PDFs that won't open on mobile."},
-      {i:"📊",t:"ATS Score",d:"Instant match score for any vacancy. Understand why your resume passes or fails automated filters."},
-      {i:"📱",t:"Mobile-first design",d:"Perfect on any device — recruiter opens it on phone, laptop, or tablet without quality loss."},
-      {i:"🖨️",t:"Download PDF",d:"Need a classic document? One click — a beautifully formatted PDF ready for HR."},
-      {i:"🌍",t:"Multilingual",d:"Service auto-detects the resume language. More languages coming soon."}
+      {i:"🔗",t:"Shareable link",d:"Your profile lives at resumelink.cc/?id=yourcode — send it to any recruiter, paste in LinkedIn, share in Telegram."},
+      {i:"📊",t:"ATS Score",d:"Instant match score for any vacancy. Know exactly why your resume passes or fails automated HR filters."},
+      {i:"📱",t:"QR code",d:"Print it on your business card, hang it at a conference, or add to any document. Instant scan — instant profile."},
+      {i:"✉️",t:"Cover letter + job search",d:"AI writes a cover letter based on your resume + vacancy. Find matching jobs right inside your profile page."},
+      {i:"⚡",t:"10 seconds",d:"Upload, paste, or link — AI structures your experience to ATS standards and publishes your profile instantly."},
+      {i:"🌍",t:"Any language",d:"Service auto-detects the resume language and outputs the profile in the same language. No manual switching."}
     ],
     howLabel:"How it works", howH1:"Three steps", howH2:"to a live profile",
-    howSub:"No signup, no settings. Just file → result.",
+    howSub:"No signup, no settings. File, text, or URL → result.",
     steps:[
-      {n:"01",t:"Upload file",d:"PDF, DOCX or TXT — any format. Click the button and pick your file. No registration needed."},
-      {n:"02",t:"AI does magic",d:"Neural net analyzes text, structures data into blocks and calculates your ATS score in seconds."},
-      {n:"03",t:"Share it",d:"Get your personal link and QR code. Send to a recruiter, add to LinkedIn, or download PDF."}
+      {n:"01",t:"Upload, paste or link",d:"PDF, DOCX, TXT — any file. Or paste text directly. Or enter a public URL of any page with your bio."},
+      {n:"02",t:"AI does magic",d:"Neural net analyzes text, structures data into blocks, calculates ATS score and builds your profile in seconds."},
+      {n:"03",t:"Share it",d:"Get your shareable link and QR code. Send to recruiter, add to LinkedIn, download PDF — all in one place."}
     ],
     navRoles:"Explore", navAbout:"About", navContact:"Contact", navUpload:"Upload →",
     footerAbout:"About", footerRoles:"Careers", footerPolicy:"Privacy & Terms",
@@ -442,28 +440,34 @@ const T = {
     previewName:"Anya Kim", previewRole:"AI Product Manager",
   },
   ru: {
-    eyebrow:"AI-Powered · 2026", h1a:"Построй своё", h1em:"AI-резюме", h1b:"за", h1c:"10 секунд",
-    sub:"Загрузи PDF или DOCX — ИИ создаст интерактивный профиль с ATS-оценкой, личной ссылкой и QR-кодом. Никакого Word, никаких шаблонов.",
-    uploadBtn:"Загрузить резюме", howLink:"Как это работает ↓", heroNote:"PDF · DOCX · TXT · Бесплатно · Без регистрации",
+    eyebrow:"75% резюме не доходит до HR — их отсеивают ATS-фильтры",
+    h1a:"Твоё резюме как", h1em:"ссылка для шеринга", h1b:"с", h1c:"ATS Score + QR",
+    sub:"Загрузи файл, вставь текст или дай любой публичный URL — ИИ создаст интерактивный профиль за 10 секунд. Бесплатно, без регистрации.",
+    tabFile:"📄 Загрузить файл", tabPaste:"📋 Вставить текст", tabUrl:"🔗 Ввести URL",
+    uploadBtn:"Выбрать файл", pasteBtn:"Анализировать текст", urlBtn:"Анализировать URL",
+    pastePlaceholder:"Вставьте текст резюме, профиль LinkedIn или любое bio…",
+    urlPlaceholder:"https://yoursite.com/about  или любая публичная страница",
+    urlHint:"Работает с личными сайтами, портфолио, публичными профилями. Для LinkedIn лучше скопировать текст вручную.",
+    howLink:"Как это работает ↓", heroNote:"PDF · DOCX · TXT · Текст · URL · Бесплатно · Без регистрации",
     backBtn:"← Назад", atsLabel:"ATS Score", shareLabel:"Поделиться", downloadLabel:"PDF",
     stages:["Анализируем текст…","Извлекаем данные…","Генерируем блоки…","Создаём QR-код…","Оптимизируем верстку…","Настраиваем интерактив…","Почти готово…"],
-    stats:[["10с","До готового профиля"],["140+","Гайды и профессии"],["ATS✓","Проходи автофильтры HR"],["0₽","Бесплатно для старта"]],
+    stats:[["10с","До ссылки для шеринга"],["ATS✓","Проходи автофильтры HR"],["QR","Скан — и профиль открыт"],["0₽","Бесплатно для старта"]],
     featLabel:"Возможности", featH1:"Всё что нужно,", featH2:"ничего лишнего",
-    featSub:"ResumeLink — не просто конвертер файлов. Это полноценная платформа для вашего профессионального присутствия.",
+    featSub:"Не просто конвертер файлов — полноценная платформа для профессионального присутствия в сети.",
     feats:[
-      {i:"⚡",t:"AI-анализ за секунды",d:"Нейросеть структурирует опыт под ATS-стандарты и выделяет ваши сильные стороны автоматически."},
-      {i:"🔗",t:"Живая ссылка и QR",d:"Ваш профиль всегда доступен по ссылке или QR-коду. Забудьте про тяжёлые PDF, которые не открываются на телефоне."},
-      {i:"📊",t:"ATS Score",d:"Мгновенная оценка соответствия вакансии. Понимайте, почему ваше резюме проходит или не проходит фильтры."},
-      {i:"📱",t:"Mobile-first дизайн",d:"Профиль отлично выглядит на любом устройстве — рекрутер открывает его с телефона, ноутбука или планшета."},
-      {i:"🖨️",t:"Скачать PDF",d:"Нужен классический документ? Один клик — готовый, красиво свёрстанный PDF для HR-отдела."},
-      {i:"🌍",t:"Мультиязычность",d:"Сервис автоматически определяет язык резюме. Скоро подключатся новые языки."}
+      {i:"🔗",t:"Ссылка для шеринга",d:"Профиль живёт по адресу resumelink.cc/?id=yourcode — отправь рекрутеру, вставь в LinkedIn, пошли в Telegram."},
+      {i:"📊",t:"ATS Score",d:"Мгновенная оценка соответствия вакансии. Понимайте точно, почему резюме проходит или не проходит HR-фильтры."},
+      {i:"📱",t:"QR-код",d:"Напечатай на визитке, повесь на конференции, добавь в любой документ. Мгновенный скан — мгновенный профиль."},
+      {i:"✉️",t:"Сопроводительное + вакансии",d:"ИИ пишет сопроводительное письмо по резюме и описанию вакансии. Подходящие вакансии прямо на странице профиля."},
+      {i:"⚡",t:"10 секунд",d:"Загрузи, вставь или дай ссылку — ИИ структурирует опыт под ATS и публикует профиль мгновенно."},
+      {i:"🌍",t:"Любой язык",d:"Сервис автоматически определяет язык резюме и выдаёт профиль на том же языке. Никаких ручных настроек."}
     ],
     howLabel:"Как это работает", howH1:"Три шага", howH2:"до живого профиля",
-    howSub:"Никакой регистрации, никаких настроек. Просто файл → результат.",
+    howSub:"Никакой регистрации, никаких настроек. Файл, текст или ссылка → результат.",
     steps:[
-      {n:"01",t:"Загрузи файл",d:"PDF, DOCX или TXT — любой формат. Нажми кнопку и выбери файл. Никакой регистрации не нужно."},
-      {n:"02",t:"AI делает магию",d:"Нейросеть анализирует текст, структурирует данные по блокам и рассчитывает ATS-score за несколько секунд."},
-      {n:"03",t:"Поделись",d:"Получи личную ссылку и QR-код. Отправь рекрутеру в Telegram, добавь в LinkedIn или скачай PDF."}
+      {n:"01",t:"Файл, текст или ссылка",d:"PDF, DOCX или TXT — любой формат. Или вставь текст напрямую. Или укажи публичный URL страницы с твоим bio."},
+      {n:"02",t:"AI делает магию",d:"Нейросеть анализирует текст, структурирует данные по блокам, рассчитывает ATS-score и строит профиль за секунды."},
+      {n:"03",t:"Поделись",d:"Получи ссылку и QR-код. Отправь рекрутеру в Telegram, добавь в LinkedIn или скачай PDF — всё в одном месте."}
     ],
     navRoles:"Ресурсы", navAbout:"О сервисе", navContact:"Контакт", navUpload:"Загрузить →",
     footerAbout:"О сервисе", footerRoles:"Профессии", footerPolicy:"Privacy & Terms",
@@ -478,6 +482,10 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [loadingStage, setLoadingStage] = useState(0);
   const [step, setStep] = useState('setup');
+  const [activeTab, setActiveTab] = useState('file');
+  const [pasteText, setPasteText] = useState('');
+  const [urlText, setUrlText] = useState('');
+  const [urlError, setUrlError] = useState('');
   const [clOpen, setClOpen] = useState(false);
   const [clJobText, setClJobText] = useState('');
   const [clResult, setClResult] = useState('');
@@ -541,7 +549,7 @@ function App() {
       setLoading(false); return;
     }
     try {
-      const prompt = `Analyze text and extract into JSON. Target language: Use the same language as the source text.
+      const prompt = `Analyze text and extract into JSON. Target language: Use the same language as the source text — if the source is in Russian, all values must be in Russian; if English, all in English; if German, all in German, etc.
 Task: Create a professional interactive profile.
 MANDATORY FOR NAME: If English — "First Last" only. If Russian — keep full name.
 MANDATORY FOR BLOCKS: Generate additional blocks only if info exists.
@@ -577,7 +585,6 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
     if (loading) return;
     const file = ev.target.files[0]; if (!file) return;
 
-    // Check profile limit for free users
     const isPro = localStorage.getItem('rl_pro') === 'true';
     const count = parseInt(localStorage.getItem('rl_count') || '0');
     if (!isPro && count >= 3) {
@@ -613,6 +620,62 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
     } catch(err) { console.error(err); setLoading(false); }
   };
 
+  const handlePaste = async () => {
+    if (loading || !pasteText.trim()) return;
+    const isPro = localStorage.getItem('rl_pro') === 'true';
+    const count = parseInt(localStorage.getItem('rl_count') || '0');
+    if (!isPro && count >= 3) {
+      alert(isEn
+        ? 'Free limit reached (3 profiles). Upgrade to Pro for up to 50 profiles.'
+        : 'Достигнут лимит бесплатных профилей (3). Улучши до Pro для создания до 50 профилей.'
+      );
+      window.location.href = '/pricing.html';
+      return;
+    }
+    setLoading(true); setLoadingStage(0);
+    await processAI(pasteText);
+  };
+
+  const handleUrl = async () => {
+    if (loading || !urlText.trim()) return;
+    setUrlError('');
+    const isPro = localStorage.getItem('rl_pro') === 'true';
+    const count = parseInt(localStorage.getItem('rl_count') || '0');
+    if (!isPro && count >= 3) {
+      alert(isEn
+        ? 'Free limit reached (3 profiles). Upgrade to Pro for up to 50 profiles.'
+        : 'Достигнут лимит бесплатных профилей (3). Улучши до Pro для создания до 50 профилей.'
+      );
+      window.location.href = '/pricing.html';
+      return;
+    }
+    setLoading(true); setLoadingStage(0);
+    try {
+      const res = await fetch(`${WORKER_URL}/fetch-url`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: urlText.trim() })
+      });
+      const data = await res.json();
+      if (data.error || !data.text) {
+        setLoading(false);
+        setUrlError(isEn
+          ? 'Could not fetch this URL. The page may be private or blocked. Try pasting the text manually.'
+          : 'Не удалось получить страницу. Возможно, она закрытая или заблокированная. Попробуйте вставить текст вручную.'
+        );
+        return;
+      }
+      await processAI(data.text);
+    } catch(err) {
+      console.error(err);
+      setLoading(false);
+      setUrlError(isEn
+        ? 'Network error. Try pasting the text manually.'
+        : 'Ошибка сети. Попробуйте вставить текст вручную.'
+      );
+    }
+  };
+
   /* ── LANDING ── */
   if (step === 'setup') return (
     <div>
@@ -631,13 +694,67 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
               <div className="glow-wrapper">
                 <div className="glow-content">
                   <div className="upload-btn-wrap">
-                    <label className="upload-btn-main">
-                      📄 {C.uploadBtn}
-                      <input type="file" onChange={handleFile} style={{display:'none'}} accept=".pdf,.docx,.txt"/>
-                    </label>
-                    <div className="upload-counter">
-                      {isEn ? `${Math.floor(Math.random()*40+60)} profiles created today` : `${Math.floor(Math.random()*40+60)} профилей создано сегодня`}
+                    {/* TABS */}
+                    <div className="upload-tabs">
+                      <button className={`upload-tab${activeTab==='file'?' active':''}`} onClick={()=>setActiveTab('file')}>{C.tabFile}</button>
+                      <button className={`upload-tab${activeTab==='paste'?' active':''}`} onClick={()=>setActiveTab('paste')}>{C.tabPaste}</button>
+                      <button className={`upload-tab${activeTab==='url'?' active':''}`} onClick={()=>setActiveTab('url')}>{C.tabUrl}</button>
                     </div>
+
+                    {/* TAB: FILE */}
+                    <div className={`tab-panel${activeTab==='file'?' active':''}`}>
+                      <label className="upload-btn-main">
+                        📄 {C.uploadBtn}
+                        <input type="file" onChange={handleFile} style={{display:'none'}} accept=".pdf,.docx,.txt"/>
+                      </label>
+                      <div className="upload-counter">
+                        {isEn ? `${Math.floor(Math.random()*40+60)} profiles created today` : `${Math.floor(Math.random()*40+60)} профилей создано сегодня`}
+                      </div>
+                    </div>
+
+                    {/* TAB: PASTE */}
+                    <div className={`tab-panel${activeTab==='paste'?' active':''}`} style={{width:'100%'}}>
+                      <textarea
+                        className="paste-area"
+                        value={pasteText}
+                        onChange={e=>setPasteText(e.target.value)}
+                        placeholder={C.pastePlaceholder}
+                        rows={4}
+                      />
+                      <button
+                        className="upload-btn-secondary"
+                        onClick={handlePaste}
+                        disabled={!pasteText.trim()}
+                        style={{opacity: pasteText.trim() ? 1 : 0.5, cursor: pasteText.trim() ? 'pointer' : 'not-allowed'}}
+                      >
+                        ✨ {C.pasteBtn}
+                      </button>
+                    </div>
+
+                    {/* TAB: URL */}
+                    <div className={`tab-panel${activeTab==='url'?' active':''}`} style={{width:'100%'}}>
+                      <input
+                        type="url"
+                        className="url-input"
+                        value={urlText}
+                        onChange={e=>{setUrlText(e.target.value); setUrlError('');}}
+                        placeholder={C.urlPlaceholder}
+                        onKeyDown={e=>{ if(e.key==='Enter') handleUrl(); }}
+                      />
+                      {urlError && (
+                        <div style={{fontSize:'11px',color:'#e05c5c',textAlign:'center',lineHeight:1.5}}>{urlError}</div>
+                      )}
+                      <button
+                        className="upload-btn-secondary"
+                        onClick={handleUrl}
+                        disabled={!urlText.trim()}
+                        style={{opacity: urlText.trim() ? 1 : 0.5, cursor: urlText.trim() ? 'pointer' : 'not-allowed'}}
+                      >
+                        🔗 {C.urlBtn}
+                      </button>
+                      <div className="url-hint">{C.urlHint}</div>
+                    </div>
+
                   </div>
                 </div>
               </div>
@@ -1043,19 +1160,7 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
           setClLoading(true);
           setClResult('');
           try {
-            const prompt = `You are a professional cover letter writer. Write a concise, compelling cover letter in the same language as the job description. Use the candidate's info below.
-
-Candidate:
-- Name: ${resumeData.name}
-- Title: ${resumeData.title}
-- Summary: ${resumeData.summary || ''}
-- Experience: ${(resumeData.experience||[]).map(e => `${e.p} at ${e.c} (${e.t}): ${e.d}`).join(' | ')}
-- Skills/Additional: ${(resumeData.additional||[]).map(b => b.title+': '+b.content).join(' | ')}
-
-Job Description:
-${clJobText.substring(0, 3000)}
-
-Write ONLY the cover letter text. No subject line, no meta-commentary. 3-4 paragraphs. Professional but human tone.`;
+            const prompt = `You are a professional cover letter writer. Write a concise, compelling cover letter in the same language as the job description. Use the candidate's info below.\n\nCandidate:\n- Name: ${resumeData.name}\n- Title: ${resumeData.title}\n- Summary: ${resumeData.summary || ''}\n- Experience: ${(resumeData.experience||[]).map(e => `${e.p} at ${e.c} (${e.t}): ${e.d}`).join(' | ')}\n- Skills/Additional: ${(resumeData.additional||[]).map(b => b.title+': '+b.content).join(' | ')}\n\nJob Description:\n${clJobText.substring(0, 3000)}\n\nWrite ONLY the cover letter text. No subject line, no meta-commentary. 3-4 paragraphs. Professional but human tone.`;
 
             const res = await fetch(`${WORKER_URL}/generate`, {
               method:'POST',
@@ -1096,17 +1201,7 @@ Write ONLY the cover letter text. No subject line, no meta-commentary. 3-4 parag
   )}
 </div>
 
-{/* ROAST BUTTON */}
-      <div style={{textAlign:'center',marginTop:'1.5rem'}}>
-        <button onClick={() => roastResume(resumeData, isEn)} style={{background:'transparent',border:'1.5px solid var(--border)',color:'var(--muted)',padding:'10px 24px',borderRadius:'50px',fontSize:'13px',fontWeight:'500',cursor:'pointer',fontFamily:'DM Sans,sans-serif',transition:'all .2s'}}
-          onMouseEnter={e=>{e.target.style.borderColor='var(--green)';e.target.style.color='var(--forest)'}}
-          onMouseLeave={e=>{e.target.style.borderColor='var(--border)';e.target.style.color='var(--muted)'}}>
-          🔥 {isEn ? 'Roast my resume' : 'Разнеси моё резюме'}
-        </button>
-        <div style={{fontSize:'11px',color:'var(--faint)',marginTop:'6px'}}>{isEn ? 'Honest AI feedback — no sugarcoating' : 'Честный AI фидбек без прикрас'}</div>
-      </div>
-
-      {/* PRO UPGRADE BLOCK */}
+{/* PRO UPGRADE BLOCK */}
 <div style={{background:'var(--forest)',borderRadius:'20px',padding:'28px 32px',display:'flex',alignItems:'center',justifyContent:'space-between',gap:'2rem',flexWrap:'wrap',marginTop:'2rem'}}>
   <div>
     <div style={{fontSize:'11px',fontWeight:'500',textTransform:'uppercase',letterSpacing:'.08em',color:'rgba(29,179,104,0.8)',marginBottom:'6px'}}>
@@ -1197,43 +1292,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
-
-async function roastResume(data, isEn) {
-  if (!data) return;
-  const modal = document.getElementById('roastModal');
-  const body = document.getElementById('roastBody');
-  modal.classList.add('open');
-  body.innerHTML = '<div class="roast-loading"><div class="roast-spinner"></div><div style="color:rgba(255,255,255,0.5);font-size:13px">' + (isEn ? 'Analyzing your resume...' : 'Анализируем резюме...') + '</div></div>';
-
-  const summary = [
-    data.name, data.title, data.summary,
-    (data.experience||[]).map(e=>e.p+' at '+e.c+': '+e.d).join('. '),
-    'Skills: ' + (data.hobbies||[]).join(', '),
-    'ATS Score: ' + data.atsScore + '%'
-  ].filter(Boolean).join('
-');
-
-  const prompt = isEn
-    ? `You are a brutally honest but helpful career coach. Roast this resume in 5-7 specific, witty bullet points. Be direct and sharp — point out weaknesses, clichés, and missed opportunities. End with 2-3 actionable suggestions. Keep it under 250 words. Resume data:
-${summary}`
-    : `Ты — честный карьерный коуч. Разнеси это резюме в 5-7 конкретных, острых пунктах на русском языке. Укажи слабые места, клише и упущенные возможности. Завершись 2-3 конкретными советами. Не более 250 слов. Данные резюме:
-${summary}`;
-
-  try {
-    const res = await fetch('https://resumelink-worker.aisrail.workers.dev/generate', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({prompt})
-    });
-    const json = await res.json();
-    const text = json?.candidates?.[0]?.content?.parts?.[0]?.text || (isEn ? 'Could not generate roast.' : 'Не удалось сгенерировать.');
-    body.innerHTML = '<div class="roast-content">' + text.replace(/\*\*(.*?)\*\*/g,'<b>$1</b>').replace(/\*(.*?)\*/g,'<i>$1</i>') + '</div>' +
-      '<div class="roast-cta"><div class="roast-cta-text">' + (isEn ? 'Want a better version?' : 'Хочешь улучшить резюме?') + '</div>' +
-      '<a href="/" class="roast-cta-btn">' + (isEn ? 'Upload improved resume →' : 'Загрузи улучшенное →') + '</a></div>';
-  } catch(e) {
-    body.innerHTML = '<div class="roast-content" style="color:rgba(255,255,255,0.5)">' + (isEn ? 'Error generating roast. Try again.' : 'Ошибка. Попробуй ещё раз.') + '</div>';
-  }
-}
 
 function selectTheme(theme) {
   const isPro = localStorage.getItem('rl_pro') === 'true';
