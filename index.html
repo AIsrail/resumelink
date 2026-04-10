@@ -418,9 +418,10 @@ const WORKER_URL = "https://resumelink-worker.aisrail.workers.dev";
 
 const T = {
   en: {
-    eyebrow:"AI-Powered · 2026", h1a:"Build your", h1em:"AI resume", h1b:"in", h1c:"10 seconds",
-    sub:"Upload PDF or DOCX — AI creates an interactive profile with ATS score, personal link and QR code. No Word, no templates.",
-    uploadBtn:"Upload Resume", howLink:"How it works ↓", heroNote:"PDF · DOCX · TXT · Free · No signup",
+    eyebrow:"75% OF RESUMES NEVER REACH A HUMAN — ATS FILTERS THEM OUT",
+    h1a:"Your resume as a", h1em:"shareable link", h1b:"with", h1c:"ATS Score + QR",
+    sub:"Upload file, paste text, or enter any public URL — AI builds your interactive profile in 10 seconds. Free, no signup.",
+    uploadBtn:"Choose file", howLink:"How it works ↓", heroNote:"PDF · DOCX · TXT · Paste · URL · Free · No signup",
     backBtn:"← Back", atsLabel:"ATS Score", shareLabel:"Share", downloadLabel:"PDF",
     stages:["Analyzing text…","Extracting data…","Generating blocks…","Creating QR…","Optimizing layout…","Finalizing…","Almost ready…"],
     stats:[["10s","To your live profile"],["140+","Guides & Careers"],["ATS✓","Pass HR filters"],["$0","Free to start"]],
@@ -448,9 +449,10 @@ const T = {
     previewName:"Anya Kim", previewRole:"AI Product Manager",
   },
   ru: {
-    eyebrow:"AI-Powered · 2026", h1a:"Построй своё", h1em:"AI-резюме", h1b:"за", h1c:"10 секунд",
-    sub:"Загрузи PDF или DOCX — ИИ создаст интерактивный профиль с ATS-оценкой, личной ссылкой и QR-кодом. Никакого Word, никаких шаблонов.",
-    uploadBtn:"Загрузить резюме", howLink:"Как это работает ↓", heroNote:"PDF · DOCX · TXT · Бесплатно · Без регистрации",
+    eyebrow:"75% резюме не доходят до человека — их отсеивают ATS-фильтры",
+    h1a:"Твоё резюме как", h1em:"живая ссылка", h1b:"с", h1c:"ATS Score + QR",
+    sub:"Загрузи файл, вставь текст или URL вакансии — ИИ создаст интерактивный профиль за 10 секунд. Бесплатно, без регистрации.",
+    uploadBtn:"Выбрать файл", howLink:"Как это работает ↓", heroNote:"PDF · DOCX · TXT · Текст · URL · Бесплатно · Без регистрации",
     backBtn:"← Назад", atsLabel:"ATS Score", shareLabel:"Поделиться", downloadLabel:"PDF",
     stages:["Анализируем текст…","Извлекаем данные…","Генерируем блоки…","Создаём QR-код…","Оптимизируем верстку…","Настраиваем интерактив…","Почти готово…"],
     stats:[["10с","До готового профиля"],["140+","Гайды и профессии"],["ATS✓","Проходи автофильтры HR"],["0₽","Бесплатно для старта"]],
@@ -485,6 +487,10 @@ function App() {
   const [loadingStage, setLoadingStage] = useState(0);
   const [step, setStep] = useState('setup');
   const [clOpen, setClOpen] = useState(false);
+  const [uploadTab, setUploadTab] = useState('file'); // 'file' | 'paste' | 'url'
+  const [pasteText, setPasteText] = useState('');
+  const [urlInput, setUrlInput] = useState('');
+  const [urlLoading, setUrlLoading] = useState(false);
   const [clJobText, setClJobText] = useState('');
   const [clResult, setClResult] = useState('');
   const [clLoading, setClLoading] = useState(false);
@@ -693,10 +699,85 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
               <div className="glow-wrapper">
                 <div className="glow-content">
                   <div className="upload-btn-wrap">
-                    <label className="upload-btn-main">
-                      📄 {C.uploadBtn}
-                      <input type="file" onChange={handleFile} style={{display:'none'}} accept=".pdf,.docx,.txt"/>
-                    </label>
+                    {/* Tabs */}
+                    <div style={{display:'flex',gap:'4px',background:'var(--bg)',borderRadius:'10px',padding:'4px',marginBottom:'16px',width:'100%'}}>
+                      {[
+                        {id:'file', icon:'📄', label: isEn?'Upload file':'Загрузить файл'},
+                        {id:'paste', icon:'📋', label: isEn?'Paste text':'Вставить текст'},
+                        {id:'url', icon:'🔗', label: isEn?'Enter URL':'Вставить URL'},
+                      ].map(tab => (
+                        <button key={tab.id} onClick={()=>setUploadTab(tab.id)}
+                          style={{flex:1,padding:'8px 4px',borderRadius:'7px',fontSize:'12px',fontWeight:'500',border:'none',cursor:'pointer',fontFamily:'DM Sans,sans-serif',
+                            background: uploadTab===tab.id ? 'var(--surface)' : 'transparent',
+                            color: uploadTab===tab.id ? 'var(--forest)' : 'var(--muted)',
+                            boxShadow: uploadTab===tab.id ? '0 1px 4px rgba(13,61,40,0.1)' : 'none'
+                          }}>
+                          {tab.icon} {tab.label}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Upload file tab */}
+                    {uploadTab === 'file' && (
+                      <label className="upload-btn-main">
+                        📄 {C.uploadBtn}
+                        <input type="file" onChange={handleFile} style={{display:'none'}} accept=".pdf,.docx,.txt"/>
+                      </label>
+                    )}
+
+                    {/* Paste text tab */}
+                    {uploadTab === 'paste' && (
+                      <div style={{width:'100%'}}>
+                        <textarea
+                          value={pasteText}
+                          onChange={e=>setPasteText(e.target.value)}
+                          placeholder={isEn ? 'Paste your resume text here…' : 'Вставьте текст резюме сюда…'}
+                          rows={4}
+                          style={{width:'100%',background:'var(--surface)',border:'1px solid var(--border)',borderRadius:'10px',padding:'12px',fontSize:'13px',fontFamily:'DM Sans,sans-serif',color:'var(--text)',resize:'none',boxSizing:'border-box',marginBottom:'10px'}}
+                        />
+                        <button
+                          onClick={()=>{ if(pasteText.trim().length>20){setLoading(true);setLoadingStage(0);processAI(pasteText);} }}
+                          disabled={pasteText.trim().length<20}
+                          className="upload-btn-main"
+                          style={{width:'100%',justifyContent:'center',opacity:pasteText.trim().length<20?0.5:1}}>
+                          ✨ {isEn ? 'Build profile' : 'Создать профиль'}
+                        </button>
+                      </div>
+                    )}
+
+                    {/* URL tab */}
+                    {uploadTab === 'url' && (
+                      <div style={{width:'100%'}}>
+                        <input
+                          type="url"
+                          value={urlInput}
+                          onChange={e=>setUrlInput(e.target.value)}
+                          placeholder={isEn ? 'https://linkedin.com/in/yourname' : 'https://hh.ru/resume/...'}
+                          style={{width:'100%',background:'var(--surface)',border:'1px solid var(--border)',borderRadius:'10px',padding:'12px',fontSize:'13px',fontFamily:'DM Sans,sans-serif',color:'var(--text)',boxSizing:'border-box',marginBottom:'10px'}}
+                        />
+                        <button
+                          onClick={async ()=>{
+                            if(!urlInput.trim()) return;
+                            setUrlLoading(true);
+                            try {
+                              const res = await fetch(`${WORKER_URL}/fetch-url`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:urlInput.trim()})});
+                              const data = await res.json();
+                              if(data.text && data.text.length>20){ setLoading(true); setLoadingStage(0); processAI(data.text); }
+                              else { alert(isEn?'Could not extract text from this URL':'Не удалось извлечь текст по этой ссылке'); }
+                            } catch(e){ alert(isEn?'Error fetching URL':'Ошибка загрузки URL'); }
+                            setUrlLoading(false);
+                          }}
+                          disabled={urlLoading||!urlInput.trim()}
+                          className="upload-btn-main"
+                          style={{width:'100%',justifyContent:'center',opacity:!urlInput.trim()?0.5:1}}>
+                          {urlLoading
+                            ? <><span style={{display:'inline-block',width:'14px',height:'14px',border:'2px solid rgba(255,255,255,0.3)',borderTop:'2px solid #fff',borderRadius:'50%',animation:'spin 1s linear infinite'}}></span>{isEn?'Loading…':'Загружаем…'}</>
+                            : <>{isEn ? '🔗 Build from URL' : '🔗 Создать по URL'}</>
+                          }
+                        </button>
+                      </div>
+                    )}
+
                     <div className="upload-counter">
                       {isEn ? `${Math.floor(Math.random()*40+60)} profiles created today` : `${Math.floor(Math.random()*40+60)} профилей создано сегодня`}
                     </div>
