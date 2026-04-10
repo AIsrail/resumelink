@@ -517,6 +517,37 @@ function App() {
     if (savedEmail && !isPro) checkProByEmail(savedEmail);
   }, []);
 
+  // ── Resume Roast (внутри React, чтобы был виден компоненту) ──
+  const roastResume = async (data, en) => {
+    if (!data) return;
+    const modal = document.getElementById('roastModal');
+    const body = document.getElementById('roastBody');
+    modal.classList.add('open');
+    body.innerHTML = '<div class="roast-loading"><div class="roast-spinner"></div><div style="color:rgba(255,255,255,0.5);font-size:13px">' + (en ? 'Analyzing your resume...' : 'Анализируем резюме...') + '</div></div>';
+    const summary = [
+      data.name, data.title, data.summary,
+      (data.experience||[]).map(e=>e.p+' at '+e.c+': '+e.d).join('. '),
+      'ATS Score: ' + data.atsScore + '%'
+    ].filter(Boolean).join('\n');
+    const prompt = en
+      ? `You are a brutally honest career coach. Roast this resume in 5-7 witty bullet points. Point out weaknesses and missed opportunities. End with 2-3 actionable suggestions. Under 250 words.\nResume:\n${summary}`
+      : `Ты честный карьерный коуч. Разнеси это резюме в 5-7 острых пунктах на русском. Укажи слабые места и упущенные возможности. Завершись 2-3 советами. Не более 250 слов.\nДанные:\n${summary}`;
+    try {
+      const res = await fetch(`${WORKER_URL}/generate`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({prompt})
+      });
+      const json = await res.json();
+      const text = json?.candidates?.[0]?.content?.parts?.[0]?.text || (en ? 'Could not generate.' : 'Не удалось сгенерировать.');
+      body.innerHTML = '<div class="roast-content">' + text.replace(/\*\*(.*?)\*\*/g,'<b>$1</b>').replace(/\*(.*?)\*/g,'<i>$1</i>') + '</div>' +
+        '<div class="roast-cta"><div class="roast-cta-text">' + (en ? 'Want a better version?' : 'Хочешь улучшить резюме?') + '</div>' +
+        '<a href="/" class="roast-cta-btn">' + (en ? 'Upload improved resume' : 'Загрузи улучшенное') + '</a></div>';
+    } catch(e) {
+      body.innerHTML = '<div class="roast-content" style="color:rgba(255,255,255,0.5)">' + (en ? 'Error. Try again.' : 'Ошибка. Попробуй ещё раз.') + '</div>';
+    }
+  };
+
   const isEn = navigator.language.startsWith('en');
   const C = isEn ? T.en : T.ru;
 
@@ -574,8 +605,8 @@ function App() {
 Task: Create a professional interactive profile.
 MANDATORY FOR NAME: If English — "First Last" only. If Russian — keep full name.
 MANDATORY FOR BLOCKS: Generate additional blocks only if info exists.
-MANDATORY FOR atsTips: Return 3-5 specific keywords/skills MISSING from the resume that would improve ATS score (e.g. ["React", "Agile", "AWS"]). Real relevant terms for this person's field only.
-MANDATORY FOR atsWeaknesses: Return 1-2 short actionable tips in the resume's language (e.g. ["Add measurable results to experience"]).
+MANDATORY FOR atsTips: Return 3-5 specific keywords/skills MISSING from the resume that would improve ATS score (e.g. ["React", "Agile", "AWS"]). Real relevant terms for this persons field only.
+MANDATORY FOR atsWeaknesses: Return 1-2 short actionable tips in the resume language (e.g. ["Add measurable results to experience"]).
 JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","languages":"","hobbies":"","links":""},"name":"","title":"","contacts":{"p":"","e":"","l":""},"socials":{"li":"","gh":"","tg":""},"summary":"","atsScore":85,"atsTips":[],"atsWeaknesses":[],"experience":[{"c":"","p":"","t":"","d":""}],"education":[{"s":"","d":"","y":""}],"languages":[],"hobbies":[],"additional":[{"title":"","content":""}]}`;
       const r = await fetch(`${WORKER_URL}/generate`, {
         method:'POST', headers:{'Content-Type':'application/json'},
@@ -1263,43 +1294,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
-
-async function roastResume(data, isEn) {
-  if (!data) return;
-  const modal = document.getElementById('roastModal');
-  const body = document.getElementById('roastBody');
-  modal.classList.add('open');
-  body.innerHTML = '<div class="roast-loading"><div class="roast-spinner"></div><div style="color:rgba(255,255,255,0.5);font-size:13px">' + (isEn ? 'Analyzing your resume...' : 'Анализируем резюме...') + '</div></div>';
-
-  const summary = [
-    data.name, data.title, data.summary,
-    (data.experience||[]).map(e=>e.p+' at '+e.c+': '+e.d).join('. '),
-    'Skills: ' + (data.hobbies||[]).join(', '),
-    'ATS Score: ' + data.atsScore + '%'
-  ].filter(Boolean).join('
-');
-
-  const prompt = isEn
-    ? `You are a brutally honest but helpful career coach. Roast this resume in 5-7 specific, witty bullet points. Be direct and sharp — point out weaknesses, clichés, and missed opportunities. End with 2-3 actionable suggestions. Keep it under 250 words. Resume data:
-${summary}`
-    : `Ты — честный карьерный коуч. Разнеси это резюме в 5-7 конкретных, острых пунктах на русском языке. Укажи слабые места, клише и упущенные возможности. Завершись 2-3 конкретными советами. Не более 250 слов. Данные резюме:
-${summary}`;
-
-  try {
-    const res = await fetch('https://resumelink-worker.aisrail.workers.dev/generate', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({prompt})
-    });
-    const json = await res.json();
-    const text = json?.candidates?.[0]?.content?.parts?.[0]?.text || (isEn ? 'Could not generate roast.' : 'Не удалось сгенерировать.');
-    body.innerHTML = '<div class="roast-content">' + text.replace(/\*\*(.*?)\*\*/g,'<b>$1</b>').replace(/\*(.*?)\*/g,'<i>$1</i>') + '</div>' +
-      '<div class="roast-cta"><div class="roast-cta-text">' + (isEn ? 'Want a better version?' : 'Хочешь улучшить резюме?') + '</div>' +
-      '<a href="/" class="roast-cta-btn">' + (isEn ? 'Upload improved resume →' : 'Загрузи улучшенное →') + '</a></div>';
-  } catch(e) {
-    body.innerHTML = '<div class="roast-content" style="color:rgba(255,255,255,0.5)">' + (isEn ? 'Error generating roast. Try again.' : 'Ошибка. Попробуй ещё раз.') + '</div>';
-  }
-}
 
 function selectTheme(theme) {
   const isPro = localStorage.getItem('rl_pro') === 'true';
