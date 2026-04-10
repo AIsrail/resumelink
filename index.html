@@ -487,7 +487,8 @@ function App() {
   const [loadingStage, setLoadingStage] = useState(0);
   const [step, setStep] = useState('setup');
   const [clOpen, setClOpen] = useState(false);
-  const [uploadTab, setUploadTab] = useState('file'); // 'file' | 'paste' | 'url'
+  const [uploadTab, setUploadTab] = useState('file');
+  const [viewCount, setViewCount] = useState(null); // 'file' | 'paste' | 'url'
   const [pasteText, setPasteText] = useState('');
   const [urlInput, setUrlInput] = useState('');
   const [urlLoading, setUrlLoading] = useState(false);
@@ -582,6 +583,12 @@ function App() {
         setResumeData(data);
         if (window.__RL_SET_RESUME_DATA__) window.__RL_SET_RESUME_DATA__(data);
         setStep('result'); setLoading(false);
+        // Track view and get count
+        fetch(`${WORKER_URL}/view`, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ id })
+        }).then(r => r.json()).then(d => { if (d.views) setViewCount(d.views); }).catch(()=>{});
       })
       .catch(() => setLoading(false));
   }, []);
@@ -966,9 +973,17 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
     <div className="result-wrap">
       <div className="result-topbar">
         <a href="/" className="result-logo">Resume<span>Link</span></a>
-        <button className="back-btn" onClick={() => { window.history.pushState({},'',location.pathname); setStep('setup'); setResumeData(null); }}>
-          {C.backBtn}
-        </button>
+        <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
+          {viewCount && (
+            <div style={{display:'inline-flex',alignItems:'center',gap:'6px',background:'var(--mint)',border:'0.5px solid var(--border)',borderRadius:'20px',padding:'5px 12px',fontSize:'12px',color:'var(--green-dk)',fontWeight:'500'}}>
+              <span style={{width:'6px',height:'6px',background:'var(--green)',borderRadius:'50%',display:'inline-block'}}></span>
+              {isEn ? `${viewCount} views` : `${viewCount} просмотров`}
+            </div>
+          )}
+          <button className="back-btn" onClick={() => { window.history.pushState({},'',location.pathname); setStep('setup'); setResumeData(null); }}>
+            {C.backBtn}
+          </button>
+        </div>
       </div>
       <div className="rl-grid">
         <div className="card card-hero">
