@@ -62,6 +62,8 @@
         .btn-free:hover{background:var(--border)}
         .btn-pro{background:var(--green);color:#fff}
         .btn-pro:hover{background:var(--green-dk);transform:translateY(-1px)}
+        /* Lifetime hint under Pro button */
+        .lifetime-hint{font-size:11px;color:rgba(255,255,255,0.4);text-align:center;margin-top:10px}
         .faq-label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);margin-bottom:16px}
         .faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:2rem}
         .faq-item{background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:18px 20px}
@@ -110,8 +112,8 @@
 <div class="page-wrap">
     <div class="pricing-hero">
         <div class="pricing-eyebrow" id="eyebrow">Simple pricing</div>
-        <h1 class="pricing-h1" id="hero-title">Start free.<br>Upgrade when <em>ready.</em></h1>
-        <p class="pricing-sub" id="hero-sub">No hidden fees. Cancel anytime.</p>
+        <h1 class="pricing-h1" id="hero-title">Start free.<br>Own it <em>forever.</em></h1>
+        <p class="pricing-sub" id="hero-sub">No subscriptions. No monthly fees. Pay once, yours for life.</p>
     </div>
     <div class="plans-grid" id="plansGrid"></div>
     <div class="faq-label" id="faq-label">Frequently asked questions</div>
@@ -133,7 +135,7 @@
     <div class="footer-copy">© 2026 ResumeLink</div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // Auto-activate Pro if coming from Lemon Squeezy redirect
 const urlParams = new URLSearchParams(window.location.search);
 if (urlParams.get('pro') === 'activated') {
@@ -146,13 +148,13 @@ const isEn = navigator.language.startsWith('en');
 const T = {
     en: {
         eyebrow: 'Simple pricing',
-        heroTitle: 'Start free.<br>Upgrade when <em>ready.</em>',
-        heroSub: 'No hidden fees. Cancel anytime.',
+        heroTitle: 'Start free.<br>Own it <em>forever.</em>',
+        heroSub: 'No subscriptions. No monthly fees. Pay once, yours for life.',
         navExplore:'Explore', navAbout:'About', navPricing:'Pricing',
         navContact:'Contact', navUpload:'Upload →',
         footerAbout:'About', footerPolicy:'Privacy & Terms', footerPricing:'Pricing',
         faqLabel: 'Frequently asked questions',
-        popular: 'Most Popular',
+        popular: 'Best Value',
         kofi: {
             title: 'Like what we\'re building?',
             sub: 'Buy us a coffee — it helps keep ResumeLink free for everyone.',
@@ -162,7 +164,7 @@ const T = {
             {
                 badge:'Free', name:'Starter',
                 price:'$0', per:'/ forever',
-                desc:'Everything you need to get started.',
+                desc:'Everything you need to get started. No credit card required.',
                 btn:'Get Started Free', btnClass:'btn-free', btnHref:'/',
                 features:[
                     {ok:true,  text:'Up to 3 AI-generated profiles'},
@@ -175,37 +177,39 @@ const T = {
                 ]
             },
             {
-                badge:'Pro', name:'Professional', featured:true, popular:true,
-                price:'$5', per:'/ month',
-                desc:'For professionals who want to stand out and own their brand.',
-                btn:'Upgrade to Pro →', btnClass:'btn-pro',
+                badge:'Pro', name:'Lifetime', featured:true, popular:true,
+                price:'$9', per:'/ once',
+                desc:'Pay once. Use forever. No renewals, no surprises.',
+                btn:'Get Pro — $9 forever', btnClass:'btn-pro',
                 btnHref:'https://resumelink.lemonsqueezy.com/checkout/buy/1b9011cf-d233-43ce-afa6-f817201f24a6?redirect_url=https://resumelink.cc/pricing.html?pro=activated',
+                lifetimeHint:'One-time payment · No subscription',
                 features:[
                     {ok:true, text:'Up to 50 AI-generated profiles'},
                     {ok:true, text:'No watermark on PDF'},
                     {ok:true, text:'Custom link: resumelink.cc/yourname'},
-                    {ok:true, text:'Detailed ATS breakdown'},
+                    {ok:true, text:'Detailed ATS breakdown with tips'},
                     {ok:true, text:'3 PDF color themes'},
                     {ok:true, text:'Priority AI processing'},
+                    {ok:true, text:'All future Pro features included'},
                 ]
             }
         ],
         faqs:[
-            {q:'Can I cancel anytime?', a:'Yes, absolutely. Cancel your subscription at any time from your Lemon Squeezy account. No questions asked.'},
-            {q:'What happens to my profiles if I cancel?', a:'Your profiles stay accessible via their links. You just lose Pro features like the custom URL and watermark removal.'},
-            {q:'How does the custom link work?', a:'After upgrading, email us at info@resumelink.cc with your desired slug and we\'ll set it up within 24 hours.'},
+            {q:'Is this really a one-time payment?', a:'Yes. $9 once, yours forever. No monthly charges, no renewals. If you pay today, you have Pro for as long as ResumeLink exists.'},
+            {q:'What happens to my profiles if I stop using it?', a:'Nothing — your profiles and their links stay live. Your custom URL keeps working. Pro is permanent once activated.'},
+            {q:'How does the custom link work?', a:'After purchasing, email us at info@resumelink.cc with your desired slug and we\'ll set it up within 24 hours.'},
             {q:'Is my resume data safe?', a:'Yes. Files are processed in your browser. We don\'t store your uploaded PDFs on our servers.'},
         ]
     },
     ru: {
         eyebrow: 'Простые тарифы',
-        heroTitle: 'Начни бесплатно.<br>Улучши когда <em>будешь готов.</em>',
-        heroSub: 'Никаких скрытых платежей. Отмена в любой момент.',
+        heroTitle: 'Начни бесплатно.<br>Владей <em>навсегда.</em>',
+        heroSub: 'Никаких подписок и ежемесячных платежей. Один раз — навсегда.',
         navExplore:'Explore', navAbout:'О сервисе', navPricing:'Тарифы',
         navContact:'Контакт', navUpload:'Загрузить →',
         footerAbout:'О сервисе', footerPolicy:'Политика', footerPricing:'Тарифы',
         faqLabel: 'Часто задаваемые вопросы',
-        popular: 'Популярный',
+        popular: 'Лучший выбор',
         kofi: {
             title: 'Нравится что мы делаем?',
             sub: 'Угости нас кофе — это помогает держать ResumeLink бесплатным для всех.',
@@ -215,7 +219,7 @@ const T = {
             {
                 badge:'Бесплатно', name:'Старт',
                 price:'$0', per:'/ навсегда',
-                desc:'Всё что нужно для начала.',
+                desc:'Всё что нужно для начала. Без карты.',
                 btn:'Начать бесплатно', btnClass:'btn-free', btnHref:'/',
                 features:[
                     {ok:true,  text:'До 3 AI-профилей (резюме)'},
@@ -228,24 +232,26 @@ const T = {
                 ]
             },
             {
-                badge:'Pro', name:'Профессионал', featured:true, popular:true,
-                price:'$5', per:'/ мес',
-                desc:'Для профессионалов, которые хотят выделиться.',
-                btn:'Улучшить до Pro →', btnClass:'btn-pro',
+                badge:'Pro', name:'Навсегда', featured:true, popular:true,
+                price:'$9', per:'/ раз',
+                desc:'Один платёж. Пользуйся вечно. Никаких продлений.',
+                btn:'Купить Pro — $9 навсегда', btnClass:'btn-pro',
                 btnHref:'https://resumelink.lemonsqueezy.com/checkout/buy/1b9011cf-d233-43ce-afa6-f817201f24a6?redirect_url=https://resumelink.cc/pricing.html?pro=activated',
+                lifetimeHint:'Единоразовый платёж · Без подписки',
                 features:[
                     {ok:true, text:'До 50 AI-профилей (резюме)'},
                     {ok:true, text:'Без watermark в PDF'},
                     {ok:true, text:'Именная ссылка: resumelink.cc/yourname'},
-                    {ok:true, text:'Детальный ATS анализ'},
+                    {ok:true, text:'Детальный ATS с конкретными советами'},
                     {ok:true, text:'3 цветовые темы PDF'},
                     {ok:true, text:'Приоритетная AI обработка'},
+                    {ok:true, text:'Все будущие Pro функции включены'},
                 ]
             }
         ],
         faqs:[
-            {q:'Можно отменить в любое время?', a:'Да. Отмени подписку в любой момент через Lemon Squeezy. Без вопросов.'},
-            {q:'Что будет с профилями после отмены?', a:'Профили остаются доступными по ссылкам. Ты просто теряешь Pro функции — именную ссылку и убранный watermark.'},
+            {q:'Это правда разовый платёж?', a:'Да. $9 один раз — навсегда. Никаких ежемесячных списаний. Заплатил сегодня — Pro у тебя пока существует ResumeLink.'},
+            {q:'Что будет с профилями?', a:'Ничего — профили и ссылки остаются активными. Именная ссылка продолжает работать. Pro не отключается.'},
             {q:'Как работает именная ссылка?', a:'После покупки напиши на info@resumelink.cc с желаемым слагом — настроим в течение 24 часов.'},
             {q:'Мои данные в безопасности?', a:'Да. Файлы обрабатываются в браузере. Мы не храним загруженные PDF на серверах.'},
         ]
@@ -292,6 +298,7 @@ document.getElementById('plansGrid').innerHTML = C.plans.map(plan => `
             `).join('')}
         </ul>
         <a href="${plan.btnHref}" class="plan-btn ${plan.btnClass}" ${plan.btnHref.startsWith('http') ? 'target="_blank"' : ''}>${plan.btn}</a>
+        ${plan.lifetimeHint ? `<div class="lifetime-hint">${plan.lifetimeHint}</div>` : ''}
     </div>
 `).join('');
 
@@ -305,5 +312,10 @@ document.getElementById('faqGrid').innerHTML = C.faqs.map(f => `
 
 // Ko-fi block
 document.getElementById('kofi-block').innerHTML = `
-    <div style="font-size:28px;margin-bottom:10px">☕</div>
-    <div style="font-size:16px;font-weight:500;color:var(--forest
+    <p style="font-size:13px;color:var(--muted);margin-bottom:4px;font-weight:500">${C.kofi.title}</p>
+    <p style="font-size:12px;color:var(--faint);margin-bottom:16px">${C.kofi.sub}</p>
+    <a href="https://ko-fi.com/resumelink" target="_blank" class="kofi-btn">${C.kofi.btn}</a>
+`;
+</script>
+</body>
+</html>
