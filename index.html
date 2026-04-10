@@ -493,6 +493,29 @@ function App() {
   const [jobsLoading, setJobsLoading] = useState(false);
   const [jobsLoaded, setJobsLoaded] = useState(false);
   const isPro = localStorage.getItem('rl_pro') === 'true';
+	// ── Проверка Pro по email (активация после оплаты) ──
+  const checkProByEmail = async (email) => {
+    try {
+      const res = await fetch(`${WORKER_URL}/check-pro`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const data = await res.json();
+      if (data.pro) {
+        localStorage.setItem('rl_pro', 'true');
+        localStorage.setItem('rl_pro_email', email);
+        return true;
+      }
+    } catch(e) { console.error(e); }
+    return false;
+  };
+
+  // При старте — если есть сохранённый email, проверяем актуальность
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('rl_pro_email');
+    if (savedEmail && !isPro) checkProByEmail(savedEmail);
+  }, []);
 
   const isEn = navigator.language.startsWith('en');
   const C = isEn ? T.en : T.ru;
@@ -1153,6 +1176,20 @@ Write ONLY the cover letter text. No subject line, no meta-commentary. 3-4 parag
      style={{background:'var(--green)',color:'#fff',padding:'13px 28px',borderRadius:'10px',fontSize:'14px',fontWeight:'500',textDecoration:'none',whiteSpace:'nowrap',flexShrink:0,display:'inline-block'}}>
     {isEn ? 'Get Pro → $9 forever' : 'Купить Pro → $9 навсегда'}
   </a>
+	<div style={{fontSize:'11px',color:'rgba(255,255,255,0.35)',marginTop:'12px',textAlign:'center'}}>
+  {isEn ? 'Already paid?' : 'Уже оплатил?'}{' '}
+  <span
+    style={{color:'var(--green)',cursor:'pointer',textDecoration:'underline'}}
+    onClick={async () => {
+      const email = prompt(isEn ? 'Enter your payment email:' : 'Введи email с которого оплатил:');
+      if (!email) return;
+      const ok = await checkProByEmail(email);
+      if (ok) { alert(isEn ? '✓ Pro activated!' : '✓ Pro активирован!'); window.location.reload(); }
+      else { alert(isEn ? 'Email not found. Check spelling or contact info@resumelink.cc' : 'Email не найден. Проверь написание или напиши на info@resumelink.cc'); }
+    }}>
+    {isEn ? 'Activate Pro' : 'Активировать Pro'}
+  </span>
+</div>
 </div>
       
       <footer className="site-footer" style={{marginTop:'3rem'}}>
