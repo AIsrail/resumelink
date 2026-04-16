@@ -6,8 +6,8 @@
     <title>ResumeLink — AI Resume Builder | AI конструктор резюме</title>
     <meta name="description" content="AI-powered interactive resume builder. Умный AI конструктор резюме: преврати файл в стильный профиль с QR-кодом за 10 секунд.">
     <meta name="keywords" content="AI resume builder, AI конструктор резюме, интерактивное резюме, ATS score, digital CV">
-    <meta property="og:title" content="ResumeLink — AI-Powered Interactive Profiles">
-    <meta property="og:description" content="Transform your resume into a stylish digital profile. AI конструктор резюме нового поколения.">
+    <meta property="og:title" content="ResumeLink — Stop Sending Resumes. Start Sharing Profiles.">
+    <meta property="og:description" content="Stop sending resumes. Start sharing profiles. AI builds your personal career profile with ATS score, shareable link and QR in 10 seconds. Works in 50+ languages.">
     <meta property="og:image" content="https://resumelink.cc/ogimage.png">
     <meta property="og:url" content="https://resumelink.cc">
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"ResumeLink","description":"AI tool to transform PDF resumes into interactive profiles","applicationCategory":"BusinessApplication","offers":{"@type":"Offer","price":"0"}}</script>
@@ -419,12 +419,12 @@ const WORKER_URL = "https://resumelink-worker.aisrail.workers.dev";
 const T = {
   en: {
     eyebrow:"75% OF RESUMES NEVER REACH A HUMAN — ATS FILTERS THEM OUT",
-    h1a:"Your resume as a", h1em:"shareable link", h1b:"with", h1c:"ATS Score + QR",
-    sub:"Upload file, paste text, or enter any public URL — AI builds your interactive profile in 10 seconds. Free, no signup.",
-    uploadBtn:"Choose file", howLink:"How it works ↓", heroNote:"PDF · DOCX · TXT · Paste · URL · Free · No signup",
+    h1a:"Stop sending resumes.", h1em:"Start sharing", h1b:"", h1c:"profiles.",
+    sub:"Upload your resume — AI builds your personal career profile with ATS score, shareable link and QR code in 10 seconds. Works in any language. Free, no signup.",
+    uploadBtn:"Choose file", howLink:"How it works ↓", heroNote:"PDF · DOCX · TXT · 50+ Languages · Free · No signup",
     backBtn:"← Back", atsLabel:"ATS Score", shareLabel:"Share", downloadLabel:"PDF",
     stages:["Analyzing text…","Extracting data…","Generating blocks…","Creating QR…","Optimizing layout…","Finalizing…","Almost ready…"],
-    stats:[["10s","To your live profile"],["140+","Guides & Careers"],["ATS✓","Pass HR filters"],["$0","Free to start"]],
+    stats:[["10s","To your live profile"],["50+","Languages supported"],["ATS✓","Pass HR filters"],["$0","Free to start"]],
     featLabel:"Features", featH1:"Everything you need,", featH2:"nothing extra",
     featSub:"ResumeLink is not just a file converter. It's a full platform for your professional presence.",
     feats:[
@@ -433,7 +433,7 @@ const T = {
       {i:"📊",t:"ATS Score",d:"Instant match score for any vacancy. Understand why your resume passes or fails automated filters."},
       {i:"📱",t:"Mobile-first design",d:"Perfect on any device — recruiter opens it on phone, laptop, or tablet without quality loss."},
       {i:"🖨️",t:"Download PDF",d:"Need a classic document? One click — a beautifully formatted PDF ready for HR."},
-      {i:"🌍",t:"Multilingual",d:"Service auto-detects the resume language. More languages coming soon."}
+      {i:"🌍",t:"Works in any language",d:"AI auto-detects your resume language — English, Russian, German, Arabic, Chinese and 50+ more. Your profile is generated in the same language automatically."}
     ],
     howLabel:"How it works", howH1:"Three steps", howH2:"to a live profile",
     howSub:"No signup, no settings. Just file → result.",
@@ -450,12 +450,12 @@ const T = {
   },
   ru: {
     eyebrow:"75% резюме не доходят до человека — их отсеивают ATS-фильтры",
-    h1a:"Твоё резюме как", h1em:"живая ссылка", h1b:"с", h1c:"ATS Score + QR",
-    sub:"Загрузи файл, вставь текст или URL вакансии — ИИ создаст интерактивный профиль за 10 секунд. Бесплатно, без регистрации.",
-    uploadBtn:"Выбрать файл", howLink:"Как это работает ↓", heroNote:"PDF · DOCX · TXT · Текст · URL · Бесплатно · Без регистрации",
+    h1a:"Хватит слать резюме.", h1em:"Начни делиться", h1b:"", h1c:"профилями.",
+    sub:"Загрузи резюме — ИИ создаст твой персональный карьерный профиль с ATS Score, ссылкой и QR-кодом за 10 секунд. Работает на любом языке. Бесплатно, без регистрации.",
+    uploadBtn:"Выбрать файл", howLink:"Как это работает ↓", heroNote:"PDF · DOCX · TXT · 50+ языков · Бесплатно · Без регистрации",
     backBtn:"← Назад", atsLabel:"ATS Score", shareLabel:"Поделиться", downloadLabel:"PDF",
     stages:["Анализируем текст…","Извлекаем данные…","Генерируем блоки…","Создаём QR-код…","Оптимизируем верстку…","Настраиваем интерактив…","Почти готово…"],
-    stats:[["10с","До готового профиля"],["140+","Гайды и профессии"],["ATS✓","Проходи автофильтры HR"],["0₽","Бесплатно для старта"]],
+    stats:[["10с","До готового профиля"],["50+","Языков поддерживается"],["ATS✓","Проходи автофильтры HR"],["0₽","Бесплатно для старта"]],
     featLabel:"Возможности", featH1:"Всё что нужно,", featH2:"ничего лишнего",
     featSub:"ResumeLink — не просто конвертер файлов. Это полноценная платформа для вашего профессионального присутствия.",
     feats:[
@@ -464,7 +464,7 @@ const T = {
       {i:"📊",t:"ATS Score",d:"Мгновенная оценка соответствия вакансии. Понимайте, почему ваше резюме проходит или не проходит фильтры."},
       {i:"📱",t:"Mobile-first дизайн",d:"Профиль отлично выглядит на любом устройстве — рекрутер открывает его с телефона, ноутбука или планшета."},
       {i:"🖨️",t:"Скачать PDF",d:"Нужен классический документ? Один клик — готовый, красиво свёрстанный PDF для HR-отдела."},
-      {i:"🌍",t:"Мультиязычность",d:"Сервис автоматически определяет язык резюме. Скоро подключатся новые языки."}
+      {i:"🌍",t:"Работает на любом языке",d:"ИИ автоматически определяет язык резюме — русский, английский, немецкий, арабский, китайский и 50+ других. Профиль генерируется на том же языке."}
     ],
     howLabel:"Как это работает", howH1:"Три шага", howH2:"до живого профиля",
     howSub:"Никакой регистрации, никаких настроек. Просто файл → результат.",
@@ -488,7 +488,8 @@ function App() {
   const [step, setStep] = useState('setup');
   const [clOpen, setClOpen] = useState(false);
   const [uploadTab, setUploadTab] = useState('file');
-  const [viewCount, setViewCount] = useState(null); // 'file' | 'paste' | 'url'
+  const [viewCount, setViewCount] = useState(null);
+  const [profileCount, setProfileCount] = useState(null);
   const [pasteText, setPasteText] = useState('');
   const [urlInput, setUrlInput] = useState('');
   const [urlLoading, setUrlLoading] = useState(false);
@@ -600,6 +601,12 @@ function App() {
     return () => clearInterval(iv);
   }, [loading]);
 
+  useEffect(() => {
+    fetch(WORKER_URL + '/count').then(r => r.json()).then(d => {
+      if (d.count) setProfileCount(d.count);
+    }).catch(() => {});
+  }, []);
+
   const autoPublish = async (data) => {
     try {
       const r = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) });
@@ -694,7 +701,11 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
       <section id="hero">
         <div>
           <div className="hero-eyebrow">{C.eyebrow}</div>
-          <h1>{C.h1a}<br/><em>{C.h1em}</em><br/>{C.h1b} <b>{C.h1c}</b></h1>
+          <div style={{display:"flex",gap:"8px",marginBottom:"12px",flexWrap:"wrap"}}>
+            <span style={{display:"inline-flex",alignItems:"center",gap:"4px",fontSize:"11px",fontWeight:"500",color:"var(--green-dk)",background:"var(--mint)",border:"0.5px solid var(--border)",padding:"3px 10px",borderRadius:"20px"}}>🌍 {isEn ? "Works in 50+ languages" : "Работает на 50+ языках"}</span>
+            <span style={{display:"inline-flex",alignItems:"center",gap:"4px",fontSize:"11px",fontWeight:"500",color:"var(--muted)",background:"var(--surface)",border:"0.5px solid var(--border)",padding:"3px 10px",borderRadius:"20px"}}>⚡ {isEn ? "10 seconds to your profile" : "10 секунд до профиля"}</span>
+          </div>
+          <h1>{C.h1a}<br/><em>{C.h1em}</em> <b>{C.h1c}</b></h1>
           <p className="hero-sub">{C.sub}</p>
           <div className="hero-actions">
             {loading ? (
@@ -854,6 +865,12 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
               <div className="stat-l">{l}</div>
             </div>
           ))}
+          {profileCount && (
+            <div className="stat-item">
+              <div className="stat-n"><em>{profileCount.toLocaleString()}+</em></div>
+              <div className="stat-l">{isEn ? 'Profiles created' : 'Профилей создано'}</div>
+            </div>
+          )}
         </div>
       </div>
 
