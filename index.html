@@ -209,7 +209,113 @@
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
         /* RESULT GRID */
-        .result-wrap { max-width: 1200px; margin: 0 auto; padding: 1.5rem clamp(1rem,3vw,2rem) 3rem; }
+        /* ── RESULT VIEW — WOW REDESIGN ── */
+        .result-wrap { max-width: 1200px; margin: 0 auto; padding: 1.5rem clamp(1rem,3vw,2rem) 4rem; }
+
+        /* Sticky mini header on scroll */
+        .sticky-header { position: fixed; top: 0; left: 0; right: 0; z-index: 500; background: rgba(242,250,246,0.96); backdrop-filter: blur(16px); border-bottom: 0.5px solid var(--border); padding: 10px clamp(1rem,3vw,2rem); display: none; align-items: center; justify-content: space-between; transition: opacity .3s; box-shadow: 0 2px 20px rgba(13,61,40,0.06); }
+        .sticky-header.visible { display: flex; }
+        .sticky-name { font-size: 15px; font-weight: 500; color: var(--forest); letter-spacing: -0.02em; }
+        .sticky-role { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+        .sticky-share { background: var(--green); color: #fff; border: none; padding: 7px 16px; border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+
+        .result-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .result-logo { font-size: 20px; font-weight: 500; color: var(--forest); letter-spacing: -0.03em; text-decoration: none; }
+        .result-logo span { color: var(--green); }
+        .back-btn { font-size: 11px; font-weight: 500; color: var(--muted); border: 0.5px solid var(--border); padding: 7px 16px; border-radius: 20px; background: none; cursor: pointer; transition: border-color .2s, color .2s; font-family: 'DM Sans', sans-serif; }
+        .back-btn:hover { border-color: var(--green); color: var(--forest); }
+
+        /* Grid */
+        .rl-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; grid-auto-rows: min-content; }
+
+        /* Cards — floating effect */
+        .card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 24px; padding: 22px; transition: border-color .3s, transform .3s, box-shadow .3s; word-break: break-word; box-shadow: 0 2px 12px rgba(13,61,40,0.04), 0 1px 3px rgba(13,61,40,0.03); animation: cardIn .5s ease both; }
+        .card:hover { border-color: rgba(29,179,104,0.4); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(13,61,40,0.10), 0 2px 8px rgba(29,179,104,0.08); }
+        @keyframes cardIn { from { opacity:0; transform: translateY(16px); } to { opacity:1; transform: translateY(0); } }
+        .card:nth-child(1) { animation-delay: .05s; }
+        .card:nth-child(2) { animation-delay: .10s; }
+        .card:nth-child(3) { animation-delay: .15s; }
+        .card:nth-child(4) { animation-delay: .20s; }
+        .card:nth-child(5) { animation-delay: .25s; }
+        .card:nth-child(6) { animation-delay: .30s; }
+        .card:nth-child(7) { animation-delay: .35s; }
+        .card:nth-child(8) { animation-delay: .40s; }
+
+        .card-label { font-size: 9px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); margin-bottom: 14px; }
+
+        /* Hero card */
+        .card-hero { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; padding: 32px 36px; background: linear-gradient(135deg, #fff 60%, var(--mint) 100%); border-color: var(--border); }
+        .resume-name { font-size: clamp(2.2rem,4.5vw,3.4rem); font-weight: 300; color: var(--forest); letter-spacing: -0.035em; line-height: 1.05; outline: none; }
+        .resume-name:focus { background: var(--mint); border-radius: 6px; padding: 2px 8px; }
+        .resume-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; color: var(--green); margin-top: 10px; }
+
+        /* ATS Score ring */
+        .ats-block { text-align: center; flex-shrink: 0; }
+        .ats-ring { position: relative; width: 80px; height: 80px; margin: 0 auto 6px; }
+        .ats-ring svg { transform: rotate(-90deg); }
+        .ats-ring-bg { fill: none; stroke: var(--border); stroke-width: 5; }
+        .ats-ring-fill { fill: none; stroke: var(--green); stroke-width: 5; stroke-linecap: round; transition: stroke-dashoffset 1.5s ease; }
+        .ats-ring-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .ats-num { font-size: 20px; font-weight: 600; color: var(--green); line-height: 1; }
+        .ats-lbl { font-size: 8px; color: var(--faint); text-transform: uppercase; letter-spacing: .08em; margin-top: 2px; }
+
+        /* ATS tips */
+        .card-ats-tips { grid-column: 1 / -1; background: var(--mint); border-color: var(--border); }
+        .ats-tips-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .ats-tip-tag { background: var(--surface); border: 1px solid var(--green); color: var(--green-dk); font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 6px; }
+        .ats-tip-tag::before { content: '+ '; color: var(--green); }
+        .ats-weakness { font-size: 12px; color: var(--muted); margin-top: 10px; padding-top: 10px; border-top: 0.5px solid var(--border); display: flex; flex-direction: column; gap: 4px; }
+        .ats-weakness-item::before { content: '→ '; color: var(--green-dk); font-weight: 500; }
+
+        /* Summary */
+        .card-summary { grid-column: span 3; }
+        .card-summary p { font-size: 16px; font-weight: 300; color: var(--text); line-height: 1.7; }
+
+        /* Contacts */
+        .card-contacts { grid-column: span 1; background: linear-gradient(145deg, #F0F9FF, #E8F4FD); border-color: #C5DFF5; }
+        .contact-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+        .contact-row:last-child { margin-bottom: 0; }
+
+        /* Experience — timeline style */
+        .card-exp { grid-column: span 3; }
+        .exp-timeline { display: flex; flex-direction: column; gap: 0; }
+        .exp-item { position: relative; padding-left: 20px; padding-bottom: 20px; }
+        .exp-item::before { content: ''; position: absolute; left: 0; top: 6px; width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 3px var(--mint); }
+        .exp-item::after { content: ''; position: absolute; left: 3.5px; top: 14px; bottom: 0; width: 1px; background: var(--border); }
+        .exp-item:last-child::after { display: none; }
+        .exp-item:last-child { padding-bottom: 0; }
+        .exp-pos { font-size: 15px; font-weight: 500; color: var(--forest); }
+        .exp-co { font-size: 11px; color: var(--green-dk); font-weight: 500; text-transform: uppercase; letter-spacing: .06em; margin: 4px 0; }
+        .exp-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+        /* Education */
+        .card-edu { grid-column: span 1; }
+        .edu-item { padding-bottom: 14px; margin-bottom: 14px; border-bottom: 0.5px solid var(--border); }
+        .edu-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .edu-deg { font-size: 14px; font-weight: 500; color: var(--forest); }
+        .edu-school { font-size: 12px; color: var(--muted); margin-top: 2px; }
+        .edu-year { font-size: 11px; color: var(--faint); margin-top: 1px; }
+
+        /* Additional */
+        .card-additional { grid-column: span 2; }
+        .card-additional p { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+        /* Misc / tags */
+        .card-misc { grid-column: span 1; }
+        .misc-section { margin-bottom: 14px; }
+        .misc-section:last-child { margin-bottom: 0; }
+        .tag-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+        .rl-tag { background: var(--mint); border: 0.5px solid var(--border); color: var(--green-dk); font-size: 10px; padding: 4px 10px; border-radius: 20px; font-weight: 500; transition: background .2s; }
+        .rl-tag:hover { background: var(--border); }
+
+        /* Links / QR */
+        .card-links { grid-column: span 2; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, var(--forest) 0%, #1a5c3a 100%); border-color: transparent; }
+        .card-links .card-label { color: rgba(255,255,255,0.4); }
+        .social-row { display: flex; gap: 10px; font-size: 20px; margin-bottom: 8px; }
+        .social-row a { text-decoration: none; transition: transform .2s; }
+        .social-row a:hover { transform: scale(1.2); }
+        .share-url { font-size: 10px; color: rgba(255,255,255,0.5); font-weight: 500; word-break: break-all; }
+        .qr-wrap { background: #fff; border-radius: 14px; padding: 10px; flex-shrink: 0; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
         .roast-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:2000; align-items:center; justify-content:center; padding:1rem; }
         .roast-modal.open { display:flex; }
         .roast-box { background:var(--forest); border-radius:20px; padding:28px; max-width:560px; width:100%; max-height:80vh; overflow-y:auto; position:relative; }
@@ -986,7 +1092,29 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
 
   /* ── RESULT ── */
   const L = resumeData.labels || {};
+
+  // Sticky header on scroll
+  React.useEffect(() => {
+    const onScroll = () => {
+      const h = document.querySelector('.sticky-header');
+      if (h) h.classList.toggle('visible', window.scrollY > 120);
+    };
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   return (
+    <>
+    <div className="sticky-header">
+      <div>
+        <div className="sticky-name">{resumeData.name}</div>
+        <div className="sticky-role">{resumeData.title}</div>
+      </div>
+      <button className="sticky-share" onClick={() => {
+        navigator.clipboard?.writeText(location.href);
+        document.getElementById('share-button')?.click();
+      }}>{isEn ? 'Share Profile' : 'Поделиться'}</button>
+    </div>
     <div className="result-wrap">
       <div className="result-topbar">
         <a href="/" className="result-logo">Resume<span>Link</span></a>
@@ -1004,13 +1132,35 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
       </div>
       <div className="rl-grid">
         <div className="card card-hero">
-          <div>
-            <div className="resume-name" contentEditable suppressContentEditableWarning>{resumeData.name}</div>
-            <div className="resume-title">{resumeData.title}</div>
+          <div style={{display:'flex',alignItems:'flex-start',gap:'20px'}}>
+            <div style={{width:'64px',height:'64px',borderRadius:'50%',background:'linear-gradient(135deg,var(--green),var(--forest))',display:'flex',alignItems:'center',justifyContent:'center',color:'#fff',fontSize:'22px',fontWeight:'600',flexShrink:0,boxShadow:'0 4px 16px rgba(13,61,40,0.2)'}}>
+              {(resumeData.name||'?').split(' ').map(w=>w[0]).slice(0,2).join('')}
+            </div>
+            <div>
+              <div style={{display:'flex',alignItems:'center',gap:'10px',flexWrap:'wrap',marginBottom:'4px'}}>
+                <div className="resume-name" contentEditable suppressContentEditableWarning>{resumeData.name}</div>
+                <span style={{display:'inline-flex',alignItems:'center',gap:'5px',background:'#DCFCE7',border:'1px solid #86EFAC',color:'#166534',fontSize:'10px',fontWeight:'600',padding:'3px 10px',borderRadius:'20px',letterSpacing:'.04em'}}>
+                  <span style={{width:'6px',height:'6px',borderRadius:'50%',background:'#22C55E',animation:'pulse 2s infinite',display:'inline-block'}}></span>
+                  {isEn ? 'Open to work' : 'Открыт к работе'}
+                </span>
+              </div>
+              <div className="resume-title">{resumeData.title}</div>
+            </div>
           </div>
           <div className="ats-block">
-            <div className="ats-num">{resumeData.atsScore}%</div>
-            <div className="ats-lbl">{C.atsLabel}</div>
+            <div className="ats-ring">
+              <svg width="80" height="80" viewBox="0 0 80 80">
+                <circle className="ats-ring-bg" cx="40" cy="40" r="34"/>
+                <circle className="ats-ring-fill" cx="40" cy="40" r="34"
+                  strokeDasharray={`${2 * Math.PI * 34}`}
+                  strokeDashoffset={`${2 * Math.PI * 34 * (1 - (resumeData.atsScore||0)/100)}`}
+                />
+              </svg>
+              <div className="ats-ring-text">
+                <div className="ats-num">{resumeData.atsScore}%</div>
+                <div className="ats-lbl">{C.atsLabel}</div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1052,7 +1202,7 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
         {resumeData.experience?.length > 0 && (
           <div className="card card-exp">
             <div className="card-label">{L.experience}</div>
-            <div className="exp-grid">
+            <div className="exp-timeline">
               {resumeData.experience.map((ex,i) => (
                 <div key={i} className="exp-item">
                   <div className="exp-pos">{ex.p}</div>
