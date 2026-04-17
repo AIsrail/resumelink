@@ -210,6 +210,21 @@
 
         /* RESULT GRID */
         .result-wrap { max-width: 1200px; margin: 0 auto; padding: 1.5rem clamp(1rem,3vw,2rem) 3rem; }
+        /* CONFETTI */
+        .confetti-wrap { position:fixed; inset:0; pointer-events:none; z-index:9999; overflow:hidden; }
+        .confetti-piece { position:absolute; width:8px; height:8px; top:-10px; border-radius:2px; animation:confettiFall linear forwards; }
+        @keyframes confettiFall { to { transform: translateY(110vh) rotate(720deg); opacity:0; } }
+
+        /* SOCIALS INPUT BLOCK */
+        .socials-block { background:var(--surface); border:0.5px solid var(--border); border-radius:20px; padding:20px 24px; margin-top:16px; animation:cardIn .5s ease both; }
+        .socials-input { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+        .socials-input:last-of-type { margin-bottom:0; }
+        .socials-input label { font-size:11px; color:var(--faint); width:28px; text-align:center; flex-shrink:0; }
+        .socials-input input { flex:1; border:0.5px solid var(--border); border-radius:8px; padding:8px 12px; font-size:13px; color:var(--text); font-family:'DM Sans',sans-serif; outline:none; background:var(--bg); transition:border-color .2s; }
+        .socials-input input:focus { border-color:var(--green); }
+        .socials-save-btn { background:var(--forest); color:#fff; border:none; padding:9px 20px; border-radius:10px; font-size:13px; font-weight:500; cursor:pointer; font-family:'DM Sans',sans-serif; transition:background .2s; }
+        .socials-save-btn:hover { background:var(--green-dk); }
+
         .roast-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:2000; align-items:center; justify-content:center; padding:1rem; }
         .roast-modal.open { display:flex; }
         .roast-box { background:var(--forest); border-radius:20px; padding:28px; max-width:560px; width:100%; max-height:80vh; overflow-y:auto; position:relative; }
@@ -491,6 +506,9 @@ function App() {
   const [uploadTab, setUploadTab] = useState('file');
   const [viewCount, setViewCount] = useState(null);
   const [profileCount, setProfileCount] = useState(null);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [showSocials, setShowSocials] = useState(false);
+  const [socialsData, setSocialsData] = useState({li:'',gh:'',tg:''});
   const [pasteText, setPasteText] = useState('');
   const [urlInput, setUrlInput] = useState('');
   const [urlLoading, setUrlLoading] = useState(false);
@@ -602,6 +620,22 @@ function App() {
     return () => clearInterval(iv);
   }, [loading]);
 
+  // Confetti effect
+  React.useEffect(() => {
+    if (!showConfetti) return;
+    const wrap = document.getElementById('confetti-wrap');
+    if (!wrap) return;
+    const colors = ['#1DB368','#0D3D28','#10b981','#3b82f6','#f59e0b','#ef4444','#8b5cf6'];
+    const pieces = 80;
+    wrap.innerHTML = '';
+    for (let i = 0; i < pieces; i++) {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.cssText = `left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*1}s;transform:rotate(${Math.random()*360}deg);border-radius:${Math.random()>0.5?'50%':'2px'};width:${6+Math.random()*6}px;height:${6+Math.random()*6}px;`;
+      wrap.appendChild(el);
+    }
+  }, [showConfetti]);
+
   useEffect(() => {
     fetch(WORKER_URL + '/count').then(r => r.json()).then(d => {
       if (d.count) setProfileCount(d.count);
@@ -649,6 +683,12 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
       // +1 к счётчику профилей
       const cur = parseInt(localStorage.getItem('rl_count') || '0');
       localStorage.setItem('rl_count', String(cur + 1));
+      try {
+        const fp2 = btoa([navigator.userAgent, screen.width, screen.height, Intl.DateTimeFormat().resolvedOptions().timeZone].join('|')).slice(0,24);
+        const fpKey2 = 'rl_fp_' + fp2;
+        const fpCur = parseInt(localStorage.getItem(fpKey2) || '0');
+        localStorage.setItem(fpKey2, String(fpCur + 1));
+      } catch(e) {}
     } catch(err) {
       console.error(err);
       alert(isEn ? "Analysis error. Check Worker settings." : "Ошибка анализа. Проверьте настройки Воркера.");
@@ -662,13 +702,13 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
 
     // Check profile limit for free users
     const isPro = localStorage.getItem('rl_pro') === 'true';
-    const count = parseInt(localStorage.getItem('rl_count') || '0');
+    const fp = btoa([navigator.userAgent, screen.width, screen.height, Intl.DateTimeFormat().resolvedOptions().timeZone].join('|')).slice(0,24);
+    const fpKey = 'rl_fp_' + fp;
+    const lsCount = parseInt(localStorage.getItem('rl_count') || '0');
+    const fpCount = parseInt(localStorage.getItem(fpKey) || '0');
+    const count = Math.max(lsCount, fpCount);
     if (!isPro && count >= 3) {
-        alert(isEn
-            ? 'Free limit reached (3 profiles). Upgrade to Pro for up to 50 profiles.'
-            : 'Достигнут лимит бесплатных профилей (3). Улучши до Pro для создания до 50 профилей.'
-        );
-        window.location.href = '/pricing.html';
+        setStep('limit');
         return;
     }
 
@@ -695,6 +735,43 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
       await processAI(text);
     } catch(err) { console.error(err); setLoading(false); }
   };
+
+  /* ── LIMIT SCREEN ── */
+  if (step === 'limit') return (
+    <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',padding:'2rem',background:'var(--bg)'}}>
+      <div style={{maxWidth:'480px',width:'100%',textAlign:'center'}}>
+        <div style={{fontSize:'48px',marginBottom:'16px'}}>🚀</div>
+        <h2 style={{fontSize:'clamp(1.6rem,3vw,2.2rem)',fontWeight:'300',color:'var(--forest)',letterSpacing:'-0.025em',marginBottom:'12px'}}>
+          {isEn ? <>You've created <b style={{fontWeight:500}}>3 free profiles.</b></> : <>Вы создали <b style={{fontWeight:500}}>3 бесплатных профиля.</b></>}
+        </h2>
+        <p style={{fontSize:'15px',color:'var(--muted)',lineHeight:'1.65',marginBottom:'28px'}}>
+          {isEn ? 'Upgrade to Pro and get unlimited profiles, PDF without watermark, color themes and priority AI processing.' : 'Перейдите на Pro — безлимитные профили, PDF без водяного знака, цветовые темы и приоритетный AI-анализ.'}
+        </p>
+        <div style={{background:'var(--surface)',border:'0.5px solid var(--border)',borderRadius:'20px',padding:'24px',marginBottom:'16px'}}>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'10px',marginBottom:'20px'}}>
+            {[
+              [isEn?'Unlimited profiles':'Безлимит профилей','♾️'],
+              [isEn?'No watermark':'Без водяного знака','✨'],
+              [isEn?'4 color themes':'4 цветовые темы','🎨'],
+              [isEn?'Priority AI':'Приоритетный AI','⚡'],
+            ].map(([t,i],idx) => (
+              <div key={idx} style={{display:'flex',alignItems:'center',gap:'8px',fontSize:'13px',color:'var(--muted)',background:'var(--mint)',padding:'10px 12px',borderRadius:'12px'}}>
+                <span>{i}</span><span>{t}</span>
+              </div>
+            ))}
+          </div>
+          <a href="https://resumelink.lemonsqueezy.com/checkout/buy/1b9011cf-d233-43ce-afa6-f817201f24a6?redirect_url=https://resumelink.cc/pricing.html?pro=activated"
+             target="_blank"
+             style={{display:'block',background:'var(--forest)',color:'#fff',padding:'14px',borderRadius:'12px',fontSize:'15px',fontWeight:'500',textDecoration:'none',textAlign:'center',marginBottom:'10px'}}>
+            {isEn ? '✦ Upgrade to Pro — $5/mo' : '✦ Перейти на Pro — $5/мес'}
+          </a>
+          <button onClick={() => setStep('setup')} style={{background:'none',border:'none',color:'var(--muted)',fontSize:'13px',cursor:'pointer',fontFamily:'DM Sans,sans-serif'}}>
+            {isEn ? '← Back to main' : '← На главную'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 
   /* ── LANDING ── */
   if (step === 'setup') return (
@@ -1293,7 +1370,43 @@ Write ONLY the cover letter text. No subject line, no meta-commentary. 3-4 parag
   )}
 </div>
 
-{/* ROAST BUTTON */}
+{/* CONFETTI */}
+      {showConfetti && (
+        <div className="confetti-wrap" id="confetti-wrap"></div>
+      )}
+
+      {/* SOCIALS BLOCK */}
+      {!showSocials ? (
+        <div style={{textAlign:'center',marginTop:'1rem'}}>
+          <button onClick={() => setShowSocials(true)} style={{background:'none',border:'0.5px solid var(--border)',color:'var(--muted)',padding:'8px 18px',borderRadius:'20px',fontSize:'12px',fontWeight:'500',cursor:'pointer',fontFamily:'DM Sans,sans-serif',transition:'all .2s'}}
+            onMouseEnter={e=>{e.target.style.borderColor='var(--green)';e.target.style.color='var(--forest)'}}
+            onMouseLeave={e=>{e.target.style.borderColor='var(--border)';e.target.style.color='var(--muted)'}}>
+            🔗 {isEn ? 'Add social links to your profile' : 'Добавить соцсети в профиль'}
+          </button>
+        </div>
+      ) : (
+        <div className="socials-block">
+          <div className="card-label" style={{marginBottom:'14px'}}>{isEn ? 'Add your social links' : 'Добавьте ваши соцсети'}</div>
+          <div className="socials-input">
+            <label>in</label>
+            <input type="url" placeholder="linkedin.com/in/yourname" value={socialsData.li} onChange={e => setSocialsData(p=>({...p,li:e.target.value}))} />
+          </div>
+          <div className="socials-input">
+            <label>gh</label>
+            <input type="url" placeholder="github.com/yourname" value={socialsData.gh} onChange={e => setSocialsData(p=>({...p,gh:e.target.value}))} />
+          </div>
+          <div className="socials-input" style={{marginBottom:'14px'}}>
+            <label>tg</label>
+            <input type="text" placeholder="@username" value={socialsData.tg} onChange={e => setSocialsData(p=>({...p,tg:e.target.value}))} />
+          </div>
+          <button className="socials-save-btn" onClick={() => {
+            setResumeData(prev => ({...prev, socials: socialsData}));
+            setShowSocials(false);
+          }}>{isEn ? 'Save & Update Profile' : 'Сохранить'}</button>
+        </div>
+      )}
+
+      {/* ROAST BUTTON */}
       <div style={{textAlign:'center',marginTop:'1.5rem'}}>
         <button onClick={() => roastResume(resumeData, isEn)} style={{background:'transparent',border:'1.5px solid var(--border)',color:'var(--muted)',padding:'10px 24px',borderRadius:'50px',fontSize:'13px',fontWeight:'500',cursor:'pointer',fontFamily:'DM Sans,sans-serif',transition:'all .2s'}}
           onMouseEnter={e=>{e.target.style.borderColor='var(--green)';e.target.style.color='var(--forest)'}}
