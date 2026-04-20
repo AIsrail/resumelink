@@ -503,6 +503,13 @@ function App() {
   const [loadingStage, setLoadingStage] = useState(0);
   const [step, setStep] = useState('setup');
   const [clOpen, setClOpen] = useState(false);
+  const [matchOpen, setMatchOpen] = useState(false);
+  const [matchJobText, setMatchJobText] = useState('');
+  const [matchResult, setMatchResult] = useState(null);
+  const [matchLoading, setMatchLoading] = useState(false);
+  const [prepOpen, setPrepOpen] = useState(false);
+  const [prepResult, setPrepResult] = useState([]);
+  const [prepLoading, setPrepLoading] = useState(false);
   const [uploadTab, setUploadTab] = useState('file');
   const [viewCount, setViewCount] = useState(null);
   const [profileCount, setProfileCount] = useState(null);
@@ -1659,6 +1666,157 @@ Write ONLY the cover letter text. No subject line, no meta-commentary. 3-4 parag
           🔥 {isEn ? 'Roast my resume' : 'Разнеси моё резюме'}
         </button>
         <div style={{fontSize:'11px',color:'var(--faint)',marginTop:'6px'}}>{isEn ? 'Honest AI feedback — no sugarcoating' : 'Честный AI фидбек без прикрас'}</div>
+      </div>
+
+      {/* MATCH SCORE BLOCK */}
+      <div className="no-print" style={{background:'var(--forest)',borderRadius:'20px',padding:'24px 28px',marginTop:'1rem',marginBottom:'1rem'}}>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:'1rem',flexWrap:'wrap'}}>
+          <div>
+            <div style={{fontSize:'16px',fontWeight:'600',color:'#fff',marginBottom:'4px'}}>
+              {isEn ? '🎯 Resume vs Job Match' : '🎯 Резюме vs Вакансия'}
+            </div>
+            <div style={{fontSize:'12px',color:'rgba(255,255,255,0.4)'}}>
+              {isEn ? 'See how well your resume fits a specific job' : 'Насколько ваше резюме подходит под вакансию'}
+            </div>
+          </div>
+          <button onClick={() => { setMatchOpen(o=>!o); setMatchResult(null); }}
+            style={{background: matchOpen?'rgba(255,255,255,0.08)':'var(--green)',color:'#fff',padding:'11px 22px',borderRadius:'10px',fontSize:'13px',fontWeight:'500',border:'none',cursor:'pointer',whiteSpace:'nowrap',flexShrink:0}}>
+            {matchOpen ? (isEn?'✕ Close':'✕ Закрыть') : (isEn?'Check Match →':'Проверить →')}
+          </button>
+        </div>
+        {matchOpen && (
+          <div style={{marginTop:'20px',borderTop:'1px solid rgba(255,255,255,0.06)',paddingTop:'20px'}}>
+            <label style={{fontSize:'11px',fontWeight:'600',textTransform:'uppercase',letterSpacing:'.08em',color:'rgba(255,255,255,0.35)',display:'block',marginBottom:'8px'}}>
+              {isEn ? 'Paste job description:' : 'Вставьте описание вакансии:'}
+            </label>
+            <textarea value={matchJobText} onChange={e=>setMatchJobText(e.target.value)}
+              placeholder={isEn?'Paste the full job description here…':'Вставьте полное описание вакансии сюда…'} rows={4}
+              style={{width:'100%',background:'rgba(0,0,0,0.3)',border:'1px solid rgba(255,255,255,0.1)',borderRadius:'10px',padding:'12px 14px',color:'#fff',fontSize:'13px',lineHeight:'1.6',resize:'vertical',fontFamily:'inherit',boxSizing:'border-box'}}/>
+            <button onClick={async () => {
+              if (!matchJobText.trim()) return;
+              setMatchLoading(true); setMatchResult(null);
+              try {
+                const prompt = `You are an ATS and recruiter expert. Compare this resume with the job description and return ONLY a JSON object (no markdown, no extra text):
+{
+  "score": <number 0-100>,
+  "matched": [<list of matched skills/keywords, max 6>],
+  "missing": [<list of important missing keywords, max 6>],
+  "verdict": "<one sentence summary in the language of the job description>"
+}
+
+Resume:
+Name: ${resumeData.name}, Title: ${resumeData.title}
+Summary: ${resumeData.summary||''}
+Experience: ${(resumeData.experience||[]).map(e=>`${e.p} at ${e.c}: ${e.d}`).join(' | ')}
+Skills: ${(resumeData.additional||[]).map(b=>b.content).join(' | ')}
+
+Job Description:
+${matchJobText.substring(0,3000)}`;
+                const res = await fetch(`${WORKER_URL}/generate`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+                const data = await res.json();
+                const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text||'';
+                const s=raw.indexOf('{'), e=raw.lastIndexOf('}');
+                if(s>-1&&e>-1) setMatchResult(JSON.parse(raw.substring(s,e+1)));
+              } catch(err){console.error(err);}
+              setMatchLoading(false);
+            }} disabled={matchLoading||!matchJobText.trim()}
+              style={{marginTop:'12px',background:matchLoading?'rgba(255,255,255,0.1)':'var(--green)',color:'#fff',padding:'11px 24px',borderRadius:'10px',fontSize:'13px',fontWeight:'500',border:'none',cursor:matchLoading?'not-allowed':'pointer',display:'flex',alignItems:'center',gap:'8px'}}>
+              {matchLoading ? <><span style={{display:'inline-block',width:'14px',height:'14px',border:'2px solid rgba(255,255,255,0.3)',borderTop:'2px solid #fff',borderRadius:'50%',animation:'spin 1s linear infinite'}}></span>{isEn?'Analyzing…':'Анализируем…'}</> : (isEn?'✨ Analyze':'✨ Анализировать')}
+            </button>
+            {matchResult && (() => {
+              const sc = matchResult.score||0;
+              const col = sc>=75?'var(--green)':sc>=50?'#f59e0b':'#ef4444';
+              const circ = 2*Math.PI*24;
+              return (
+                <div style={{marginTop:'20px',background:'rgba(0,0,0,0.25)',border:'1px solid rgba(255,255,255,0.08)',borderRadius:'12px',padding:'16px 18px'}}>
+                  <div style={{display:'flex',alignItems:'center',gap:'16px',marginBottom:'14px'}}>
+                    <svg width="60" height="60" viewBox="0 0 60 60">
+                      <circle cx="30" cy="30" r="24" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="4"/>
+                      <circle cx="30" cy="30" r="24" fill="none" stroke={col} strokeWidth="4"
+                        strokeDasharray={circ} strokeDashoffset={circ*(1-sc/100)}
+                        strokeLinecap="round" transform="rotate(-90 30 30)"/>
+                    </svg>
+                    <div>
+                      <div style={{fontSize:'28px',fontWeight:'300',color:col,lineHeight:1}}>{sc}<span style={{fontSize:'14px',color:'rgba(255,255,255,0.4)'}}>%</span></div>
+                      <div style={{fontSize:'12px',color:'rgba(255,255,255,0.5)',marginTop:'3px'}}>{isEn?'match score':'совпадение'}</div>
+                    </div>
+                    <div style={{flex:1,fontSize:'13px',color:'rgba(255,255,255,0.7)',lineHeight:'1.5',fontStyle:'italic'}}>{matchResult.verdict}</div>
+                  </div>
+                  <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'10px'}}>
+                    <div>
+                      <div style={{fontSize:'10px',fontWeight:'600',textTransform:'uppercase',letterSpacing:'.08em',color:'rgba(255,255,255,0.3)',marginBottom:'6px'}}>✅ {isEn?'Matched':'Совпало'}</div>
+                      {(matchResult.matched||[]).map((k,i)=><div key={i} style={{fontSize:'12px',color:'var(--green)',padding:'2px 0'}}>• {k}</div>)}
+                    </div>
+                    <div>
+                      <div style={{fontSize:'10px',fontWeight:'600',textTransform:'uppercase',letterSpacing:'.08em',color:'rgba(255,255,255,0.3)',marginBottom:'6px'}}>❌ {isEn?'Missing':'Не хватает'}</div>
+                      {(matchResult.missing||[]).map((k,i)=><div key={i} style={{fontSize:'12px',color:'#f87171',padding:'2px 0'}}>• {k}</div>)}
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+        )}
+      </div>
+
+      {/* INTERVIEW PREP BLOCK */}
+      <div className="no-print" style={{background:'var(--forest)',borderRadius:'20px',padding:'24px 28px',marginTop:'1rem',marginBottom:'1rem'}}>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:'1rem',flexWrap:'wrap'}}>
+          <div>
+            <div style={{fontSize:'16px',fontWeight:'600',color:'#fff',marginBottom:'4px'}}>
+              {isEn ? '🎤 Interview Prep' : '🎤 Подготовка к интервью'}
+            </div>
+            <div style={{fontSize:'12px',color:'rgba(255,255,255,0.4)'}}>
+              {isEn ? 'AI generates likely interview questions based on your resume' : 'ИИ генерирует вопросы на основе вашего резюме'}
+            </div>
+          </div>
+          <button onClick={async () => {
+            if (prepOpen) { setPrepOpen(false); setPrepResult([]); return; }
+            setPrepOpen(true);
+            if (prepResult.length>0) return;
+            setPrepLoading(true);
+            try {
+              const prompt = `You are an experienced tech recruiter. Based on this resume, generate exactly 8 likely interview questions. Return ONLY a JSON array of strings (no markdown, no extra text):
+["question 1", "question 2", ...]
+
+Mix behavioral (2-3) and technical/role-specific (5-6) questions. Use the same language as the resume.
+
+Resume:
+Name: ${resumeData.name}, Title: ${resumeData.title}
+Summary: ${resumeData.summary||''}
+Experience: ${(resumeData.experience||[]).map(e=>`${e.p} at ${e.c} (${e.t}): ${e.d}`).join(' | ')}
+Skills: ${(resumeData.additional||[]).map(b=>b.title+': '+b.content).join(' | ')}`;
+              const res = await fetch(`${WORKER_URL}/generate`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+              const data = await res.json();
+              const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text||'';
+              const s=raw.indexOf('['), e=raw.lastIndexOf(']');
+              if(s>-1&&e>-1) setPrepResult(JSON.parse(raw.substring(s,e+1)));
+            } catch(err){console.error(err);}
+            setPrepLoading(false);
+          }}
+            style={{background: prepOpen?'rgba(255,255,255,0.08)':'var(--green)',color:'#fff',padding:'11px 22px',borderRadius:'10px',fontSize:'13px',fontWeight:'500',border:'none',cursor:'pointer',whiteSpace:'nowrap',flexShrink:0}}>
+            {prepLoading ? '...' : prepOpen ? (isEn?'✕ Close':'✕ Закрыть') : (isEn?'Generate Questions →':'Сгенерировать →')}
+          </button>
+        </div>
+        {prepOpen && (
+          <div style={{marginTop:'20px',borderTop:'1px solid rgba(255,255,255,0.06)',paddingTop:'20px'}}>
+            {prepLoading ? (
+              <div style={{display:'flex',alignItems:'center',gap:'10px',color:'rgba(255,255,255,0.5)',fontSize:'13px'}}>
+                <span style={{display:'inline-block',width:'14px',height:'14px',border:'2px solid rgba(255,255,255,0.3)',borderTop:'2px solid #fff',borderRadius:'50%',animation:'spin 1s linear infinite'}}></span>
+                {isEn?'Generating questions…':'Генерируем вопросы…'}
+              </div>
+            ) : (
+              <div style={{display:'flex',flexDirection:'column',gap:'8px'}}>
+                {prepResult.map((q,i)=>(
+                  <div key={i} style={{display:'flex',gap:'12px',alignItems:'flex-start',background:'rgba(0,0,0,0.2)',border:'1px solid rgba(255,255,255,0.06)',borderRadius:'10px',padding:'12px 14px'}}>
+                    <span style={{fontSize:'11px',fontWeight:'700',color:'var(--green)',flexShrink:0,marginTop:'2px',minWidth:'18px'}}>Q{i+1}</span>
+                    <span style={{fontSize:'13px',color:'rgba(255,255,255,0.8)',lineHeight:'1.5'}}>{q}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* MAGIC LINK BLOCK — Pro: вернуться и редактировать */}
