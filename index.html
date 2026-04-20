@@ -520,6 +520,10 @@ function App() {
   const [jobsLoading, setJobsLoading] = useState(false);
   const [jobsLoaded, setJobsLoaded] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState(null);
+  const [slugInput, setSlugInput] = useState('');
+  const [slugStatus, setSlugStatus] = useState(null); // null | 'saving' | 'ok' | 'error'
+  const [slugError, setSlugError] = useState('');
+  const [activeSlug, setActiveSlug] = useState('');
   const isPro = localStorage.getItem('rl_pro') === 'true';
 
   // expose photo to printResume (vanilla JS)
@@ -1222,6 +1226,71 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
           </div>
         </div>
       </div>
+
+{/* CUSTOM SLUG BLOCK — Pro only */}
+{isPro && savedId && (
+  <div className="no-print" style={{background:'var(--forest)',borderRadius:'20px',padding:'24px 28px',marginTop:'2rem',marginBottom:'1rem'}}>
+    <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',gap:'1rem',flexWrap:'wrap'}}>
+      <div>
+        <div style={{fontSize:'16px',fontWeight:'600',color:'#fff',marginBottom:'4px'}}>
+          {isEn ? '🔗 Your Custom Link' : '🔗 Ваша именная ссылка'}
+        </div>
+        <div style={{fontSize:'12px',color:'rgba(255,255,255,0.4)'}}>
+          {activeSlug
+            ? <span style={{color:'var(--green)',fontWeight:'500'}}>resumelink.cc/{activeSlug}</span>
+            : (isEn ? 'Claim your personal URL — resumelink.cc/yourname' : 'Получи личный URL — resumelink.cc/yourname')}
+        </div>
+      </div>
+    </div>
+    <div style={{marginTop:'16px',display:'flex',gap:'8px',alignItems:'center',flexWrap:'wrap'}}>
+      <div style={{display:'flex',alignItems:'center',background:'rgba(0,0,0,0.2)',border:'0.5px solid rgba(255,255,255,0.1)',borderRadius:'10px',overflow:'hidden',flex:1,minWidth:'200px'}}>
+        <span style={{padding:'0 10px',fontSize:'12px',color:'rgba(255,255,255,0.3)',whiteSpace:'nowrap',borderRight:'0.5px solid rgba(255,255,255,0.1)'}}>resumelink.cc/</span>
+        <input
+          value={slugInput}
+          onChange={e => { setSlugInput(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g,'')); setSlugStatus(null); }}
+          placeholder={isEn ? 'yourname' : 'yourname'}
+          maxLength={30}
+          style={{flex:1,background:'transparent',border:'none',outline:'none',padding:'10px 12px',fontSize:'13px',color:'#fff',fontFamily:'inherit'}}
+        />
+      </div>
+      <button
+        onClick={async () => {
+          if (!slugInput || slugInput.length < 3) { setSlugError(isEn ? 'Min 3 characters' : 'Минимум 3 символа'); setSlugStatus('error'); return; }
+          setSlugStatus('saving');
+          setSlugError('');
+          try {
+            const res = await fetch(`${WORKER_URL}/slug`, {
+              method: 'PUT',
+              headers: {'Content-Type':'application/json'},
+              body: JSON.stringify({ slug: slugInput, id: savedId })
+            });
+            const data = await res.json();
+            if (data.ok) {
+              setActiveSlug(slugInput);
+              setSlugStatus('ok');
+              const newUrl = `${location.origin}/${slugInput}`;
+              window.history.pushState({}, '', newUrl);
+            } else {
+              setSlugError(data.error || 'Error');
+              setSlugStatus('error');
+            }
+          } catch(e) { setSlugError(e.message); setSlugStatus('error'); }
+        }}
+        disabled={slugStatus === 'saving'}
+        style={{background: slugStatus === 'ok' ? 'rgba(29,179,104,0.3)' : 'var(--green)',color:'#fff',border:'none',borderRadius:'10px',padding:'10px 20px',fontSize:'13px',fontWeight:'500',cursor:'pointer',whiteSpace:'nowrap',flexShrink:0}}>
+        {slugStatus === 'saving' ? '...' : slugStatus === 'ok' ? (isEn ? '✓ Saved!' : '✓ Сохранено!') : (isEn ? 'Claim →' : 'Сохранить →')}
+      </button>
+    </div>
+    {slugStatus === 'error' && (
+      <div style={{fontSize:'11px',color:'#f87171',marginTop:'8px'}}>{slugError}</div>
+    )}
+    {slugStatus === 'ok' && (
+      <div style={{fontSize:'11px',color:'var(--green)',marginTop:'8px'}}>
+        {isEn ? `Your profile is now live at: resumelink.cc/${activeSlug}` : `Ваш профиль доступен по: resumelink.cc/${activeSlug}`}
+      </div>
+    )}
+  </div>
+)}
 
 {/* JOBS SECTION */}
 <div className="no-print" style={{background:'var(--forest)',borderRadius:'20px',padding:'24px 28px',marginTop:'2rem',marginBottom:'1rem'}}>
