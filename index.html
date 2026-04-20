@@ -1163,26 +1163,77 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
           </div>
         </div>
 
-        {/* ATS TIPS CARD */}
-        {resumeData.atsTips?.length > 0 && (
-          <div className="card card-ats-tips">
-            <div className="card-label">{isEn ? 'ATS Boost — add these keywords' : 'ATS — добавьте эти слова'}</div>
-            <div style={{fontSize:'13px',color:'var(--muted)',lineHeight:'1.5'}}>
-              {isEn
-                ? `Your score is ${resumeData.atsScore}%. Add these keywords to your experience section to pass more filters:`
-                : `Ваш ATS Score — ${resumeData.atsScore}%. Добавьте эти слова в опыт, чтобы проходить больше фильтров:`
-              }
-            </div>
-            <div className="ats-tips-row">
-              {resumeData.atsTips.map((tip,i) => <span key={i} className="ats-tip-tag">{tip}</span>)}
-            </div>
-            {resumeData.atsWeaknesses?.length > 0 && (
-              <div className="ats-weakness">
-                {resumeData.atsWeaknesses.map((w,i) => <span key={i} className="ats-weakness-item">{w}</span>)}
+        {/* ATS SCORE BREAKDOWN */}
+        {(resumeData.atsTips?.length > 0 || resumeData.atsWeaknesses?.length > 0) && (() => {
+          const score = resumeData.atsScore || 0;
+          const color = score >= 80 ? 'var(--green)' : score >= 60 ? '#f59e0b' : '#ef4444';
+          const label = score >= 80
+            ? (isEn ? 'Strong' : 'Сильное')
+            : score >= 60
+            ? (isEn ? 'Average' : 'Среднее')
+            : (isEn ? 'Needs work' : 'Требует улучшений');
+          const circumference = 2 * Math.PI * 28;
+          const offset = circumference * (1 - score / 100);
+          return (
+            <div className="card card-ats-tips">
+              <div style={{display:'flex',alignItems:'center',gap:'20px',flexWrap:'wrap'}}>
+                {/* Circular gauge */}
+                <div style={{position:'relative',flexShrink:0}}>
+                  <svg width="72" height="72" viewBox="0 0 72 72">
+                    <circle cx="36" cy="36" r="28" fill="none" stroke="var(--border)" strokeWidth="5"/>
+                    <circle cx="36" cy="36" r="28" fill="none" stroke={color} strokeWidth="5"
+                      strokeDasharray={circumference} strokeDashoffset={offset}
+                      strokeLinecap="round" transform="rotate(-90 36 36)"
+                      style={{transition:'stroke-dashoffset 1s ease'}}/>
+                  </svg>
+                  <div style={{position:'absolute',inset:0,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
+                    <span style={{fontSize:'16px',fontWeight:'600',color,lineHeight:1}}>{score}</span>
+                    <span style={{fontSize:'8px',color:'var(--faint)',textTransform:'uppercase',letterSpacing:'.05em'}}>ATS</span>
+                  </div>
+                </div>
+                {/* Header text */}
+                <div style={{flex:1,minWidth:'140px'}}>
+                  <div style={{fontSize:'15px',fontWeight:'600',color:'var(--text)',marginBottom:'3px'}}>
+                    {isEn ? 'ATS Score Breakdown' : 'Разбор ATS Score'}
+                  </div>
+                  <div style={{display:'inline-flex',alignItems:'center',gap:'5px',background: score>=80?'rgba(29,179,104,0.1)':score>=60?'rgba(245,158,11,0.1)':'rgba(239,68,68,0.1)',borderRadius:'6px',padding:'3px 9px'}}>
+                    <span style={{width:'6px',height:'6px',borderRadius:'50%',background:color,flexShrink:0,display:'inline-block'}}></span>
+                    <span style={{fontSize:'11px',fontWeight:'600',color,textTransform:'uppercase',letterSpacing:'.06em'}}>{label}</span>
+                  </div>
+                </div>
               </div>
-            )}
-          </div>
-        )}
+
+              {/* Missing keywords */}
+              {resumeData.atsTips?.length > 0 && (
+                <div style={{marginTop:'16px',paddingTop:'14px',borderTop:'0.5px solid var(--border)'}}>
+                  <div style={{fontSize:'10px',fontWeight:'600',textTransform:'uppercase',letterSpacing:'.08em',color:'var(--faint)',marginBottom:'8px'}}>
+                    {isEn ? '⚡ Add these keywords to boost your score:' : '⚡ Добавьте эти слова чтобы поднять ATS:'}
+                  </div>
+                  <div className="ats-tips-row">
+                    {resumeData.atsTips.map((tip,i) => <span key={i} className="ats-tip-tag">{tip}</span>)}
+                  </div>
+                </div>
+              )}
+
+              {/* Actionable weaknesses */}
+              {resumeData.atsWeaknesses?.length > 0 && (
+                <div style={{marginTop:'12px',paddingTop:'12px',borderTop:'0.5px solid var(--border)'}}>
+                  <div style={{fontSize:'10px',fontWeight:'600',textTransform:'uppercase',letterSpacing:'.08em',color:'var(--faint)',marginBottom:'8px'}}>
+                    {isEn ? '→ What to fix:' : '→ Что улучшить:'}
+                  </div>
+                  <div style={{display:'flex',flexDirection:'column',gap:'6px'}}>
+                    {resumeData.atsWeaknesses.map((w,i) => (
+                      <div key={i} style={{display:'flex',alignItems:'flex-start',gap:'8px',fontSize:'13px',color:'var(--muted)'}}>
+                        <span style={{color:'var(--green)',fontWeight:'600',flexShrink:0,marginTop:'1px'}}>→</span>
+                        <span>{w}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })()}
 
         {resumeData.summary && (
           <div className="card card-summary">
@@ -1265,6 +1316,64 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
           </div>
         </div>
       </div>
+
+{/* ANALYTICS BLOCK */}
+{(() => {
+  const views = viewCount || 0;
+  const isOwner = isPro && savedId;
+  if (!views && !isOwner) return null;
+  return (
+    <div className="no-print" style={{background:'var(--forest)',borderRadius:'20px',padding:'24px 28px',marginTop:'2rem',marginBottom:'1rem'}}>
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:'1rem',flexWrap:'wrap'}}>
+        <div>
+          <div style={{fontSize:'16px',fontWeight:'600',color:'#fff',marginBottom:'4px'}}>
+            {isEn ? '📊 Profile Analytics' : '📊 Аналитика профиля'}
+          </div>
+          <div style={{fontSize:'12px',color:'rgba(255,255,255,0.4)'}}>
+            {isEn ? 'How many people viewed your profile' : 'Сколько человек просмотрели ваш профиль'}
+          </div>
+        </div>
+        {/* Big views number */}
+        <div style={{textAlign:'right'}}>
+          <div style={{fontSize:'36px',fontWeight:'300',color:'#fff',lineHeight:1}}>{views}</div>
+          <div style={{fontSize:'10px',color:'rgba(255,255,255,0.35)',textTransform:'uppercase',letterSpacing:'.08em',marginTop:'3px'}}>
+            {isEn ? 'total views' : 'просмотров'}
+          </div>
+        </div>
+      </div>
+
+      {/* Visual bar */}
+      <div style={{marginTop:'16px',borderTop:'1px solid rgba(255,255,255,0.06)',paddingTop:'14px'}}>
+        <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
+          <div style={{flex:1,height:'4px',background:'rgba(255,255,255,0.08)',borderRadius:'4px',overflow:'hidden'}}>
+            <div style={{
+              height:'100%',
+              width: views === 0 ? '0%' : views < 5 ? '15%' : views < 20 ? '40%' : views < 50 ? '65%' : views < 100 ? '85%' : '100%',
+              background:'var(--green)',borderRadius:'4px',
+              transition:'width 1s ease'
+            }}/>
+          </div>
+          <div style={{fontSize:'11px',color:'rgba(255,255,255,0.3)',whiteSpace:'nowrap'}}>
+            {views === 0
+              ? (isEn ? 'Share your link to get views' : 'Поделитесь ссылкой чтобы получить просмотры')
+              : views < 10
+              ? (isEn ? 'Getting started 🌱' : 'Начинаем 🌱')
+              : views < 50
+              ? (isEn ? 'Growing 🚀' : 'Растём 🚀')
+              : (isEn ? 'Popular! 🔥' : 'Популярно! 🔥')}
+          </div>
+        </div>
+      </div>
+
+      {/* Tip for non-pro */}
+      {!isOwner && views > 0 && (
+        <div style={{fontSize:'10px',color:'rgba(255,255,255,0.2)',textTransform:'uppercase',letterSpacing:'.08em',fontWeight:'600',marginTop:'12px'}}>
+          {isEn ? '✨ Pro: track views on your own profiles' : '✨ Pro: отслеживай просмотры своих профилей'}
+        </div>
+      )}
+    </div>
+  );
+})()}
 
 {/* CUSTOM SLUG BLOCK — Pro only */}
 {isPro && savedId && (
