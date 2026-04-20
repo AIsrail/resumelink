@@ -519,7 +519,11 @@ function App() {
   const [jobsResults, setJobsResults] = useState([]);
   const [jobsLoading, setJobsLoading] = useState(false);
   const [jobsLoaded, setJobsLoaded] = useState(false);
+  const [profilePhoto, setProfilePhoto] = useState(null);
   const isPro = localStorage.getItem('rl_pro') === 'true';
+
+  // expose photo to printResume (vanilla JS)
+  useEffect(() => { window.__RL_PROFILE_PHOTO__ = profilePhoto; }, [profilePhoto]);
 	// ── Проверка Pro по email (активация после оплаты) ──
   const checkProByEmail = async (email) => {
     try {
@@ -1082,9 +1086,33 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
       </div>
       <div className="rl-grid">
         <div className="card card-hero">
-          <div>
-            <div className="resume-name" contentEditable suppressContentEditableWarning>{resumeData.name}</div>
-            <div className="resume-title">{resumeData.title}</div>
+          <div style={{display:'flex',alignItems:'center',gap:'16px'}}>
+            {/* PHOTO */}
+            <div style={{position:'relative',flexShrink:0}}>
+              {profilePhoto ? (
+                <img src={profilePhoto} alt="photo"
+                  style={{width:'64px',height:'64px',borderRadius:'50%',objectFit:'cover',border:'0.5px solid var(--border)'}}/>
+              ) : (
+                <div style={{width:'64px',height:'64px',borderRadius:'50%',background:'var(--mint)',border:'0.5px solid var(--border)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'22px',fontWeight:'600',color:'var(--forest)'}}>
+                  {(resumeData.name||'?')[0].toUpperCase()}
+                </div>
+              )}
+              <label title={isEn ? 'Upload photo' : 'Загрузить фото'}
+                style={{position:'absolute',bottom:'-2px',right:'-2px',width:'20px',height:'20px',borderRadius:'50%',background:'var(--green)',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',boxShadow:'0 1px 4px rgba(0,0,0,0.15)'}}>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <input type="file" accept="image/*" className="hidden" onChange={e => {
+                  const f = e.target.files[0];
+                  if (!f) return;
+                  const reader = new FileReader();
+                  reader.onload = ev => setProfilePhoto(ev.target.result);
+                  reader.readAsDataURL(f);
+                }}/>
+              </label>
+            </div>
+            <div>
+              <div className="resume-name" contentEditable suppressContentEditableWarning>{resumeData.name}</div>
+              <div className="resume-title">{resumeData.title}</div>
+            </div>
           </div>
           <div className="ats-block">
             <div className="ats-num">{resumeData.atsScore}%</div>
@@ -1180,46 +1208,14 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
         )}
 
         <div className="card card-links">
-          <div style={{width:'100%'}}>
+          <div>
             <div className="card-label">{L.links}</div>
-            <div style={{display:'flex',flexDirection:'column',gap:'8px',marginTop:'12px'}}>
-              {resumeData.socials?.li && resumeData.socials.li !== '#' && (
-                <a href={resumeData.socials.li} target="_blank" rel="noopener noreferrer"
-                  style={{display:'flex',alignItems:'center',gap:'10px',background:'rgba(10,102,194,0.08)',border:'0.5px solid rgba(10,102,194,0.2)',borderRadius:'10px',padding:'9px 13px',textDecoration:'none',transition:'border-color .2s'}}
-                  onMouseEnter={e=>e.currentTarget.style.borderColor='rgba(10,102,194,0.5)'}
-                  onMouseLeave={e=>e.currentTarget.style.borderColor='rgba(10,102,194,0.2)'}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="#0A66C2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-                  <span style={{fontSize:'12px',fontWeight:'500',color:'#0A66C2'}}>LinkedIn</span>
-                  <span style={{fontSize:'10px',color:'var(--faint)',marginLeft:'auto',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',maxWidth:'120px'}}>{resumeData.socials.li.replace(/^https?:\/\/(www\.)?/,'')}</span>
-                </a>
-              )}
-              {resumeData.socials?.gh && resumeData.socials.gh !== '#' && (
-                <a href={resumeData.socials.gh} target="_blank" rel="noopener noreferrer"
-                  style={{display:'flex',alignItems:'center',gap:'10px',background:'rgba(36,41,47,0.06)',border:'0.5px solid rgba(36,41,47,0.15)',borderRadius:'10px',padding:'9px 13px',textDecoration:'none',transition:'border-color .2s'}}
-                  onMouseEnter={e=>e.currentTarget.style.borderColor='rgba(36,41,47,0.4)'}
-                  onMouseLeave={e=>e.currentTarget.style.borderColor='rgba(36,41,47,0.15)'}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--forest)"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-                  <span style={{fontSize:'12px',fontWeight:'500',color:'var(--forest)'}}>GitHub</span>
-                  <span style={{fontSize:'10px',color:'var(--faint)',marginLeft:'auto',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',maxWidth:'120px'}}>{resumeData.socials.gh.replace(/^https?:\/\/(www\.)?/,'')}</span>
-                </a>
-              )}
-              {resumeData.socials?.tg && resumeData.socials.tg !== '#' && (
-                <a href={resumeData.socials.tg.startsWith('@') ? `https://t.me/${resumeData.socials.tg.slice(1)}` : resumeData.socials.tg} target="_blank" rel="noopener noreferrer"
-                  style={{display:'flex',alignItems:'center',gap:'10px',background:'rgba(39,174,239,0.08)',border:'0.5px solid rgba(39,174,239,0.2)',borderRadius:'10px',padding:'9px 13px',textDecoration:'none',transition:'border-color .2s'}}
-                  onMouseEnter={e=>e.currentTarget.style.borderColor='rgba(39,174,239,0.5)'}
-                  onMouseLeave={e=>e.currentTarget.style.borderColor='rgba(39,174,239,0.2)'}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="#27AAEF"><path d="M21.198 2.433a2.242 2.242 0 0 0-1.022.215l-16.5 7.5a2.25 2.25 0 0 0 .126 4.073l3.9 1.205 1.894 5.85a.75.75 0 0 0 1.308.23l2.546-3.043 4.394 3.203a2.25 2.25 0 0 0 3.436-1.41l2.72-16.5a2.25 2.25 0 0 0-2.802-2.323z"/></svg>
-                  <span style={{fontSize:'12px',fontWeight:'500',color:'#27AAEF'}}>Telegram</span>
-                  <span style={{fontSize:'10px',color:'var(--faint)',marginLeft:'auto'}}>{resumeData.socials.tg}</span>
-                </a>
-              )}
-              {!resumeData.socials?.li && !resumeData.socials?.gh && !resumeData.socials?.tg && (
-                <p style={{fontSize:'12px',color:'var(--faint)',margin:0}}>
-                  {isEn ? 'No social links found in resume' : 'Соцсети не найдены в резюме'}
-                </p>
-              )}
+            <div className="social-row">
+              <a href={resumeData.socials?.li || "#"} target="_blank">🔗</a>
+              <a href={resumeData.socials?.gh || "#"} target="_blank">🐙</a>
+              <a href={resumeData.socials?.tg || "#"} target="_blank">✈️</a>
             </div>
-            <div className="share-url" style={{marginTop:'12px'}}>{location.href}</div>
+            <div className="share-url">{location.href}</div>
           </div>
           <div className="qr-wrap">
             <img src={`https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(location.href)}`} alt="QR" style={{display:'block',width:'72px',height:'72px'}}/>
@@ -1671,7 +1667,7 @@ function printResume(frozenTheme) {
         <span class="rl-name-last">${esc(lastName)}</span>
         <div class="rl-job-title">${esc(data.title)}</div>
       </div>
-      <div class="rl-photo"></div>
+      <div class="rl-photo" style="${window.__RL_PROFILE_PHOTO__ ? `background-image:url('${window.__RL_PROFILE_PHOTO__}');background-size:cover;background-position:center;background-color:transparent` : ''}"></div>
     </div>
     <div class="rl-contacts">${contacts}</div>
     <div class="rl-body">
