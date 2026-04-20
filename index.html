@@ -521,9 +521,14 @@ function App() {
   const [jobsLoaded, setJobsLoaded] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [slugInput, setSlugInput] = useState('');
-  const [slugStatus, setSlugStatus] = useState(null); // null | 'saving' | 'ok' | 'error'
+  const [slugStatus, setSlugStatus] = useState(null);
   const [slugError, setSlugError] = useState('');
   const [activeSlug, setActiveSlug] = useState('');
+  const [magicEmail, setMagicEmail] = useState('');
+  const [magicStatus, setMagicStatus] = useState(null); // null | 'sending' | 'sent' | 'error'
+  const [editMode, setEditMode] = useState(false);
+  const [editData, setEditData] = useState(null);
+  const [saveStatus, setSaveStatus] = useState(null); // null | 'saving' | 'ok' | 'error'
   const isPro = localStorage.getItem('rl_pro') === 'true';
 
   // expose photo to printResume (vanilla JS)
@@ -600,9 +605,44 @@ function App() {
     Object.entries(map).forEach(([id, txt]) => { const el = document.getElementById(id); if (el) el.textContent = txt; });
   }, []);
 
+
   // load from ?id=
   useEffect(() => {
-    const id = new URLSearchParams(location.search).get('id');
+    const params = new URLSearchParams(location.search);
+    const id = params.get('id');
+    const magic = params.get('magic');
+
+    // ── Magic Link verification ──
+    if (magic) {
+      setLoading(true);
+      fetch(`${WORKER_URL}/magic-verify`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ token: magic })
+      }).then(r => r.json()).then(data => {
+        if (data.ok) {
+          localStorage.setItem('rl_pro', 'true');
+          localStorage.setItem('rl_pro_email', data.email);
+          // Load the resume
+          return fetch(`${WORKER_URL}/${data.resumeId}`)
+            .then(r => r.json())
+            .then(resumeJson => {
+              setResumeData(resumeJson);
+              if (window.__RL_SET_RESUME_DATA__) window.__RL_SET_RESUME_DATA__(resumeJson);
+              setStep('result');
+              setLoading(false);
+              const newUrl = `${location.origin}/?id=${data.resumeId}`;
+              window.history.replaceState({}, '', newUrl);
+            });
+        } else {
+          alert(data.error || 'Invalid link');
+          setLoading(false);
+        }
+      }).catch(() => setLoading(false));
+      return;
+    }
+
+    // ── Load by ?id= ──
     if (!id) return;
     setLoading(true);
     fetch(`${WORKER_URL}/${id}`)
@@ -611,7 +651,6 @@ function App() {
         setResumeData(data);
         if (window.__RL_SET_RESUME_DATA__) window.__RL_SET_RESUME_DATA__(data);
         setStep('result'); setLoading(false);
-        // Track view and get count
         fetch(`${WORKER_URL}/view`, {
           method: 'POST',
           headers: {'Content-Type':'application/json'},
@@ -1512,6 +1551,162 @@ Write ONLY the cover letter text. No subject line, no meta-commentary. 3-4 parag
         </button>
         <div style={{fontSize:'11px',color:'var(--faint)',marginTop:'6px'}}>{isEn ? 'Honest AI feedback — no sugarcoating' : 'Честный AI фидбек без прикрас'}</div>
       </div>
+
+      {/* MAGIC LINK BLOCK — Pro: вернуться и редактировать */}
+      {isPro && savedId && (
+        <div className="no-print" style={{background:'var(--forest)',borderRadius:'20px',padding:'24px 28px',marginTop:'1rem',marginBottom:'1rem'}}>
+          <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',gap:'1rem',flexWrap:'wrap'}}>
+            <div>
+              <div style={{fontSize:'16px',fontWeight:'600',color:'#fff',marginBottom:'4px'}}>
+                {isEn ? '✉️ Save access to your profile' : '✉️ Сохрани доступ к профилю'}
+              </div>
+              <div style={{fontSize:'12px',color:'rgba(255,255,255,0.4)'}}>
+                {isEn ? 'Get a magic link to return and edit anytime' : 'Получи ссылку чтобы вернуться и редактировать'}
+              </div>
+            </div>
+            <button
+              onClick={() => setEditMode(m => !m)}
+              style={{background: editMode ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.12)',color:'#fff',border:'0.5px solid rgba(255,255,255,0.15)',borderRadius:'10px',padding:'9px 18px',fontSize:'13px',fontWeight:'500',cursor:'pointer',whiteSpace:'nowrap',flexShrink:0}}>
+              {editMode ? (isEn ? '✕ Close editor' : '✕ Закрыть редактор') : (isEn ? '✏️ Edit profile' : '✏️ Редактировать')}
+            </button>
+          </div>
+
+          {/* Magic Link form */}
+          {!editMode && (
+            <div style={{marginTop:'16px',display:'flex',gap:'8px',flexWrap:'wrap'}}>
+              <input
+                value={magicEmail}
+                onChange={e => { setMagicEmail(e.target.value); setMagicStatus(null); }}
+                placeholder={isEn ? 'your@email.com' : 'ваш@email.com'}
+                type="email"
+                style={{flex:1,minWidth:'200px',background:'rgba(0,0,0,0.2)',border:'0.5px solid rgba(255,255,255,0.1)',borderRadius:'10px',padding:'10px 14px',color:'#fff',fontSize:'13px',fontFamily:'inherit',outline:'none'}}
+              />
+              <button
+                onClick={async () => {
+                  if (!magicEmail.includes('@')) return;
+                  setMagicStatus('sending');
+                  try {
+                    const res = await fetch(`${WORKER_URL}/magic-link`, {
+                      method:'POST',
+                      headers:{'Content-Type':'application/json'},
+                      body: JSON.stringify({ email: magicEmail, resumeId: savedId })
+                    });
+                    const data = await res.json();
+                    setMagicStatus(data.ok ? 'sent' : 'error');
+                  } catch(e) { setMagicStatus('error'); }
+                }}
+                disabled={magicStatus === 'sending' || magicStatus === 'sent'}
+                style={{background: magicStatus === 'sent' ? 'rgba(29,179,104,0.3)' : 'var(--green)',color:'#fff',border:'none',borderRadius:'10px',padding:'10px 20px',fontSize:'13px',fontWeight:'500',cursor:'pointer',whiteSpace:'nowrap',flexShrink:0}}>
+                {magicStatus === 'sending' ? '...' : magicStatus === 'sent' ? (isEn ? '✓ Sent!' : '✓ Отправлено!') : (isEn ? 'Send link →' : 'Отправить →')}
+              </button>
+            </div>
+          )}
+          {magicStatus === 'sent' && (
+            <div style={{fontSize:'12px',color:'var(--green)',marginTop:'8px'}}>
+              {isEn ? 'Check your inbox — the link expires in 30 minutes.' : 'Проверьте почту — ссылка действительна 30 минут.'}
+            </div>
+          )}
+          {magicStatus === 'error' && (
+            <div style={{fontSize:'12px',color:'#f87171',marginTop:'8px'}}>
+              {isEn ? 'Failed to send. Try again.' : 'Ошибка отправки. Попробуйте ещё раз.'}
+            </div>
+          )}
+
+          {/* Edit Mode */}
+          {editMode && (() => {
+            const ed = editData || resumeData;
+            const set = (field, val) => setEditData(p => ({...(p||resumeData), [field]: val}));
+            const setContact = (k, val) => setEditData(p => ({...(p||resumeData), contacts:{...(p||resumeData).contacts,[k]:val}}));
+            const setExp = (i, k, val) => setEditData(p => { const exp=[...(p||resumeData).experience]; exp[i]={...exp[i],[k]:val}; return {...(p||resumeData),experience:exp}; });
+            const setEdu = (i, k, val) => setEditData(p => { const edu=[...(p||resumeData).education]; edu[i]={...edu[i],[k]:val}; return {...(p||resumeData),education:edu}; });
+            const inp = (val, onChange, placeholder='') => (
+              <input value={val||''} onChange={e=>onChange(e.target.value)} placeholder={placeholder}
+                style={{width:'100%',background:'rgba(0,0,0,0.25)',border:'0.5px solid rgba(255,255,255,0.1)',borderRadius:'8px',padding:'8px 12px',color:'#fff',fontSize:'13px',fontFamily:'inherit',outline:'none',boxSizing:'border-box'}}/>
+            );
+            const ta = (val, onChange, placeholder='', rows=3) => (
+              <textarea value={val||''} onChange={e=>onChange(e.target.value)} placeholder={placeholder} rows={rows}
+                style={{width:'100%',background:'rgba(0,0,0,0.25)',border:'0.5px solid rgba(255,255,255,0.1)',borderRadius:'8px',padding:'8px 12px',color:'#fff',fontSize:'13px',fontFamily:'inherit',outline:'none',resize:'vertical',boxSizing:'border-box'}}/>
+            );
+            const lbl = (t) => <div style={{fontSize:'10px',fontWeight:'600',textTransform:'uppercase',letterSpacing:'.08em',color:'rgba(255,255,255,0.35)',marginBottom:'5px',marginTop:'12px'}}>{t}</div>;
+            return (
+              <div style={{marginTop:'20px',borderTop:'1px solid rgba(255,255,255,0.06)',paddingTop:'20px'}}>
+                {lbl(isEn ? 'Name' : 'Имя')}
+                {inp(ed.name, v=>set('name',v))}
+                {lbl(isEn ? 'Title / Position' : 'Должность')}
+                {inp(ed.title, v=>set('title',v))}
+                {lbl('Summary')}
+                {ta(ed.summary, v=>set('summary',v), '', 4)}
+                {lbl(isEn ? 'Phone' : 'Телефон')}
+                {inp(ed.contacts?.p, v=>setContact('p',v))}
+                {lbl('Email')}
+                {inp(ed.contacts?.e, v=>setContact('e',v))}
+                {lbl(isEn ? 'Location' : 'Локация')}
+                {inp(ed.contacts?.l, v=>setContact('l',v))}
+                {lbl('LinkedIn')}
+                {inp(ed.socials?.li, v=>setEditData(p=>({...(p||resumeData),socials:{...(p||resumeData).socials,li:v}})))}
+                {lbl('GitHub')}
+                {inp(ed.socials?.gh, v=>setEditData(p=>({...(p||resumeData),socials:{...(p||resumeData).socials,gh:v}})))}
+                {lbl('Telegram')}
+                {inp(ed.socials?.tg, v=>setEditData(p=>({...(p||resumeData),socials:{...(p||resumeData).socials,tg:v}})))}
+
+                {/* Experience */}
+                {lbl(isEn ? 'Experience' : 'Опыт')}
+                {(ed.experience||[]).map((ex,i) => (
+                  <div key={i} style={{background:'rgba(0,0,0,0.15)',borderRadius:'10px',padding:'12px',marginBottom:'8px'}}>
+                    <div style={{fontSize:'11px',color:'rgba(255,255,255,0.3)',marginBottom:'8px'}}>#{i+1}</div>
+                    {inp(ex.p, v=>setExp(i,'p',v), isEn?'Position':'Должность')}
+                    <div style={{height:'6px'}}/>
+                    {inp(ex.c, v=>setExp(i,'c',v), isEn?'Company':'Компания')}
+                    <div style={{height:'6px'}}/>
+                    {inp(ex.t, v=>setExp(i,'t',v), isEn?'Period':'Период')}
+                    <div style={{height:'6px'}}/>
+                    {ta(ex.d, v=>setExp(i,'d',v), isEn?'Description':'Описание', 2)}
+                  </div>
+                ))}
+
+                {/* Education */}
+                {lbl(isEn ? 'Education' : 'Образование')}
+                {(ed.education||[]).map((edu,i) => (
+                  <div key={i} style={{background:'rgba(0,0,0,0.15)',borderRadius:'10px',padding:'12px',marginBottom:'8px'}}>
+                    <div style={{fontSize:'11px',color:'rgba(255,255,255,0.3)',marginBottom:'8px'}}>#{i+1}</div>
+                    {inp(edu.d, v=>setEdu(i,'d',v), isEn?'Degree':'Степень')}
+                    <div style={{height:'6px'}}/>
+                    {inp(edu.s, v=>setEdu(i,'s',v), isEn?'School':'Учебное заведение')}
+                    <div style={{height:'6px'}}/>
+                    {inp(edu.y, v=>setEdu(i,'y',v), isEn?'Year':'Год')}
+                  </div>
+                ))}
+
+                <button
+                  onClick={async () => {
+                    setSaveStatus('saving');
+                    try {
+                      const dataToSave = editData || resumeData;
+                      const res = await fetch(`${WORKER_URL}/save`, {
+                        method:'PUT',
+                        headers:{'Content-Type':'application/json'},
+                        body: JSON.stringify({ id: savedId, data: dataToSave })
+                      });
+                      const result = await res.json();
+                      if (result.ok) {
+                        setResumeData(dataToSave);
+                        if (window.__RL_SET_RESUME_DATA__) window.__RL_SET_RESUME_DATA__(dataToSave);
+                        setEditMode(false);
+                        setEditData(null);
+                        setSaveStatus('ok');
+                        setTimeout(()=>setSaveStatus(null), 3000);
+                      } else { setSaveStatus('error'); }
+                    } catch(e) { setSaveStatus('error'); }
+                  }}
+                  disabled={saveStatus === 'saving'}
+                  style={{marginTop:'16px',background:'var(--green)',color:'#fff',border:'none',borderRadius:'10px',padding:'12px 28px',fontSize:'14px',fontWeight:'500',cursor:'pointer',width:'100%'}}>
+                  {saveStatus === 'saving' ? '...' : saveStatus === 'ok' ? (isEn ? '✓ Saved!' : '✓ Сохранено!') : (isEn ? 'Save changes' : 'Сохранить изменения')}
+                </button>
+              </div>
+            );
+          })()}
+        </div>
+      )}
 
       {/* PRO UPGRADE BLOCK */}
 <div style={{background:'var(--forest)',borderRadius:'20px',padding:'28px 32px',display:'flex',alignItems:'center',justifyContent:'space-between',gap:'2rem',flexWrap:'wrap',marginTop:'2rem'}}>
