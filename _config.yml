@@ -1,20 +1,8 @@
 # ResumeLink — Jekyll Config
-# GitHub Pages configuration
-
 title: ResumeLink
 description: AI-powered resume builder that converts PDF resumes into interactive profiles with ATS score, QR code and shareable link. Free, no signup required.
 url: "https://resumelink.cc"
 baseurl: ""
-
-# Allow XML and other file types to be served correctly
-include:
-  - sitemap.xml
-  - robots.txt
-
-# MIME types fix for GitHub Pages
-webrick:
-  headers:
-    X-Content-Type-Options: nosniff
 
 # Collections
 collections:
@@ -30,13 +18,11 @@ defaults:
     values:
       layout: "role"
 
-# Exclude unnecessary files
+# Exclude from Jekyll processing
 exclude:
   - Gemfile
   - Gemfile.lock
   - node_modules
   - vendor
 
-# Plugins
-plugins:
-  - jekyll-sitemap
+# NO jekyll-sitemap plugin — we manage sitemap.xml manually
