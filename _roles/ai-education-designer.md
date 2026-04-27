@@ -2,51 +2,59 @@
 layout: role
 category: "AI Roles"
 title: "AI Education Designer"
-h1: "The New Learning: AI Curriculum Resume"
-summary_hack: "Designing personalized learning paths using AI. I focus on student engagement."
-judgment_skills: ['Curriculum Design', 'Educational Psychology', 'Mentorship', 'Accessibility', 'Storytelling']
-ai_tools: ['Khan Academy AI', 'Duolingo AI', 'Canva', 'ChatGPT', 'Loom']
-human_touch_tip: "Describe how you helped a struggling student using a custom AI tool."
+h1: "AI Education Designer Resume Guide 2026"
+summary_hack: "AI Education Designer professionals combine domain expertise with AI tools to deliver measurable results in 2026's rapidly evolving job market."
+salary_range: "$70,000 – $120,000"
+salary_note: "US market rate, varies by experience and location"
+judgment_skills:
+  - Strategic Thinking & Problem Solving
+  - AI Tool Proficiency & Critical Evaluation
+  - Cross-functional Collaboration
+  - Data Interpretation & Decision Making
+  - Communication & Stakeholder Management
+ai_tools:
+  - Python / R
+  - AI Productivity Suite
+  - Data Visualization Tools
+  - Project Management Platforms
+  - Domain-specific AI Software
+ats_keywords:
+  - artificial intelligence
+  - machine learning
+  - data analysis
+  - cross-functional collaboration
+  - stakeholder management
+  - process optimization
+  - AI implementation
+resume_bullet_1: "Led AI implementation initiative delivering 35% efficiency gain across 3 departments within 6 months."
+resume_bullet_2: "Built and trained team of 8 on AI-augmented workflows, reducing manual processing time by 50%."
+resume_bullet_3: "Developed data-driven reporting framework that improved decision-making speed by 40% for senior leadership."
+career_transition: "Common paths into AI Education Designer: professionals from adjacent fields with strong analytical skills, domain experts who upskill in AI tools, and career changers who complete targeted AI certifications. Most transitions take 6-12 months."
+certifications:
+  - Google AI Essentials Certificate
+  - IBM AI Engineering Professional Certificate
+  - Coursera Machine Learning Specialization
+human_touch_tip: "In every AI Education Designer interview, prepare one story where your judgment corrected or improved on what an AI system suggested. This demonstrates the human value you bring beyond tool proficiency."
+faq_q1: "What skills are most important for a AI Education Designer in 2026?"
+faq_a1: "The combination of domain expertise and AI tool proficiency is most valued. Technical skills like Python, data analysis, and familiarity with AI platforms are essential, but soft skills like critical thinking, communication, and ethical judgment differentiate top candidates."
+faq_q2: "What is the salary range for AI Education Designer roles?"
+faq_a2: "Salaries range from $70,000 – $120,000 depending on experience, location, and company size. AI specialization typically commands a 20-30% premium over traditional roles in the same domain."
+faq_q3: "How do I transition into AI Education Designer from my current career?"
+faq_a3: "Start by identifying the overlap between your current skills and the role requirements. Complete relevant certifications, build a portfolio of AI-augmented projects, and network in professional communities. Most successful transitions take 6-18 months of deliberate preparation."
+related_roles:
+  - chief-ai-officer
+  - ai-governance-consultant
+  - computer-vision-specialist
 ---
 
-## What is a AI Education Designer?
+## What does a AI Education Designer do?
 
-Designing personalized learning paths using AI. I focus on student engagement. This role sits at the intersection of human expertise and artificial intelligence, requiring professionals who can leverage AI tools while maintaining the judgment and creativity that machines cannot replicate.
+AI Education Designer professionals combine domain expertise with AI tools to deliver measurable results in 2026's rapidly evolving job market. In 2026, this role requires both deep domain knowledge and the ability to work alongside AI systems as a collaborative partner, not just a user.
 
-As AI transforms industries in 2026, the AI Education Designer role has become one of the most sought-after positions in the modern workforce. Organizations need specialists who understand both the technical capabilities of AI systems and the human context in which they operate.
+Professionals in this field spend their time designing AI-augmented workflows, validating machine outputs with human judgment, and communicating insights to stakeholders who may not have technical backgrounds. The human element — ethics, creativity, and contextual understanding — remains irreplaceable.
 
-## Core Skills for AI Education Designer
+## Why this role matters in 2026
 
-To succeed as a AI Education Designer, you need a combination of technical knowledge and human skills. The key competencies include: Curriculum Design, Educational Psychology, Mentorship, Accessibility, Storytelling.
+Organizations are deploying AI tools faster than they can build internal expertise to manage them. AI Education Designer professionals bridge the gap between AI capability and business value, ensuring that technology investments translate into real outcomes.
 
-These skills work together to help you navigate complex challenges that pure automation cannot solve. Employers consistently look for candidates who demonstrate these abilities through concrete examples and measurable outcomes.
-
-## AI Tools Used by AI Education Designer Professionals
-
-Modern AI Education Designer professionals work with a range of AI-powered tools: Khan Academy AI, Duolingo AI, Canva, ChatGPT, Loom.
-
-Familiarity with these tools is increasingly expected, but what truly differentiates top candidates is knowing *when* to use them and how to interpret their outputs critically.
-
-## How to Build Your AI Education Designer Resume
-
-Your resume for a AI Education Designer position should clearly demonstrate your ability to work alongside AI systems while providing distinctly human value. Here's what matters most:
-
-**Lead with impact.** Quantify your achievements wherever possible. Instead of "managed AI projects," write "led implementation of AI workflow that reduced processing time by 40%."
-
-**Show your judgment.** Employers want to see that you can make decisions AI cannot. Include examples where your expertise, ethics, or creativity determined the outcome.
-
-**Describe how you helped a struggling student using a custom AI tool.**
-
-**List relevant tools.** Include the AI tools you've worked with: Khan Academy AI, Duolingo AI, Canva, ChatGPT, Loom. Be specific about your proficiency level and the context in which you used them.
-
-## Resume Tips Specific to AI Education Designer Roles
-
-- Use keywords from job descriptions — ATS systems scan for exact matches
-- Include a professional summary that mentions your AI-augmented skill set
-- Quantify results: percentages, time saved, revenue impacted, team size
-- Keep formatting clean and ATS-friendly — no tables, graphics, or unusual fonts
-- Add links to relevant projects, publications, or portfolios where applicable
-
-## Create Your AI Education Designer Resume in 10 Seconds
-
-Upload your existing resume to ResumeLink and get an AI-optimized interactive profile with ATS score, shareable link, and QR code — instantly, no signup required.
+The demand for specialists who combine domain knowledge with AI literacy is outpacing supply across industries, creating significant career opportunities for those who invest in developing this hybrid skill set.
