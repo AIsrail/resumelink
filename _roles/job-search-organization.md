@@ -1,52 +1,60 @@
 ---
 layout: role
-category: "Checklists"
-title: "Job Search Tracker"
-h1: "How to Manage 50+ Applications Efficiently"
-summary_hack: "Organization is the key to not losing your mind during a job search. Build your system today."
-judgment_skills: Set a 'Job Search' schedule. Treat it like a 9-to-5 job to avoid burnout.
-ai_tools: ["PDF Version", "Print Ready", "Mobile Friendly", "ResumeLink Tool"]
-human_touch_tip: "Treat your job search like a sales pipeline with weekly metrics reviews — candidates who track their conversion rates at each stage identify and fix bottlenecks systematically rather than attributing their results to luck or market conditions."
+category: "Guides & Strategy"
+title: "Job Search Strategist"
+h1: "Job Search Strategist Resume Guide 2026"
+summary_hack: "Job Search Strategist professionals combine domain expertise with AI tools to deliver measurable results in 2026's rapidly evolving job market."
+salary_range: "$55,000 – $100,000"
+salary_note: "US market rate, varies by experience and location"
+judgment_skills:
+  - Strategic Thinking & Problem Solving
+  - AI Tool Proficiency & Critical Evaluation
+  - Cross-functional Collaboration
+  - Data Interpretation & Decision Making
+  - Communication & Stakeholder Management
+ai_tools:
+  - Python / R
+  - AI Productivity Suite
+  - Data Visualization Tools
+  - Project Management Platforms
+  - Domain-specific AI Software
+ats_keywords:
+  - artificial intelligence
+  - machine learning
+  - data analysis
+  - cross-functional collaboration
+  - stakeholder management
+  - process optimization
+  - AI implementation
+resume_bullet_1: "Led AI implementation initiative delivering 35% efficiency gain across 3 departments within 6 months."
+resume_bullet_2: "Built and trained team of 8 on AI-augmented workflows, reducing manual processing time by 50%."
+resume_bullet_3: "Developed data-driven reporting framework that improved decision-making speed by 40% for senior leadership."
+career_transition: "Common paths into Job Search Strategist: professionals from adjacent fields with strong analytical skills, domain experts who upskill in AI tools, and career changers who complete targeted AI certifications. Most transitions take 6-12 months."
+certifications:
+  - Google AI Essentials Certificate
+  - IBM AI Engineering Professional Certificate
+  - Coursera Machine Learning Specialization
+human_touch_tip: "In every Job Search Strategist interview, prepare one story where your judgment corrected or improved on what an AI system suggested. This demonstrates the human value you bring beyond tool proficiency."
+faq_q1: "What skills are most important for a Job Search Strategist in 2026?"
+faq_a1: "The combination of domain expertise and AI tool proficiency is most valued. Technical skills like Python, data analysis, and familiarity with AI platforms are essential, but soft skills like critical thinking, communication, and ethical judgment differentiate top candidates."
+faq_q2: "What is the salary range for Job Search Strategist roles?"
+faq_a2: "Salaries range from $55,000 – $100,000 depending on experience, location, and company size. AI specialization typically commands a 20-30% premium over traditional roles in the same domain."
+faq_q3: "How do I transition into Job Search Strategist from my current career?"
+faq_a3: "Start by identifying the overlap between your current skills and the role requirements. Complete relevant certifications, build a portfolio of AI-augmented projects, and network in professional communities. Most successful transitions take 6-18 months of deliberate preparation."
+related_roles:
+  - career-change-roadmap
+  - first-90-days-plan
+  - career-change-roadmap
 ---
 
-## What is a Job Search Tracker?
+## What does a Job Search Strategist do?
 
-Organization is the key to not losing your mind during a job search. Build your system today. This role sits at the intersection of human expertise and artificial intelligence, requiring professionals who can leverage AI tools while maintaining the judgment and creativity that machines cannot replicate.
+Job Search Strategist professionals combine domain expertise with AI tools to deliver measurable results in 2026's rapidly evolving job market. In 2026, this role requires both deep domain knowledge and the ability to work alongside AI systems as a collaborative partner, not just a user.
 
-As AI transforms industries in 2026, the Job Search Tracker role has become one of the most sought-after positions in the modern workforce. Organizations need specialists who understand both the technical capabilities of AI systems and the human context in which they operate.
+Professionals in this field spend their time designing AI-augmented workflows, validating machine outputs with human judgment, and communicating insights to stakeholders who may not have technical backgrounds. The human element — ethics, creativity, and contextual understanding — remains irreplaceable.
 
-## Core Skills for Job Search Tracker
+## Why this role matters in 2026
 
-To succeed as a Job Search Tracker, you need a combination of technical knowledge and human skills. The key competencies include: Job Search.
+Organizations are deploying AI tools faster than they can build internal expertise to manage them. Job Search Strategist professionals bridge the gap between AI capability and business value, ensuring that technology investments translate into real outcomes.
 
-These skills work together to help you navigate complex challenges that pure automation cannot solve. Employers consistently look for candidates who demonstrate these abilities through concrete examples and measurable outcomes.
-
-## AI Tools Used by Job Search Tracker Professionals
-
-Modern Job Search Tracker professionals work with a range of AI-powered tools: PDF Version, Print Ready, Mobile Friendly, ResumeLink Tool.
-
-Familiarity with these tools is increasingly expected, but what truly differentiates top candidates is knowing *when* to use them and how to interpret their outputs critically.
-
-## How to Build Your Job Search Tracker Resume
-
-Your resume for a Job Search Tracker position should clearly demonstrate your ability to work alongside AI systems while providing distinctly human value. Here's what matters most:
-
-**Lead with impact.** Quantify your achievements wherever possible. Instead of "managed AI projects," write "led implementation of AI workflow that reduced processing time by 40%."
-
-**Show your judgment.** Employers want to see that you can make decisions AI cannot. Include examples where your expertise, ethics, or creativity determined the outcome.
-
-**Treat your job search like a sales pipeline with weekly metrics reviews — candidates who track their conversion rates at each stage identify and fix bottlenecks systematically rather than attributing their results to luck or market conditions.**
-
-**List relevant tools.** Include the AI tools you've worked with: PDF Version, Print Ready, Mobile Friendly, ResumeLink Tool. Be specific about your proficiency level and the context in which you used them.
-
-## Resume Tips Specific to Job Search Tracker Roles
-
-- Use keywords from job descriptions — ATS systems scan for exact matches
-- Include a professional summary that mentions your AI-augmented skill set
-- Quantify results: percentages, time saved, revenue impacted, team size
-- Keep formatting clean and ATS-friendly — no tables, graphics, or unusual fonts
-- Add links to relevant projects, publications, or portfolios where applicable
-
-## Create Your Job Search Tracker Resume in 10 Seconds
-
-Upload your existing resume to ResumeLink and get an AI-optimized interactive profile with ATS score, shareable link, and QR code — instantly, no signup required.
+The demand for specialists who combine domain knowledge with AI literacy is outpacing supply across industries, creating significant career opportunities for those who invest in developing this hybrid skill set.
