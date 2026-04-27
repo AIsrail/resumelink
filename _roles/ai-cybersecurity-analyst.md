@@ -1,16 +1,16 @@
 ---
 layout: role
-category: "AI Roles"
+category: "Security & Privacy"
 title: "AI Cybersecurity Analyst"
 h1: "AI Cybersecurity Analyst Resume Guide 2026"
-summary_hack: "AI Cybersecurity Analysts use machine learning to detect threats in real-time, reducing response time from hours to milliseconds. They sit at the intersection of human judgment and automated security systems."
+summary_hack: "AI Cybersecurity Analysts use machine learning to detect threats in real-time, reducing response time from hours to milliseconds. They manage AI-powered security tools while providing human judgment for complex decisions."
 salary_range: "$95,000 – $165,000"
 salary_note: "US average; senior roles exceed $200K"
 judgment_skills:
   - Threat Detection & Incident Response
-  - Security Operations Center (SOC) Management
-  - Risk Assessment & Vulnerability Analysis
-  - Network Security Architecture
+  - SOC Management
+  - Risk Assessment
+  - Network Security
   - Forensic Investigation
 ai_tools:
   - Darktrace
@@ -18,7 +18,6 @@ ai_tools:
   - Splunk SIEM
   - SentinelOne
   - Python / YARA Rules
-  - Microsoft Sentinel
 ats_keywords:
   - threat detection
   - incident response
@@ -27,46 +26,33 @@ ats_keywords:
   - zero trust
   - SOC analyst
   - vulnerability management
-  - endpoint protection
   - MITRE ATT&CK
-  - cloud security
-resume_bullet_1: "Reduced mean time to detect (MTTD) threats by 78% by implementing AI-powered Darktrace across 3,000-node network infrastructure."
-resume_bullet_2: "Led incident response for ransomware attack, containing breach within 4 hours and preventing estimated $2.3M in damage."
-resume_bullet_3: "Built automated threat hunting playbooks using Python and MITRE ATT&CK framework, processing 50M+ log events daily."
-career_transition: "Common paths into this role: Network Administrator (strong foundation in infrastructure), Software Developer (brings coding skills for automation), Military/Intelligence background (brings operational security mindset), IT Support (entry-level SOC analyst path). Most transitions take 6-18 months with targeted certifications."
+resume_bullet_1: "Reduced mean time to detect threats by 78% by implementing AI-powered Darktrace across 3,000-node network."
+resume_bullet_2: "Led incident response for ransomware attack, containing breach within 4 hours, preventing estimated $2.3M in damage."
+resume_bullet_3: "Built automated threat hunting playbooks using Python and MITRE ATT&CK, processing 50M+ log events daily."
+career_transition: "Common paths: Network Administrator (infrastructure foundation), Software Developer (automation skills), Military/Intelligence background, IT Support moving into SOC analyst role."
 certifications:
   - CompTIA Security+
-  - CISSP (Certified Information Systems Security Professional)
+  - CISSP
   - CEH (Certified Ethical Hacker)
   - GIAC Security Essentials (GSEC)
-  - AWS Security Specialty
-human_touch_tip: "The best AI Cybersecurity Analysts know when NOT to trust the algorithm. Document cases where your judgment overruled an AI false positive or caught something the system missed — that's your most valuable story in any interview."
+human_touch_tip: "Document cases where your judgment improved or corrected an AI recommendation — these stories are gold in interviews for AI Cybersecurity Analyst roles."
 faq_q1: "Do I need a degree to become an AI Cybersecurity Analyst?"
-faq_a1: "A degree helps but is not required. Many successful analysts enter through certifications (CompTIA Security+, CISSP) and hands-on experience. Boot camps and self-study combined with a home lab are increasingly common paths. Employers care more about skills and certifications than formal degrees in this field."
-faq_q2: "What is the average salary for an AI Cybersecurity Analyst in 2026?"
-faq_a2: "In the US, salaries range from $95,000 for entry-level SOC analysts to $165,000+ for senior threat hunters and security architects. With AI specialization, top earners exceed $200,000. European salaries are typically 20-40% lower. Remote roles often pay US rates regardless of location."
-faq_q3: "How is this role different from a traditional Cybersecurity Analyst?"
-faq_a3: "Traditional analysts manually review alerts and logs. AI Cybersecurity Analysts work alongside ML systems that automate detection, triage, and initial response. The human role shifts toward training models, validating AI decisions, handling complex edge cases, and managing the AI tools themselves. You need both security knowledge and AI literacy."
-faq_q4: "What is the career path for an AI Cybersecurity Analyst?"
-faq_a4: "Typical progression: SOC Analyst (L1/L2) → Threat Hunter → Senior Security Engineer → Security Architect → CISO. With AI specialization, you can also move into AI Security Research, Red Team lead, or product security roles at AI companies. Timeline to senior is typically 5-8 years."
-faq_q5: "What home lab projects should I build to break into this role?"
-faq_a5: "Set up a SIEM (Splunk free tier or Elastic Stack), run vulnerable VMs (HackTheBox, TryHackMe), build a Python script that analyzes logs for anomalies, practice with YARA rules for malware detection, and document everything in a GitHub portfolio. These hands-on projects matter more than certifications alone."
+faq_a1: "No. Many successful analysts enter through certifications and hands-on experience. CompTIA Security+ is the standard entry-level credential. Home labs and CTF competitions matter more than formal degrees."
+faq_q2: "What is the salary for an AI Cybersecurity Analyst in 2026?"
+faq_a2: "Entry-level SOC analysts earn $95K; senior threat hunters and security architects earn $165K+. With AI specialization, top earners exceed $200K. Remote roles often pay US rates regardless of location."
+faq_q3: "How is this different from a traditional Cybersecurity Analyst?"
+faq_a3: "Traditional analysts manually review alerts. AI Cybersecurity Analysts manage ML systems that automate detection and triage. The human role shifts to training models, validating AI decisions, and handling complex edge cases."
 related_roles:
   - ai-governance-consultant
-  - computer-vision-specialist
   - ai-legal-compliance-manager
-  - chief-ai-officer
-  - ai-data-privacy-for-small-business
+  - zero-knowledge-ai-privacy
 ---
 
-## What does an AI Cybersecurity Analyst do day-to-day?
+## What does a AI Cybersecurity Analyst do?
 
-AI Cybersecurity Analysts monitor, detect, and respond to security threats using AI-powered tools that process millions of events per second. Unlike traditional security roles, they spend less time on manual log review and more time on threat hunting, model tuning, and strategic response planning.
+AI Cybersecurity Analysts use machine learning to detect threats in real-time, reducing response time from hours to milliseconds. They manage AI-powered security tools while providing human judgment for complex decisions. This role requires both domain expertise and AI literacy — the ability to work alongside automated systems while providing irreplaceable human judgment.
 
-A typical day includes reviewing AI-generated alerts, investigating anomalies the system flagged overnight, running threat hunting queries, and updating detection rules based on new threat intelligence. Communication with engineering teams and leadership is frequent — translating technical findings into business risk is a core skill.
+## Why this role is growing in 2026
 
-## Why this role is growing fast in 2026
-
-AI is part of the hiring process — 1 in 3 companies expect AI to run their entire hiring process by the end of 2026. The same AI transformation is happening in security. Organizations are deploying AI security tools faster than they can hire humans to manage them, creating a significant talent gap for people who understand both security and AI systems.
-
-The attack surface is also expanding. Cloud environments, IoT devices, and AI systems themselves introduce new vulnerabilities that require specialists who understand how AI can be both a defense tool and an attack vector.
+Organizations are investing heavily in AI across every sector. AI Cybersecurity Analyst professionals help translate that investment into measurable business outcomes, bridging the gap between technical capability and real-world value.
