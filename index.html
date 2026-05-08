@@ -225,6 +225,25 @@
         .socials-save-btn { background:var(--forest); color:#fff; border:none; padding:9px 20px; border-radius:10px; font-size:13px; font-weight:500; cursor:pointer; font-family:'DM Sans',sans-serif; transition:background .2s; }
         .socials-save-btn:hover { background:var(--green-dk); }
 
+        /* TEMPLATE PICKER */
+        .tpl-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:3000;align-items:center;justify-content:center;padding:1rem}
+        .tpl-modal.open{display:flex}
+        .tpl-box{background:var(--surface);border-radius:20px;padding:28px;max-width:520px;width:100%}
+        .tpl-title{font-size:18px;font-weight:500;color:var(--forest);margin-bottom:4px}
+        .tpl-sub{font-size:12px;color:var(--muted);margin-bottom:20px}
+        .tpl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+        .tpl-card{border:1.5px solid var(--border);border-radius:12px;padding:12px;cursor:pointer;transition:all .2s;text-align:center;position:relative}
+        .tpl-card:hover{border-color:var(--green);transform:translateY(-2px)}
+        .tpl-card.selected{border-color:var(--green);background:var(--mint)}
+        .tpl-card.locked{opacity:0.5;cursor:default}
+        .tpl-card.locked:hover{transform:none;border-color:var(--border)}
+        .tpl-preview{height:60px;border-radius:6px;margin-bottom:8px;overflow:hidden;background:var(--bg)}
+        .tpl-name{font-size:11px;font-weight:500;color:var(--forest)}
+        .tpl-pro-badge{position:absolute;top:6px;right:6px;background:var(--forest);color:#fff;font-size:8px;font-weight:600;padding:2px 6px;border-radius:10px}
+        .tpl-print-btn{width:100%;background:var(--forest);color:#fff;padding:13px;border-radius:12px;font-size:14px;font-weight:500;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s}
+        .tpl-print-btn:hover{background:var(--green-dk)}
+        .tpl-cancel{display:block;text-align:center;margin-top:10px;font-size:12px;color:var(--muted);cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif}
+
         .roast-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:2000; align-items:center; justify-content:center; padding:1rem; }
         .roast-modal.open { display:flex; }
         .roast-box { background:var(--forest); border-radius:20px; padding:28px; max-width:560px; width:100%; max-height:80vh; overflow-y:auto; position:relative; }
@@ -514,6 +533,8 @@ function App() {
   const [viewCount, setViewCount] = useState(null);
   const [profileCount, setProfileCount] = useState(null);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [showTplPicker, setShowTplPicker] = useState(false);
+  const [selectedTpl, setSelectedTpl] = useState('timeline');
   const [showSocials, setShowSocials] = useState(false);
   const [socialsData, setSocialsData] = useState({li:'',gh:'',tg:''});
   const [pasteText, setPasteText] = useState('');
@@ -539,6 +560,8 @@ function App() {
   const isPro = localStorage.getItem('rl_pro') === 'true';
 
   // expose photo to printResume (vanilla JS)
+  window.__RL_PROFILE_PHOTO__ = null;
+  window.__RL_SHOW_TPL_PICKER__ = () => setShowTplPicker(true);
   useEffect(() => { window.__RL_PROFILE_PHOTO__ = profilePhoto; }, [profilePhoto]);
 	// ── Проверка Pro по email (активация после оплаты) ──
   const checkProByEmail = async (email) => {
@@ -1150,11 +1173,14 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
               <label title={isEn ? 'Upload photo' : 'Загрузить фото'}
                 style={{position:'absolute',bottom:'-2px',right:'-2px',width:'20px',height:'20px',borderRadius:'50%',background:'var(--green)',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',boxShadow:'0 1px 4px rgba(0,0,0,0.15)'}}>
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                <input type="file" accept="image/*" className="hidden" onChange={e => {
+                <input type="file" accept="image/*" style={{position:'absolute',inset:0,opacity:0,cursor:'pointer',width:'100%',height:'100%'}} onChange={e => {
                   const f = e.target.files[0];
                   if (!f) return;
                   const reader = new FileReader();
-                  reader.onload = ev => setProfilePhoto(ev.target.result);
+                  reader.onload = ev => {
+                    setProfilePhoto(ev.target.result);
+                    window.__RL_PROFILE_PHOTO__ = ev.target.result;
+                  };
                   reader.readAsDataURL(f);
                 }}/>
               </label>
@@ -1627,6 +1653,53 @@ Write ONLY the cover letter text. No subject line, no meta-commentary. 3-4 parag
         <div className="confetti-wrap" id="confetti-wrap"></div>
       )}
 
+      {/* TEMPLATE PICKER MODAL */}
+      {showTplPicker && (() => {
+        window.__RL_SHOW_TPL_PICKER__ = null;
+        const isPro = localStorage.getItem('rl_pro') === 'true';
+        const templates = [
+          { id:'timeline', name: isEn ? 'Timeline' : 'Таймлайн', desc: isEn ? 'Experience as story' : 'Опыт как история', locked: false,
+            preview: <svg viewBox="0 0 80 60" style={{width:'100%',height:'100%'}}><rect x="0" y="0" width="80" height="60" fill="#F2FAF6"/><rect x="0" y="0" width="80" height="14" fill="#0D3D28"/><rect x="6" y="3" width="28" height="4" rx="1" fill="white" opacity="0.9"/><rect x="6" y="9" width="16" height="2" rx="1" fill="#1DB368"/><circle cx="12" cy="22" r="2.5" fill="#1DB368"/><line x1="12" y1="24.5" x2="12" y2="36" stroke="#C5E8D5" strokeWidth="1"/><rect x="17" y="19" width="30" height="3" rx="1" fill="#0D3D28" opacity="0.7"/><rect x="17" y="24" width="20" height="2" rx="1" fill="#5A8A70" opacity="0.6"/><rect x="17" y="28" width="35" height="1.5" rx="0.5" fill="#A8CDB9" opacity="0.5"/><circle cx="12" cy="38" r="2.5" fill="#1DB368"/><rect x="17" y="35" width="28" height="3" rx="1" fill="#0D3D28" opacity="0.7"/><rect x="17" y="40" width="22" height="2" rx="1" fill="#5A8A70" opacity="0.6"/><rect x="17" y="44" width="32" height="1.5" rx="0.5" fill="#A8CDB9" opacity="0.5"/></svg>
+          },
+          { id:'minimal', name: isEn ? 'Minimal' : 'Минимал', desc: isEn ? 'Clean & modern' : 'Чисто и современно', locked: !isPro,
+            preview: <svg viewBox="0 0 80 60" style={{width:'100%',height:'100%'}}><rect x="0" y="0" width="80" height="60" fill="#fff"/><rect x="6" y="6" width="35" height="5" rx="1" fill="#1A1A1A" opacity="0.8"/><rect x="6" y="13" width="22" height="2.5" rx="1" fill="#888" opacity="0.5"/><rect x="6" y="18" width="68" height="0.5" fill="#E0E0DC"/><rect x="6" y="22" width="15" height="2" rx="1" fill="#888" opacity="0.4"/><rect x="6" y="26" width="60" height="1.5" rx="0.5" fill="#1A1A1A" opacity="0.6"/><rect x="6" y="29" width="50" height="1.5" rx="0.5" fill="#888" opacity="0.4"/><rect x="6" y="33" width="55" height="1.5" rx="0.5" fill="#888" opacity="0.3"/><rect x="6" y="38" width="15" height="2" rx="1" fill="#888" opacity="0.4"/><rect x="6" y="42" width="58" height="1.5" rx="0.5" fill="#1A1A1A" opacity="0.6"/><rect x="6" y="45" width="45" height="1.5" rx="0.5" fill="#888" opacity="0.4"/></svg>
+          },
+          { id:'sidebar', name: isEn ? 'Sidebar' : 'Сайдбар', desc: isEn ? 'Two columns' : 'Две колонки', locked: !isPro,
+            preview: <svg viewBox="0 0 80 60" style={{width:'100%',height:'100%'}}><rect x="0" y="0" width="80" height="60" fill="#fff"/><rect x="0" y="0" width="26" height="60" fill="#0D3D28"/><circle cx="13" cy="10" r="6" fill="#1DB368" opacity="0.6"/><rect x="4" y="19" width="18" height="2" rx="1" fill="white" opacity="0.7"/><rect x="4" y="23" width="14" height="1.5" rx="0.5" fill="white" opacity="0.4"/><rect x="4" y="27" width="16" height="1.5" rx="0.5" fill="white" opacity="0.4"/><rect x="30" y="6" width="28" height="4" rx="1" fill="#0D3D28" opacity="0.8"/><rect x="30" y="12" width="18" height="2" rx="1" fill="#1DB368"/><rect x="30" y="18" width="12" height="1.5" rx="0.5" fill="#888" opacity="0.5"/><rect x="30" y="22" width="42" height="1.5" rx="0.5" fill="#333" opacity="0.5"/><rect x="30" y="25" width="38" height="1.5" rx="0.5" fill="#888" opacity="0.4"/><rect x="30" y="32" width="12" height="1.5" rx="0.5" fill="#888" opacity="0.5"/><rect x="30" y="36" width="40" height="1.5" rx="0.5" fill="#333" opacity="0.5"/><rect x="30" y="39" width="35" height="1.5" rx="0.5" fill="#888" opacity="0.4"/></svg>
+          },
+        ];
+        return (
+          <div className="tpl-modal open" onClick={e => { if(e.target===e.currentTarget) setShowTplPicker(false); }}>
+            <div className="tpl-box">
+              <div className="tpl-title">🖨️ {isEn ? 'Choose PDF Template' : 'Выберите шаблон PDF'}</div>
+              <div className="tpl-sub">{isEn ? 'Timeline is free. Minimal & Sidebar — Pro only.' : 'Таймлайн бесплатно. Минимал и Сайдбар — только Pro.'}</div>
+              <div className="tpl-grid">
+                {templates.map(t => (
+                  <div key={t.id} className={`tpl-card${selectedTpl===t.id?' selected':''}${t.locked?' locked':''}`}
+                    onClick={() => { if(!t.locked) setSelectedTpl(t.id); else window.open('/pricing.html','_blank'); }}>
+                    {t.locked && <div className="tpl-pro-badge">PRO</div>}
+                    <div className="tpl-preview">{t.preview}</div>
+                    <div className="tpl-name">{t.name}</div>
+                    <div style={{fontSize:'10px',color:'var(--muted)',marginTop:'2px'}}>{t.desc}</div>
+                  </div>
+                ))}
+              </div>
+              <button className="tpl-print-btn" onClick={() => {
+                setShowTplPicker(false);
+                const isPro2 = localStorage.getItem('rl_pro') === 'true';
+                const frozenTheme = isPro2 ? (localStorage.getItem('rl_theme') || 'green') : 'charcoal';
+                setTimeout(() => printResume(frozenTheme, selectedTpl), 100);
+              }}>
+                {isEn ? '⬇ Download PDF' : '⬇ Скачать PDF'}
+              </button>
+              <button className="tpl-cancel" onClick={() => setShowTplPicker(false)}>
+                {isEn ? 'Cancel' : 'Отмена'}
+              </button>
+            </div>
+          </div>
+        );
+      })()}
+
       {/* SOCIALS BLOCK */}
       {!showSocials ? (
         <div style={{textAlign:'center',marginTop:'1rem'}}>
@@ -2074,9 +2147,13 @@ document.addEventListener('DOMContentLoaded', () => {
   if (dlBtn && !dlBtn.dataset.bound) {
     dlBtn.dataset.bound = 'true';
     dlBtn.addEventListener('click', () => {
-      const isPro = localStorage.getItem('rl_pro') === 'true';
-      const frozenTheme = isPro ? (localStorage.getItem('rl_theme') || 'green') : 'charcoal';
-      printResume(frozenTheme);
+      // Show template picker via React
+      if (window.__RL_SHOW_TPL_PICKER__) window.__RL_SHOW_TPL_PICKER__();
+      else {
+        const isPro = localStorage.getItem('rl_pro') === 'true';
+        const frozenTheme = isPro ? (localStorage.getItem('rl_theme') || 'green') : 'charcoal';
+        printResume(frozenTheme, 'timeline');
+      }
     });
   }
 });
@@ -2105,148 +2182,167 @@ function selectTheme(theme) {
   });
 }
 
-function printResume(frozenTheme) {
+function printResume(frozenTheme, template) {
   if (window.__RL_PRINTING__) return;
   window.__RL_PRINTING__ = true;
   const data = window.__RL_RESUME_DATA__;
   if (!data) { window.__RL_PRINTING__ = false; alert('Please wait and try again.'); return; }
   const isPro = localStorage.getItem('rl_pro') === 'true';
+  const tpl = template || 'timeline';
   const theme = isPro ? (frozenTheme || localStorage.getItem('rl_theme') || 'green') : 'charcoal';
   const themes = {
-    green:    { header:'#F2FAF6', headerBorder:'#C5E8D5', nameLast:'#1DB368', contacts:'#0D3D28', contactsText:'#EAF7F0', sidebar:'#F2FAF6', sidebarBorder:'#C5E8D5', accent:'#1DB368', lineColor:'#EAF7F0', qrUrl:'#1DB368' },
-    navy:     { header:'#EEF3FF', headerBorder:'#C5D5F5', nameLast:'#1E3A8A', contacts:'#1E3A8A', contactsText:'#EEF3FF', sidebar:'#EEF3FF', sidebarBorder:'#C5D5F5', accent:'#3B82F6', lineColor:'#DBEAFE', qrUrl:'#3B82F6' },
-    amber:    { header:'#FFFBF0', headerBorder:'#F5DFA0', nameLast:'#78480A', contacts:'#78480A', contactsText:'#FFFBF0', sidebar:'#FFFBF0', sidebarBorder:'#F5DFA0', accent:'#D4870A', lineColor:'#FEF0C7', qrUrl:'#D4870A' },
-    charcoal: { header:'#F8F8F6', headerBorder:'#D0D0C8', nameLast:'#1A1A1A', contacts:'#1A1A1A', contactsText:'#F0F0F0', sidebar:'#F0F0EC', sidebarBorder:'#D0D0C8', accent:'#888888', lineColor:'#E0E0DC', qrUrl:'#888888' }
+    green:    { accent:'#1DB368', dark:'#0D3D28', light:'#EAF7F0', border:'#C5E8D5', muted:'#5A8A70' },
+    navy:     { accent:'#3B82F6', dark:'#1E3A8A', light:'#EEF3FF', border:'#C5D5F5', muted:'#5A8ABA' },
+    amber:    { accent:'#D4870A', dark:'#78480A', light:'#FFFBF0', border:'#F5DFA0', muted:'#A87840' },
+    charcoal: { accent:'#555555', dark:'#1A1A1A', light:'#F0F0EC', border:'#D0D0C8', muted:'#888888' }
   };
   const th = themes[theme] || themes.charcoal;
   const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   const L = data.labels || {};
   const pageUrl = location.href;
-  const parts = (data.name||'').trim().split(' ');
-  const firstName = parts.slice(0,-1).join(' ') || parts[0] || '';
-  const lastName  = parts.length > 1 ? parts[parts.length-1] : '';
-  const contacts = [
-    data.contacts?.p && '<span>'+esc(data.contacts.p)+'</span>',
-    data.contacts?.e && '<span>'+esc(data.contacts.e)+'</span>',
-    data.contacts?.l && '<span>'+esc(data.contacts.l)+'</span>'
-  ].filter(Boolean).join('<span class="rl-sep">|</span>');
+  const photoSrc = window.__RL_PROFILE_PHOTO__ || null;
+  const photoHtml = photoSrc
+    ? `<img src="${photoSrc}" style="width:56pt;height:56pt;border-radius:50%;object-fit:cover;border:2pt solid ${th.border};flex-shrink:0"/>`
+    : `<div style="width:56pt;height:56pt;border-radius:50%;background:${th.light};border:2pt solid ${th.border};display:flex;align-items:center;justify-content:center;font-size:18pt;font-weight:600;color:${th.dark};flex-shrink:0">${(data.name||'?')[0].toUpperCase()}</div>`;
 
-  const eduHtml = (data.education||[]).map(ed=>`<div class="rl-edu-item"><div class="rl-edu-degree">${esc(ed.d)}</div><div class="rl-edu-school">${esc(ed.s)}</div><div class="rl-edu-year">${esc(ed.y)}</div></div>`).join('');
-  const langsHtml = (data.languages||[]).map(l=>`<div class="rl-lang-item">— ${esc(l)}</div>`).join('');
-  const hobbiesHtml = (data.hobbies||[]).length > 0 ? `<div class="rl-section"><div class="rl-section-title">${esc(L.hobbies||'Hobbies')}</div><div class="rl-lang-item">${esc((data.hobbies||[]).join(', '))}</div></div>` : '';
-  const expHtml = (data.experience||[]).map(ex=>`<div class="rl-exp-entry"><div class="rl-exp-header"><span class="rl-exp-title">${esc(ex.p)}</span><span class="rl-exp-period">${esc(ex.t)}</span></div><div class="rl-exp-company">${esc(ex.c)}</div><div class="rl-exp-desc">${esc(ex.d)}</div><div class="rl-exp-divider"></div></div>`).join('');
-  const addHtml = (data.additional||[]).filter(b=>b&&b.title).map(b=>`<div class="rl-section"><div class="rl-section-title">${esc(b.title)}</div><div class="rl-additional-text">${esc(b.content)}</div></div>`).join('');
+  const nameWords = (data.name||'').trim().split(' ');
+  const firstName = nameWords.slice(0,-1).join(' ') || nameWords[0] || '';
+  const lastName = nameWords.length > 1 ? nameWords[nameWords.length-1] : '';
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${encodeURIComponent(pageUrl)}`;
+
+  const contacts = [data.contacts?.p, data.contacts?.e, data.contacts?.l].filter(Boolean).map(esc).join(' &nbsp;·&nbsp; ');
+  const expItems = (data.experience||[]);
+  const eduItems = (data.education||[]);
+  const addItems = (data.additional||[]).filter(b=>b&&b.title);
+
+  // ── TIMELINE TEMPLATE ───────────────────────────────────────────────────────
+  const timelineHtml = `
+<div style="font-family:'DM Sans',sans-serif;color:#0D3D28;width:190mm;background:#fff">
+
+  <!-- HEADER -->
+  <div style="background:${th.dark};padding:16pt 20pt 14pt;display:flex;align-items:center;justify-content:space-between;gap:12pt">
+    <div style="display:flex;align-items:center;gap:14pt">
+      ${photoHtml}
+      <div>
+        <div style="font-size:24pt;font-weight:300;color:#fff;line-height:1;letter-spacing:-0.02em">${esc(firstName)} <span style="font-weight:600;color:${th.accent}">${esc(lastName)}</span></div>
+        <div style="font-size:8pt;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-top:5pt">${esc(data.title)}</div>
+        ${contacts ? `<div style="font-size:7pt;color:rgba(255,255,255,0.5);margin-top:4pt">${contacts}</div>` : ''}
+      </div>
+    </div>
+    <div style="text-align:center;flex-shrink:0">
+      <div style="background:${th.accent};color:#fff;font-size:16pt;font-weight:700;width:44pt;height:44pt;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 4pt">${esc(String(data.atsScore||0))}%</div>
+      <div style="font-size:6pt;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.1em">ATS Score</div>
+    </div>
+  </div>
+
+  ${data.summary ? `<!-- SUMMARY -->
+  <div style="padding:10pt 20pt;background:${th.light};border-bottom:1pt solid ${th.border}">
+    <div style="font-size:8pt;font-style:italic;color:${th.muted};line-height:1.65">${esc(data.summary)}</div>
+  </div>` : ''}
+
+  <!-- BODY -->
+  <div style="display:flex;padding:0">
+
+    <!-- MAIN: EXPERIENCE TIMELINE -->
+    <div style="flex:1;padding:14pt 16pt 14pt 20pt;border-right:1pt solid ${th.border}">
+      <div style="font-size:7pt;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:${th.accent};margin-bottom:12pt;padding-bottom:4pt;border-bottom:2pt solid ${th.accent}">${esc(L.experience||'Experience')}</div>
+
+      ${expItems.map((ex, i) => `
+      <div style="display:flex;gap:10pt;margin-bottom:${i<expItems.length-1?'12pt':'0'};position:relative">
+        <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;padding-top:2pt">
+          <div style="width:8pt;height:8pt;border-radius:50%;background:${th.accent};flex-shrink:0;box-shadow:0 0 0 2pt ${th.light},0 0 0 3pt ${th.accent}"></div>
+          ${i<expItems.length-1?`<div style="width:1pt;flex:1;background:${th.border};margin-top:3pt"></div>`:''}
+        </div>
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2pt">
+            <span style="font-size:9pt;font-weight:600;color:#0D3D28">${esc(ex.p)}</span>
+            <span style="font-size:7pt;color:${th.accent};font-weight:500;white-space:nowrap;margin-left:6pt">${esc(ex.t)}</span>
+          </div>
+          <div style="font-size:7.5pt;font-weight:500;color:${th.muted};text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4pt">${esc(ex.c)}</div>
+          <div style="font-size:7pt;color:#5A8A70;line-height:1.6">${esc(ex.d)}</div>
+        </div>
+      </div>`).join('')}
+
+      ${addItems.map(b=>`
+      <div style="margin-top:14pt">
+        <div style="font-size:7pt;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:${th.accent};margin-bottom:8pt;padding-bottom:4pt;border-bottom:2pt solid ${th.accent}">${esc(b.title)}</div>
+        <div style="font-size:7pt;color:#5A8A70;line-height:1.6">${esc(b.content)}</div>
+      </div>`).join('')}
+    </div>
+
+    <!-- SIDEBAR -->
+    <div style="width:62mm;padding:14pt 14pt 14pt 16pt;background:${th.light}">
+
+      ${eduItems.length ? `<div style="margin-bottom:14pt">
+        <div style="font-size:7pt;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:${th.accent};margin-bottom:10pt;padding-bottom:4pt;border-bottom:2pt solid ${th.accent}">${esc(L.education||'Education')}</div>
+        ${eduItems.map(ed=>`<div style="margin-bottom:8pt">
+          <div style="font-size:8pt;font-weight:600;color:#0D3D28">${esc(ed.d)}</div>
+          <div style="font-size:7pt;color:${th.muted};margin-top:1pt">${esc(ed.s)}</div>
+          <div style="font-size:6.5pt;color:#A8CDB9;margin-top:1pt">${esc(ed.y)}</div>
+        </div>`).join('')}
+      </div>` : ''}
+
+      ${(data.languages||[]).length ? `<div style="margin-bottom:14pt">
+        <div style="font-size:7pt;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:${th.accent};margin-bottom:10pt;padding-bottom:4pt;border-bottom:2pt solid ${th.accent}">${esc(L.languages||'Languages')}</div>
+        ${(data.languages||[]).map(l=>`<div style="font-size:7.5pt;color:#0D3D28;padding:2pt 0">· ${esc(l)}</div>`).join('')}
+      </div>` : ''}
+
+      ${(data.hobbies||[]).length ? `<div style="margin-bottom:14pt">
+        <div style="font-size:7pt;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:${th.accent};margin-bottom:10pt;padding-bottom:4pt;border-bottom:2pt solid ${th.accent}">${esc(L.hobbies||'Interests')}</div>
+        <div style="font-size:7pt;color:${th.muted};line-height:1.7">${esc((data.hobbies||[]).join(', '))}</div>
+      </div>` : ''}
+
+      <!-- QR -->
+      <div style="margin-top:auto">
+        <div style="font-size:7pt;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:${th.accent};margin-bottom:8pt;padding-bottom:4pt;border-bottom:2pt solid ${th.accent}">Online Profile</div>
+        <img src="${qrUrl}" style="width:60pt;height:60pt;display:block;margin-bottom:4pt"/>
+        <div style="font-size:5.5pt;color:${th.accent};word-break:break-all;line-height:1.4">${esc(pageUrl)}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WATERMARK -->
+  <div style="border-top:1pt solid ${th.border};padding:4pt 20pt;display:flex;justify-content:space-between;align-items:center;background:${th.dark}">
+    <span style="font-size:6pt;color:rgba(255,255,255,0.4)">Made with ResumeLink.cc</span>
+    <span style="font-size:6pt;color:${th.accent}">${esc(pageUrl)}</span>
+  </div>
+</div>`;
 
   const styleEl = document.createElement('style');
   styleEl.id = 'rl-print-styles';
   styleEl.textContent = `
-    @page{size:A4 portrait;margin:10mm 10mm 20mm 10mm}
-    :root{
-      --rl-primary:${th.accent};
-      --rl-header-bg:${th.header};
-      --rl-header-border:${th.headerBorder};
-      --rl-name-last:${th.nameLast};
-      --rl-contacts-bg:${th.contacts};
-      --rl-contacts-text:${th.contactsText};
-      --rl-sidebar-bg:${th.sidebar};
-      --rl-sidebar-border:${th.sidebarBorder};
-      --rl-line-color:${th.lineColor};
-      --rl-qr-url:${th.qrUrl};
-    }
+    @page{size:A4 portrait;margin:8mm 8mm 8mm 8mm}
     *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;box-sizing:border-box;}
     body{margin:0;padding:0;}
-    #rl-print-dom{font-family:'DM Sans',sans-serif;color:#0D3D28;width:190mm;background:#fff}
-    #rl-print-dom .rl-header{display:flex;justify-content:space-between;align-items:center;padding:14pt 18pt 12pt 14pt;border-bottom:1.5pt solid var(--rl-header-border)!important;background:var(--rl-header-bg)!important;margin-bottom:0}
-    #rl-print-dom .rl-name-first{font-size:22pt;font-weight:300;line-height:1.1;display:block;color:#0D3D28}
-    #rl-print-dom .rl-name-last{font-size:22pt;font-weight:600;line-height:1.1;display:block;color:var(--rl-name-last)!important}
-    #rl-print-dom .rl-job-title{font-size:7pt;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:#5A8A70;margin-top:4pt}
-    #rl-print-dom .rl-photo{width:48pt;height:48pt;border-radius:50%;background:var(--rl-line-color)!important;border:1pt solid var(--rl-header-border)!important;flex-shrink:0}
-    #rl-print-dom .rl-contacts{display:flex;align-items:center;justify-content:center;background:var(--rl-contacts-bg)!important;padding:5pt 0;width:100%}
-    #rl-print-dom .rl-contacts span{color:var(--rl-contacts-text)!important;font-size:6.5pt;white-space:nowrap;padding:0 8pt}
-    #rl-print-dom .rl-sep{color:#5A8A70!important;padding:0 2pt!important}
-    #rl-print-dom .rl-body{display:table;width:190mm;table-layout:fixed;border-collapse:collapse}
-    #rl-print-dom .rl-sidebar{display:table-cell;width:56mm;background:var(--rl-sidebar-bg)!important;vertical-align:top;padding:10pt 10pt 10pt 10pt;border-right:1pt solid var(--rl-sidebar-border)!important}
-    #rl-print-dom .rl-main{display:table-cell;width:134mm;background:#fff;vertical-align:top;padding:10pt 12pt 10pt 12pt}
-    #rl-print-dom .rl-section{margin-bottom:10pt;break-inside:avoid;page-break-inside:avoid}
-    #rl-print-dom .rl-section-title{font-size:6pt;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#0D3D28;border-bottom:1.5pt solid var(--rl-primary)!important;padding-bottom:3pt;margin-bottom:7pt}
-    #rl-print-dom .rl-edu-item{margin-bottom:8pt;break-inside:avoid}
-    #rl-print-dom .rl-edu-degree{font-size:7pt;font-weight:600;color:#0D3D28}
-    #rl-print-dom .rl-edu-school{font-size:6pt;color:#5A8A70;margin-top:1pt}
-    #rl-print-dom .rl-edu-year{font-size:6pt;color:#A8CDB9;margin-top:1pt}
-    #rl-print-dom .rl-lang-item{font-size:6.5pt;color:#5A8A70;padding:1.5pt 0}
-    #rl-print-dom .rl-qr-section{margin-top:4pt}
-    #rl-print-dom .rl-qr-img{width:60pt;height:60pt;display:block;margin:0 0 4pt}
-    #rl-print-dom .rl-qr-url{font-size:5pt;color:var(--rl-qr-url)!important;word-break:break-all;line-height:1.4}
-    #rl-print-dom .rl-summary{font-size:7.5pt;font-style:italic;line-height:1.6;color:#5A8A70;margin-bottom:10pt}
-    #rl-print-dom .rl-exp-entry{break-inside:avoid;page-break-inside:avoid;margin-bottom:2pt}
-    #rl-print-dom .rl-exp-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1pt}
-    #rl-print-dom .rl-exp-title{font-size:8pt;font-weight:600;color:#0D3D28}
-    #rl-print-dom .rl-exp-period{font-size:6.5pt;font-weight:500;color:var(--rl-primary)!important;white-space:nowrap;margin-left:6pt}
-    #rl-print-dom .rl-exp-company{font-size:6.5pt;color:#5A8A70;margin-bottom:3pt}
-    #rl-print-dom .rl-exp-desc{font-size:6.5pt;color:#5A8A70;line-height:1.5}
-    #rl-print-dom .rl-exp-divider{border-top:.5pt solid var(--rl-sidebar-border)!important;margin:6pt 0}
-    #rl-print-dom .rl-exp-entry:last-child .rl-exp-divider{display:none}
-    #rl-print-dom .rl-additional-text{font-size:7pt;color:#5A8A70;line-height:1.5}
-    #rl-print-dom .rl-watermark{position:fixed;bottom:0;left:0;right:0;font-size:7pt;color:#0D3D28;text-align:center;border-top:1.5pt solid var(--rl-primary)!important;padding:5pt 0;background:var(--rl-header-bg)!important;font-family:'DM Sans',sans-serif;letter-spacing:.02em;font-weight:500}
-    #rl-print-dom .rl-watermark span{color:var(--rl-primary)!important}
+    #rl-print-dom{font-family:'DM Sans',sans-serif;}
   `;
 
-  const html = `<div id="rl-print-dom">
-    <div class="rl-header">
-      <div>
-        <span class="rl-name-first">${esc(firstName)}</span>
-        <span class="rl-name-last">${esc(lastName)}</span>
-        <div class="rl-job-title">${esc(data.title)}</div>
-      </div>
-      <div class="rl-photo" style="${window.__RL_PROFILE_PHOTO__ ? `background-image:url('${window.__RL_PROFILE_PHOTO__}');background-size:cover;background-position:center;background-color:transparent` : ''}"></div>
-    </div>
-    <div class="rl-contacts">${contacts}</div>
-    <div class="rl-body">
-      <div class="rl-sidebar">
-        ${eduHtml ? `<div class="rl-section"><div class="rl-section-title">${esc(L.education||'Education')}</div>${eduHtml}</div>` : ''}
-        ${langsHtml ? `<div class="rl-section"><div class="rl-section-title">${esc(L.languages||'Languages')}</div>${langsHtml}</div>` : ''}
-        ${hobbiesHtml}
-        <div class="rl-section rl-qr-section">
-          <div class="rl-section-title">Online Profile</div>
-          <img class="rl-qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${encodeURIComponent(pageUrl)}" alt="QR">
-          <div class="rl-qr-url">${esc(pageUrl)}</div>
-        </div>
-      </div>
-      <div class="rl-main">
-        ${data.summary ? `<div class="rl-summary">${esc(data.summary)}</div>` : ''}
-        ${expHtml ? `<div class="rl-section"><div class="rl-section-title">${esc(L.experience||'Experience')}</div>${expHtml}</div>` : ''}
-        ${addHtml}
-      </div>
-    </div>
-    ${isPro ? '' : `<div class="rl-watermark">✦ Made with <b>ResumeLink.cc</b> · Get your own profile free → <span>${esc(pageUrl)}</span></div>`}
-  </div>`;
+  const wrapper = document.createElement('div');
+  wrapper.id = 'rl-print-dom';
+  wrapper.innerHTML = timelineHtml;
 
-const wrap = document.createElement('div');
-wrap.innerHTML = html;
-const dom = wrap.firstElementChild;
+  const old = document.getElementById('rl-print-dom');
+  if (old) old.parentNode.removeChild(old);
 
-const old = document.getElementById('rl-print-dom');
-if (old) old.parentNode?.removeChild(old);
-const oldStyle = document.getElementById('rl-print-styles');
-if (oldStyle) oldStyle.parentNode?.removeChild(oldStyle);
+  document.head.appendChild(styleEl);
+  document.body.appendChild(wrapper);
 
-document.head.appendChild(styleEl);
-document.body.appendChild(dom);
-setTimeout(() => {
-    if (isPro && theme !== 'charcoal') {
-        const isEn = navigator.language.startsWith('en');
-        const msg = isEn
-            ? '🎨 Color PDF tip: In the print dialog, set "Color" (not Grayscale) and enable "Background graphics" for best results.'
-            : '🎨 Совет: В диалоге печати выбери "Цветная печать" и включи "Фон" для цветного PDF.';
-        alert(msg);
-    }
+  const isColorTheme = theme !== 'charcoal';
+  if (isPro && isColorTheme) {
+    const isEn = navigator.language.startsWith('en');
+    alert(isEn
+      ? '🎨 Tip: In print dialog set "Color" and enable "Background graphics" for best results.'
+      : '🎨 Совет: В диалоге печати выбери "Цветная" и включи "Фон" для лучшего результата.');
+  }
+
+  requestAnimationFrame(() => requestAnimationFrame(() => {
     window.print();
     setTimeout(() => {
-        dom?.parentNode?.removeChild(dom);
-        styleEl?.parentNode?.removeChild(styleEl);
-        window.__RL_PRINTING__ = false;
+      wrapper?.parentNode?.removeChild(wrapper);
+      styleEl?.parentNode?.removeChild(styleEl);
+      window.__RL_PRINTING__ = false;
     }, 1500);
-}, 1200);
+  }));
 }
 </script>
 </body>
