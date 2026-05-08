@@ -225,6 +225,20 @@
         .socials-save-btn { background:var(--forest); color:#fff; border:none; padding:9px 20px; border-radius:10px; font-size:13px; font-weight:500; cursor:pointer; font-family:'DM Sans',sans-serif; transition:background .2s; }
         .socials-save-btn:hover { background:var(--green-dk); }
 
+        /* AI QUESTIONS BLOCK */
+        .ai-questions-block{background:var(--surface);border:1px solid var(--green);border-radius:20px;padding:22px 24px;margin-top:16px;animation:cardIn .5s ease both}
+        .ai-q-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--green-dk);margin-bottom:14px;display:flex;align-items:center;gap:6px}
+        .ai-q-item{margin-bottom:14px}
+        .ai-q-text{font-size:13px;color:var(--forest);font-weight:500;margin-bottom:6px;line-height:1.4}
+        .ai-q-input{width:100%;border:0.5px solid var(--border);border-radius:8px;padding:9px 12px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;background:var(--bg);transition:border-color .2s;resize:none}
+        .ai-q-input:focus{border-color:var(--green)}
+        .ai-q-free{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:6px}
+        .ai-q-actions{display:flex;align-items:center;gap:10px;margin-top:4px}
+        .ai-q-submit{background:var(--forest);color:#fff;border:none;padding:10px 22px;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s;display:flex;align-items:center;gap:6px}
+        .ai-q-submit:hover{background:var(--green-dk)}
+        .ai-q-skip{background:none;border:none;color:var(--faint);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:color .2s}
+        .ai-q-skip:hover{color:var(--muted)}
+
         /* TEMPLATE PICKER */
         .tpl-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:3000;align-items:center;justify-content:center;padding:1rem}
         .tpl-modal.open{display:flex}
@@ -536,6 +550,9 @@ function App() {
   const [showTplPicker, setShowTplPicker] = useState(false);
   const [selectedTpl, setSelectedTpl] = useState('timeline');
   const [showSocials, setShowSocials] = useState(false);
+  const [aiQuestions, setAiQuestions] = useState(null); // {questions:[...], step:'questions'|'done'}
+  const [aiAnswers, setAiAnswers] = useState(['','','','']);
+  const [aiQLoading, setAiQLoading] = useState(false);
   const [socialsData, setSocialsData] = useState({li:'',gh:'',tg:''});
   const [pasteText, setPasteText] = useState('');
   const [urlInput, setUrlInput] = useState('');
@@ -727,6 +744,60 @@ function App() {
     } catch(e) { console.error(e); }
   };
 
+  const generateAiQuestions = async (data) => {
+    try {
+      const summary = [
+        data.name, data.title, data.summary,
+        (data.experience||[]).slice(0,2).map(e=>e.p+' at '+e.c+': '+e.d).join('. ')
+      ].filter(Boolean).join('\n');
+      const prompt = `Based on this resume, generate exactly 3 specific questions to extract quantifiable achievements (numbers, percentages, budgets, team sizes). Each question must be directly relevant to THIS person's actual experience. Format as JSON array of strings only, no other text. Resume: ${summary.substring(0,1500)}`;
+      const res = await fetch(WORKER_URL+'/generate', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({prompt})
+      });
+      const json = await res.json();
+      const raw = json?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      const s = raw.indexOf('['), e = raw.lastIndexOf(']');
+      if (s === -1 || e === -1) return;
+      const qs = JSON.parse(raw.substring(s, e+1));
+      if (Array.isArray(qs) && qs.length >= 3) {
+        setAiQuestions(qs.slice(0,3));
+      }
+    } catch(e) { console.log('AI questions error:', e); }
+  };
+
+  const submitAiAnswers = async () => {
+    if (!resumeData) return;
+    const filled = aiAnswers.filter(a => a.trim()).join('\n');
+    if (!filled) { setAiQuestions(null); return; }
+    setAiQLoading(true);
+    try {
+      const prompt = `Enhance this resume profile JSON with the following additional information provided by the user. Keep all existing fields, only improve summary and experience descriptions to include specific numbers and achievements. Return valid JSON only.
+Additional info from user:
+${filled}
+Current profile JSON:
+${JSON.stringify(resumeData).substring(0,4000)}`;
+      const res = await fetch(WORKER_URL+'/generate', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({prompt})
+      });
+      const json = await res.json();
+      const raw = json?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      const s = raw.indexOf('{'), e = raw.lastIndexOf('}');
+      if (s !== -1 && e !== -1) {
+        const updated = JSON.parse(raw.substring(s, e+1));
+        updated.experience = updated.experience || resumeData.experience;
+        updated.education  = updated.education  || resumeData.education;
+        updated.additional = updated.additional || resumeData.additional;
+        setResumeData(updated);
+        if (window.__RL_SET_RESUME_DATA__) window.__RL_SET_RESUME_DATA__(updated);
+        await autoPublish(updated);
+      }
+    } catch(e) { console.log('AI enhance error:', e); }
+    setAiQLoading(false);
+    setAiQuestions(null);
+  };
+
   const processAI = async (text) => {
     if (!text || text.trim().length < 20) {
       alert(isEn ? "No readable text found" : "Текст не найден (возможно, это скан)");
@@ -757,6 +828,8 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
       if (window.__RL_SET_RESUME_DATA__) window.__RL_SET_RESUME_DATA__(parsed);
       await autoPublish(parsed);
       setStep('result');
+      // Generate AI questions in background
+      generateAiQuestions(parsed);
       // +1 к счётчику профилей
       const cur = parseInt(localStorage.getItem('rl_count') || '0');
       localStorage.setItem('rl_count', String(cur + 1));
@@ -1731,6 +1804,48 @@ Write ONLY the cover letter text. No subject line, no meta-commentary. 3-4 parag
         </div>
       )}
 
+      {/* AI QUESTIONS BLOCK */}
+      {aiQuestions && (
+        <div className="ai-questions-block">
+          <div className="ai-q-label">
+            <span>✨</span>
+            {isEn ? 'Improve your profile with specific data' : 'Улучши профиль конкретными данными'}
+          </div>
+          <p style={{fontSize:'12px',color:'var(--muted)',marginBottom:'16px',lineHeight:'1.5'}}>
+            {isEn ? 'AI analyzed your resume and has a few questions. Specific numbers make your profile stand out and avoid AI detection filters.' : 'ИИ проанализировал резюме и задаёт уточняющие вопросы. Конкретные цифры делают профиль заметным и обходят AI-фильтры.'}
+          </p>
+          {aiQuestions.map((q,i) => (
+            <div key={i} className="ai-q-item">
+              <div className="ai-q-text">{i+1}. {q}</div>
+              <input className="ai-q-input" type="text"
+                placeholder={isEn ? 'Your answer...' : 'Ваш ответ...'}
+                value={aiAnswers[i]}
+                onChange={e => { const a=[...aiAnswers]; a[i]=e.target.value; setAiAnswers(a); }}
+              />
+            </div>
+          ))}
+          <div className="ai-q-item" style={{marginBottom:'16px'}}>
+            <div className="ai-q-text ai-q-free">4. {isEn ? 'Anything else you'd like to add that wasn't covered above?' : 'Хотите добавить что-то ещё, что не было охвачено выше?'}</div>
+            <textarea className="ai-q-input" rows="2"
+              placeholder={isEn ? 'Optional — any achievements, projects or details...' : 'Необязательно — достижения, проекты, детали...'}
+              value={aiAnswers[3]}
+              onChange={e => { const a=[...aiAnswers]; a[3]=e.target.value; setAiAnswers(a); }}
+            />
+          </div>
+          <div className="ai-q-actions">
+            <button className="ai-q-submit" onClick={submitAiAnswers} disabled={aiQLoading}>
+              {aiQLoading
+                ? <><span style={{width:'14px',height:'14px',border:'2px solid rgba(255,255,255,0.3)',borderTop:'2px solid #fff',borderRadius:'50%',animation:'spin 1s linear infinite',display:'inline-block'}}></span>{isEn?'Updating...':'Обновляем...'}</>
+                : <>{isEn ? '✦ Update my profile' : '✦ Обновить профиль'}</>
+              }
+            </button>
+            <button className="ai-q-skip" onClick={() => setAiQuestions(null)}>
+              {isEn ? 'Skip for now →' : 'Пропустить →'}
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* ROAST BUTTON */}
       <div style={{textAlign:'center',marginTop:'1.5rem'}}>
         <button onClick={() => roastResume(resumeData, isEn)} style={{background:'transparent',border:'1.5px solid var(--border)',color:'var(--muted)',padding:'10px 24px',borderRadius:'50px',fontSize:'13px',fontWeight:'500',cursor:'pointer',fontFamily:'DM Sans,sans-serif',transition:'all .2s'}}
@@ -2302,7 +2417,7 @@ function printResume(frozenTheme, template) {
   </div>
 
   <!-- WATERMARK -->
-  <div style="border-top:1pt solid ${th.border};padding:4pt 20pt;display:flex;justify-content:space-between;align-items:center;background:${th.dark}">
+  <div style="padding:4pt 20pt;display:flex;justify-content:space-between;align-items:center;background:${th.dark}">
     <span style="font-size:6pt;color:rgba(255,255,255,0.4)">Made with ResumeLink.cc</span>
     <span style="font-size:6pt;color:${th.accent}">${esc(pageUrl)}</span>
   </div>
