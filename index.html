@@ -578,6 +578,7 @@ function App() {
       });
     }
   });
+  window.__RL_HANDLE_FILE__ = (e) => handleFile(e);
   useEffect(() => { window.__RL_PROFILE_PHOTO__ = profilePhoto; }, [profilePhoto]);
 	// ── Проверка Pro по email (активация после оплаты) ──
   const checkProByEmail = async (email) => {
@@ -1189,7 +1190,7 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
           <a href="/about.html">{C.footerAbout}</a>
           <a href="/roles/">{C.footerRoles}</a>
           <a href="/policy.html">{C.footerPolicy}</a>
-          <a href="mailto:info@resumelink.cc">info@resumelink.cc</a>
+          <a href="#" onclick="navigator.clipboard.writeText('info@resumelink.cc');this.textContent='✓ Copied!';setTimeout(()=>this.textContent='info@resumelink.cc',2000);return false">info@resumelink.cc</a>
         </div>
         <div className="footer-copy">© 2026 ResumeLink</div>
       </footer>
@@ -2166,7 +2167,7 @@ Skills: ${(resumeData.additional||[]).map(b=>b.title+': '+b.content).join(' | ')
         <a href="/" className="footer-logo">Resume<span>Link</span></a>
         <div className="footer-links">
           <a href="/policy.html">{C.footerPolicy}</a>
-          <a href="mailto:info@resumelink.cc">info@resumelink.cc</a>
+          <a href="#" onclick="navigator.clipboard.writeText('info@resumelink.cc');this.textContent='✓ Copied!';setTimeout(()=>this.textContent='info@resumelink.cc',2000);return false">info@resumelink.cc</a>
         </div>
         <div className="footer-copy">© 2026 ResumeLink</div>
       </footer>
@@ -2207,13 +2208,10 @@ window.__RL_SET_RESUME_DATA__ = function(data) {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Nav upload inputs - wired after React mounts
-  ['nav-upload-input','mob-upload-input'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.addEventListener('change', e => {
-        if (window.__RL_HANDLE_FILE__) window.__RL_HANDLE_FILE__(e);
-      });
+  // Nav upload — use event delegation so it works before and after React mounts
+  document.addEventListener('change', e => {
+    if ((e.target.id === 'nav-upload-input' || e.target.id === 'mob-upload-input') && e.target.files[0]) {
+      if (window.__RL_HANDLE_FILE__) window.__RL_HANDLE_FILE__(e);
     }
   });
   const btn = document.getElementById('share-button');
@@ -2383,21 +2381,21 @@ function printResume(frozenTheme, template) {
   const sidebarSec = (title,body)=>`<div style="margin-bottom:11pt"><div style="font-size:6pt;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:${th.accent};margin-bottom:7pt;padding-bottom:3pt;border-bottom:1pt solid ${th.accent}">${title}</div>${body}</div>`;
 
   const html = `<div id="rl-print-dom" style="font-family:'DM Sans',sans-serif;color:#0D3D28;width:190mm;background:#fff">
-    <div style="background:${th.lineColor};border-bottom:2pt solid ${th.accent};padding:13pt 17pt 11pt;display:flex;align-items:center;justify-content:space-between;gap:10pt">
+    <div style="background:#EAF7F0;border-bottom:2.5pt solid ${th.accent};padding:14pt 18pt 13pt;display:flex;align-items:center;justify-content:space-between;gap:12pt">
       <div style="display:flex;align-items:center;gap:11pt">
         ${photoEl}
         <div>
-          <div style="font-size:20pt;font-weight:300;color:${th.contacts};line-height:1.05;letter-spacing:-.02em">${esc(firstName)} <span style="font-weight:700;color:${th.dark||th.contacts}">${esc(lastName)}</span></div>
-          <div style="font-size:7pt;font-weight:500;letter-spacing:.13em;text-transform:uppercase;color:${th.muted};margin-top:4pt">${esc(data.title)}</div>
-          ${contacts?`<div style="font-size:6pt;color:${th.muted};margin-top:3pt;opacity:0.7">${contacts}</div>`:''}
+          <div style="font-size:22pt;font-weight:300;color:#0D3D28;line-height:1.05;letter-spacing:-.025em">${esc(firstName)} <span style="font-weight:700;color:${th.accent}">${esc(lastName)}</span></div>
+          <div style="font-size:7pt;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#5A8A70;margin-top:5pt">${esc(data.title)}</div>
+          ${contacts?`<div style="font-size:6.5pt;color:#5A8A70;margin-top:4pt">${contacts}</div>":''}
         </div>
       </div>
       <div style="text-align:center;flex-shrink:0">
-        <div style="background:${th.accent};color:#fff;font-size:14pt;font-weight:700;width:40pt;height:40pt;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 3pt">${esc(String(data.atsScore||0))}%</div>
-        <div style="font-size:5pt;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:.09em">ATS Score</div>
+        <div style="background:#fff;border:2pt solid ${th.accent};color:${th.accent};font-size:14pt;font-weight:700;width:42pt;height:42pt;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 3pt">${esc(String(data.atsScore||0))}%</div>
+        <div style="font-size:5pt;color:#5A8A70;text-transform:uppercase;letter-spacing:.1em;margin-top:1pt">ATS Score</div>
       </div>
     </div>
-    ${data.summary?`<div style="padding:7pt 17pt;background:${th.lineColor};border-bottom:.5pt solid ${th.headerBorder}"><div style="font-size:7pt;font-style:italic;color:#5A8A70;line-height:1.65">${esc(data.summary)}</div></div>`:''}
+    ${data.summary?`<div style="padding:8pt 18pt;background:#fff;border-bottom:.5pt solid #C5E8D5"><div style="font-size:7pt;font-style:italic;color:#5A8A70;line-height:1.65">${esc(data.summary)}</div></div>`:''}
     <div style="display:flex">
       <div style="flex:1;padding:11pt 13pt 11pt 17pt;border-right:none">
         <div style="font-size:6pt;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:${th.accent};margin-bottom:9pt;padding-bottom:3pt;border-bottom:1pt solid ${th.accent}">${esc(L.experience||'Experience')}</div>
@@ -2411,7 +2409,7 @@ function printResume(frozenTheme, template) {
         ${sidebarSec('Online Profile',`<img src="${qrSrc}" style="width:54pt;height:54pt;display:block;margin-bottom:3pt"/><div style="font-size:5pt;color:${th.accent};word-break:break-all;line-height:1.4">${esc(pageUrl)}</div>`)}
       </div>
     </div>
-    ${isPro?'':`<div style="padding:3pt 17pt;background:${th.lineColor};border-top:.5pt solid ${th.headerBorder};display:flex;justify-content:space-between"><span style="font-size:5.5pt;color:${th.muted};opacity:0.6">Made with ResumeLink.cc</span><span style="font-size:5.5pt;color:${th.accent}">${esc(pageUrl)}</span></div>`}
+    ${isPro?'':`<div style="padding:4pt 18pt;background:#EAF7F0;border-top:1pt solid #C5E8D5;display:flex;justify-content:space-between"><span style="font-size:5.5pt;color:#5A8A70">Made with ResumeLink.cc</span><span style="font-size:5.5pt;color:${th.accent}">${esc(pageUrl)}</span></div>`}
   </div>`;
 
 const wrap = document.createElement('div');
