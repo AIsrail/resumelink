@@ -564,21 +564,36 @@ function App() {
   const [saveStatus, setSaveStatus] = useState(null); // null | 'saving' | 'ok' | 'error'
   const isPro = localStorage.getItem('rl_pro') === 'true';
 
-  // expose photo to printResume (vanilla JS)
+  // expose to vanilla JS — always fresh
   window.__RL_SHOW_TPL_PICKER__ = () => setShowTplPicker(true);
   window.__RL_HANDLE_FILE__ = (e) => handleFile(e);
 
-  // Wire nav upload inputs to handleFile
-  ['nav-upload-input','mob-upload-input'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el && !el.dataset.bound) {
-      el.dataset.bound = 'true';
-      el.addEventListener('change', e => {
-        if (e.target.files[0]) handleFile(e);
+  // Show/hide PDF buttons and theme selector when step changes
+  useEffect(() => {
+    if (step === 'result' && resumeData) {
+      if (window.__RL_SET_RESUME_DATA__) window.__RL_SET_RESUME_DATA__(resumeData);
+    } else {
+      ['share-button','download-button'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
       });
+      const sel = document.getElementById('theme-selector');
+      if (sel) sel.style.display = 'none';
     }
-  });
-  window.__RL_HANDLE_FILE__ = (e) => handleFile(e);
+  }, [step, resumeData]);
+
+  // Wire nav upload inputs to handleFile
+  useEffect(() => {
+    ['nav-upload-input','mob-upload-input'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && !el.dataset.bound) {
+        el.dataset.bound = 'true';
+        el.addEventListener('change', e => {
+          if (e.target.files[0]) handleFile(e);
+        });
+      }
+    });
+  }, []);
   useEffect(() => { window.__RL_PROFILE_PHOTO__ = profilePhoto; }, [profilePhoto]);
 	// ── Проверка Pro по email (активация после оплаты) ──
   const checkProByEmail = async (email) => {
