@@ -518,6 +518,73 @@ const T = {
   }
 };
 
+function RefVerifyPage({ token, isEn, workerUrl }) {
+  const [comment, setComment] = React.useState('');
+  const [status, setStatus] = React.useState(null); // null|'submitting'|'ok'|'error'
+  const [refName, setRefName] = React.useState('');
+
+  const submit = async () => {
+    setStatus('submitting');
+    try {
+      const res = await fetch(`${workerUrl}/reference-verify`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ token, comment })
+      });
+      const data = await res.json();
+      if (data.ok) { setStatus('ok'); setRefName(data.refName||''); }
+      else setStatus('error');
+    } catch(e) { setStatus('error'); }
+  };
+
+  return (
+    <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',padding:'20px',background:'#0a0a0a'}}>
+      <div style={{maxWidth:'440px',width:'100%',background:'#161616',border:'1px solid #262626',borderRadius:'24px',padding:'40px 32px',textAlign:'center'}}>
+        <div style={{fontSize:'36px',marginBottom:'16px'}}>✅</div>
+        <h1 style={{fontSize:'22px',fontWeight:'600',color:'#fff',marginBottom:'8px'}}>
+          {isEn ? 'Confirm Reference' : 'Подтвердить референс'}
+        </h1>
+        {status === 'ok' ? (
+          <div>
+            <p style={{color:'#1DB368',fontSize:'15px',lineHeight:'1.6',marginBottom:'16px'}}>
+              {isEn ? 'Thank you! Your confirmation has been recorded.' : 'Спасибо! Ваше подтверждение зафиксировано.'}
+            </p>
+            <p style={{color:'rgba(255,255,255,0.4)',fontSize:'13px'}}>
+              {isEn ? 'You can close this page.' : 'Можете закрыть эту страницу.'}
+            </p>
+          </div>
+        ) : status === 'error' ? (
+          <p style={{color:'#f87171',fontSize:'14px'}}>
+            {isEn ? 'This link is invalid or has already been used.' : 'Ссылка недействительна или уже использована.'}
+          </p>
+        ) : (
+          <div>
+            <p style={{color:'rgba(255,255,255,0.5)',fontSize:'14px',lineHeight:'1.6',marginBottom:'24px'}}>
+              {isEn
+                ? 'By clicking Confirm, you verify that you have worked professionally with this person.'
+                : 'Нажав Подтвердить, вы удостоверяете что работали с этим человеком профессионально.'}
+            </p>
+            <textarea
+              value={comment}
+              onChange={e => setComment(e.target.value)}
+              placeholder={isEn ? 'Optional: leave a short comment about this person…' : 'Опционально: оставьте короткий комментарий…'}
+              rows={3}
+              style={{width:'100%',background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.1)',borderRadius:'10px',padding:'12px 14px',color:'#fff',fontSize:'13px',fontFamily:'inherit',resize:'vertical',boxSizing:'border-box',marginBottom:'16px',outline:'none'}}
+            />
+            <button onClick={submit} disabled={status==='submitting'}
+              style={{width:'100%',background:'#1DB368',color:'#fff',border:'none',borderRadius:'12px',padding:'14px',fontSize:'15px',fontWeight:'500',cursor:'pointer'}}>
+              {status === 'submitting' ? '...' : (isEn ? '✅ Confirm Reference' : '✅ Подтвердить')}
+            </button>
+          </div>
+        )}
+        <div style={{marginTop:'24px',fontSize:'11px',color:'rgba(255,255,255,0.2)'}}>
+          ResumeLink · <a href="https://resumelink.cc" style={{color:'#1DB368',textDecoration:'none'}}>resumelink.cc</a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const [resumeData, setResumeData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -531,6 +598,11 @@ function App() {
   const [prepOpen, setPrepOpen] = useState(false);
   const [prepResult, setPrepResult] = useState([]);
   const [prepLoading, setPrepLoading] = useState(false);
+  const [refsOpen, setRefsOpen] = useState(false);
+  const [refName, setRefName] = useState('');
+  const [refEmail, setRefEmail] = useState('');
+  const [refStatus, setRefStatus] = useState(null);
+  const [refError, setRefError] = useState('');
   const [uploadTab, setUploadTab] = useState('file');
   const [viewCount, setViewCount] = useState(null);
   const [profileCount, setProfileCount] = useState(null);
@@ -673,6 +745,14 @@ function App() {
     const params = new URLSearchParams(location.search);
     const id = params.get('id');
     const magic = params.get('magic');
+    const reftoken = params.get('reftoken');
+
+    // ── Reference verification page ──
+    if (reftoken) {
+      setStep('refverify');
+      window.__RL_REF_TOKEN__ = reftoken;
+      return;
+    }
 
     // ── Magic Link verification ──
     if (magic) {
@@ -921,6 +1001,11 @@ JSON: {"labels":{"summary":"","experience":"","education":"","contacts":"","lang
         </div>
       </div>
     </div>
+  );
+
+  /* ── REFERENCE VERIFY PAGE ── */
+  if (step === 'refverify') return (
+    <RefVerifyPage token={window.__RL_REF_TOKEN__} isEn={isEn} workerUrl={WORKER_URL} />
   );
 
   /* ── LANDING ── */
@@ -1987,6 +2072,111 @@ Skills: ${(resumeData.additional||[]).map(b=>b.title+': '+b.content).join(' | ')
           </div>
         )}
       </div>
+
+      {/* VERIFIED REFERENCES BLOCK — Pro only */}
+      {isPro && savedId && (
+        <div className="no-print" style={{background:'var(--forest)',borderRadius:'20px',padding:'24px 28px',marginTop:'1rem',marginBottom:'1rem'}}>
+          <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',gap:'1rem',flexWrap:'wrap'}}>
+            <div>
+              <div style={{fontSize:'16px',fontWeight:'600',color:'#fff',marginBottom:'4px'}}>
+                {isEn ? '🏅 Verified References' : '🏅 Верифицированные референсы'}
+              </div>
+              <div style={{fontSize:'12px',color:'rgba(255,255,255,0.4)'}}>
+                {isEn ? 'Ask colleagues to verify your experience — up to 3' : 'Попросите коллег подтвердить ваш опыт — до 3'}
+              </div>
+            </div>
+            <button onClick={() => { setRefsOpen(o=>!o); setRefStatus(null); }}
+              style={{background: refsOpen?'rgba(255,255,255,0.08)':'var(--green)',color:'#fff',padding:'11px 22px',borderRadius:'10px',fontSize:'13px',fontWeight:'500',border:'none',cursor:'pointer',whiteSpace:'nowrap',flexShrink:0}}>
+              {refsOpen ? (isEn?'✕ Close':'✕ Закрыть') : (isEn?'Add Reference →':'Добавить →')}
+            </button>
+          </div>
+
+          {/* Existing references */}
+          {(resumeData._references||[]).length > 0 && (
+            <div style={{marginTop:'16px',display:'flex',flexDirection:'column',gap:'8px'}}>
+              {(resumeData._references||[]).map((ref,i) => (
+                <div key={i} style={{display:'flex',alignItems:'center',gap:'10px',background:'rgba(0,0,0,0.2)',border:`0.5px solid ${ref.status==='verified'?'rgba(29,179,104,0.3)':'rgba(255,255,255,0.08)'}`,borderRadius:'10px',padding:'10px 14px'}}>
+                  <span style={{fontSize:'16px'}}>{ref.status==='verified'?'✅':'⏳'}</span>
+                  <div style={{flex:1}}>
+                    <div style={{fontSize:'13px',fontWeight:'500',color:'#fff'}}>{ref.name}</div>
+                    {ref.comment && <div style={{fontSize:'11px',color:'rgba(255,255,255,0.5)',marginTop:'2px',fontStyle:'italic'}}>"{ref.comment}"</div>}
+                  </div>
+                  <div style={{fontSize:'10px',fontWeight:'600',textTransform:'uppercase',letterSpacing:'.06em',color: ref.status==='verified'?'var(--green)':'rgba(255,255,255,0.3)'}}>
+                    {ref.status==='verified' ? (isEn?'Verified':'Подтверждён') : (isEn?'Pending':'Ожидает')}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Add new reference form */}
+          {refsOpen && (resumeData._references||[]).length < 3 && (
+            <div style={{marginTop:'16px',borderTop:'1px solid rgba(255,255,255,0.06)',paddingTop:'16px'}}>
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'8px',marginBottom:'8px'}}>
+                <input value={refName} onChange={e=>setRefName(e.target.value)}
+                  placeholder={isEn?'Their name':'Имя коллеги'}
+                  style={{background:'rgba(0,0,0,0.25)',border:'0.5px solid rgba(255,255,255,0.1)',borderRadius:'8px',padding:'10px 12px',color:'#fff',fontSize:'13px',fontFamily:'inherit',outline:'none'}}/>
+                <input value={refEmail} onChange={e=>setRefEmail(e.target.value)}
+                  placeholder={isEn?'Their email':'Email коллеги'} type="email"
+                  style={{background:'rgba(0,0,0,0.25)',border:'0.5px solid rgba(255,255,255,0.1)',borderRadius:'8px',padding:'10px 12px',color:'#fff',fontSize:'13px',fontFamily:'inherit',outline:'none'}}/>
+              </div>
+              <button onClick={async () => {
+                if (!refName.trim() || !refEmail.includes('@')) { setRefError(isEn?'Fill in both fields':'Заполните оба поля'); return; }
+                setRefStatus('sending'); setRefError('');
+                try {
+                  const res = await fetch(`${WORKER_URL}/reference-request`, {
+                    method:'POST',
+                    headers:{'Content-Type':'application/json'},
+                    body: JSON.stringify({
+                      resumeId: savedId,
+                      refName: refName.trim(),
+                      refEmail: refEmail.trim(),
+                      candidateName: resumeData.name,
+                      candidateTitle: resumeData.title
+                    })
+                  });
+                  const data = await res.json();
+                  if (data.ok) {
+                    setRefStatus('sent');
+                    setRefName(''); setRefEmail('');
+                    // Update local state to show pending
+                    setResumeData(prev => ({...prev, _references: [...(prev._references||[]), {name: refName.trim(), email: refEmail.trim(), status:'pending', comment:''}]}));
+                    setTimeout(()=>setRefStatus(null), 3000);
+                  } else { setRefError(data.error||'Error'); setRefStatus(null); }
+                } catch(e) { setRefError(e.message); setRefStatus(null); }
+              }} disabled={refStatus==='sending'}
+                style={{background: refStatus==='sent'?'rgba(29,179,104,0.3)':'var(--green)',color:'#fff',border:'none',borderRadius:'8px',padding:'10px 20px',fontSize:'13px',fontWeight:'500',cursor:'pointer'}}>
+                {refStatus==='sending'?'...' : refStatus==='sent'?(isEn?'✓ Sent!':'✓ Отправлено!') : (isEn?'Send Request →':'Отправить запрос →')}
+              </button>
+              {refError && <div style={{fontSize:'11px',color:'#f87171',marginTop:'6px'}}>{refError}</div>}
+              <div style={{fontSize:'11px',color:'rgba(255,255,255,0.25)',marginTop:'8px'}}>
+                {isEn?'They\'ll receive an email to confirm. Link valid 7 days.':'Они получат письмо для подтверждения. Ссылка действительна 7 дней.'}
+              </div>
+            </div>
+          )}
+
+          {refsOpen && (resumeData._references||[]).length >= 3 && (
+            <div style={{marginTop:'12px',fontSize:'13px',color:'rgba(255,255,255,0.4)'}}>
+              {isEn?'Maximum 3 references reached.':'Максимум 3 референса достигнут.'}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* VERIFIED BADGE — показывается всем у кого есть verified refs */}
+      {(resumeData._references||[]).some(r=>r.status==='verified') && (
+        <div style={{display:'flex',flexWrap:'wrap',gap:'8px',marginTop:'0.5rem',marginBottom:'0.5rem'}}>
+          {(resumeData._references||[]).filter(r=>r.status==='verified').map((ref,i)=>(
+            <div key={i} style={{display:'inline-flex',alignItems:'center',gap:'6px',background:'rgba(29,179,104,0.08)',border:'0.5px solid rgba(29,179,104,0.25)',borderRadius:'20px',padding:'6px 12px'}}>
+              <span>✅</span>
+              <span style={{fontSize:'12px',fontWeight:'500',color:'var(--green)'}}>
+                {isEn?'Verified by':'Подтверждено:'} {ref.name}
+              </span>
+              {ref.comment && <span style={{fontSize:'11px',color:'rgba(255,255,255,0.4)',fontStyle:'italic'}}>· "{ref.comment}"</span>}
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* MAGIC LINK BLOCK — Pro: вернуться и редактировать */}
       {isPro && savedId && (
