@@ -1,4 +1,6 @@
 ---
+redirect_from:
+  - /2026/04/08/death-of-pdf-resume.html
 layout: post
 title: "The Death of the PDF Resume (And What Comes Next)"
 date: 2026-04-08

@@ -1,4 +1,6 @@
 ---
+redirect_from:
+  - /2026/04/15/resume-ai-screening-guide.html
 layout: post
 title: "How to Write a Resume That Passes AI Screening in 2026"
 date: 2026-04-8
