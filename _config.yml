@@ -25,4 +25,10 @@ exclude:
   - node_modules
   - vendor
 
-# NO jekyll-sitemap plugin — we manage sitemap.xml manually
+# Blog posts live under /blog/<slug>/ (the URLs already listed in sitemap and shared)
+permalink: /blog/:title/
+
+plugins:
+  - jekyll-redirect-from
+
+# sitemap.xml is generated from site.pages / site.roles / site.posts (see sitemap.xml)

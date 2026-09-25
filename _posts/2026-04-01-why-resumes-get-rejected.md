@@ -1,4 +1,6 @@
 ---
+redirect_from:
+  - /2026/04/01/why-resumes-get-rejected.html
 layout: post
 title: "Why 75% of Resumes Get Rejected Before a Human Sees Them"
 date: 2026-04-01

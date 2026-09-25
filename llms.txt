@@ -1,0 +1,26 @@
+---
+layout: null
+sitemap_exclude: true
+---
+# ResumeLink (resumelink.cc)
+
+> ResumeLink is an AI resume builder that turns a PDF resume into an interactive online career profile with an ATS score, a shareable link and a QR code in about 10 seconds. It works in 50+ languages, free to start with no signup. It also publishes resume guides for 190+ emerging AI-era roles and honest comparisons with other resume builders.
+
+## Product
+- [Home](https://resumelink.cc/): AI resume builder — upload a PDF, get an interactive profile, ATS score, link and QR code
+- [Pricing](https://resumelink.cc/pricing): free plan and paid upgrades
+- [For business](https://resumelink.cc/business): white-label AI resume profiles for agencies, universities and platforms
+- [About](https://resumelink.cc/about)
+
+## Comparisons
+{%- for p in site.pages %}{% if p.url contains "/vs/" and p.url != "/vs/" %}
+- [{{ p.title }}]({{ p.url | absolute_url }}): {{ p.description }}{% endif %}{% endfor %}
+
+## Blog
+{%- for post in site.posts %}
+- [{{ post.title }}]({{ post.url | absolute_url }}): {{ post.excerpt | strip_html | normalize_whitespace | truncate: 200 }}{% endfor %}
+
+## Resume guides by role
+- [All role guides](https://resumelink.cc/roles/)
+{%- for r in site.roles %}
+- [{{ r.h1 | default: r.title }}]({{ r.url | absolute_url }}){% endfor %}
