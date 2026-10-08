@@ -341,10 +341,14 @@ document.getElementById('kofi-block').innerHTML = `
 <script>
 function copyEmailFallback(e){
   try{
-    navigator.clipboard.writeText('connect4fund@gmail.com');
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText('connect4fund@gmail.com').catch(function(){});
+    }
+  }catch(err){}
+  try{
     var t=document.createElement('div');
     t.className='email-toast';
-    t.textContent='✓ Email copied: connect4fund@gmail.com';
+    t.textContent='✓ connect4fund@gmail.com — copied, or write to us directly';
     document.body.appendChild(t);
     requestAnimationFrame(function(){t.classList.add('show')});
     setTimeout(function(){t.classList.remove('show');setTimeout(function(){t.remove()},300)},3500);
