@@ -105,7 +105,7 @@
         <a href="/pricing.html" id="nav-pricing" class="nav-active">Pricing</a>
         <a href="/blog.html" id="nav-blog">Blog</a>
         <a href="/business.html" id="nav-business">For Business</a>
-        <a href="mailto:connect4fund@gmail.com" id="nav-contact">Contact</a>
+        <a href="mailto:connect4fund@gmail.com" onclick="copyEmailFallback(event)" id="nav-contact">Contact</a>
         <a href="/" class="nav-cta" id="nav-upload">Upload →</a>
     </div>
     <button class="nav-hamburger" onclick="document.querySelector('.nav-mobile').classList.toggle('open')" aria-label="Menu">
@@ -118,7 +118,7 @@
     <a href="/pricing.html" id="mob-pricing" style="color:var(--green-dk);font-weight:500">Pricing</a>
     <a href="/blog.html" id="mob-blog">Blog</a>
     <a href="/business.html" id="mob-business">For Business</a>
-    <a href="mailto:connect4fund@gmail.com" id="mob-contact">Contact</a>
+    <a href="mailto:connect4fund@gmail.com" onclick="copyEmailFallback(event)" id="mob-contact">Contact</a>
     <a href="/" id="mob-upload" style="color:var(--green-dk);font-weight:500">Upload →</a>
 </div>
 
@@ -143,7 +143,7 @@
         <a href="/blog.html">Blog</a>
         <a href="/business.html">For Business</a>
         <a href="/policy.html" id="footer-policy">Privacy & Terms</a>
-        <a href="mailto:connect4fund@gmail.com">connect4fund@gmail.com</a>
+        <a href="mailto:connect4fund@gmail.com" onclick="copyEmailFallback(event)">connect4fund@gmail.com</a>
     </div>
     <div class="footer-copy">© 2026 ResumeLink</div>
 </footer>
@@ -332,6 +332,24 @@ document.getElementById('kofi-block').innerHTML = `
         <a href="https://patreon.com/AzatIsrailov?utm_medium=unknown&utm_source=join_link&utm_campaign=creatorshare_creator&utm_content=copyLink" target="_blank" rel="noopener" class="kofi-btn" style="background:#FF424D">🧡 Patreon</a>
     </div>
 `;
+</script>
+
+<style>
+.email-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--forest,#0D3D28);color:#fff;padding:13px 22px;border-radius:10px;font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;z-index:99999;box-shadow:0 8px 30px rgba(0,0,0,0.25);opacity:0;transition:opacity .25s,transform .25s;pointer-events:none}
+.email-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+<script>
+function copyEmailFallback(e){
+  try{
+    navigator.clipboard.writeText('connect4fund@gmail.com');
+    var t=document.createElement('div');
+    t.className='email-toast';
+    t.textContent='✓ Email copied: connect4fund@gmail.com';
+    document.body.appendChild(t);
+    requestAnimationFrame(function(){t.classList.add('show')});
+    setTimeout(function(){t.classList.remove('show');setTimeout(function(){t.remove()},300)},3500);
+  }catch(err){}
+}
 </script>
 </body>
 </html>

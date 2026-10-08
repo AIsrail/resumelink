@@ -462,7 +462,7 @@
         <a href="/pricing.html">Pricing</a>
         <a href="/business.html">For Business</a>
         <a href="/policy.html">Privacy & Terms</a>
-        <a href="mailto:connect4fund@gmail.com">connect4fund@gmail.com</a>
+        <a href="mailto:connect4fund@gmail.com" onclick="copyEmailFallback(event)">connect4fund@gmail.com</a>
         <a href="https://ko-fi.com/ontoguzlabs" target="_blank" rel="noopener">☕ Support</a>
         <a href="https://patreon.com/AzatIsrailov?utm_medium=unknown&utm_source=join_link&utm_campaign=creatorshare_creator&utm_content=copyLink" target="_blank" rel="noopener">🧡 Patreon</a>
     </div>
@@ -489,6 +489,24 @@ const observer = new IntersectionObserver(entries => {
     });
 }, { threshold: 0.1 });
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+<style>
+.email-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--forest,#0D3D28);color:#fff;padding:13px 22px;border-radius:10px;font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;z-index:99999;box-shadow:0 8px 30px rgba(0,0,0,0.25);opacity:0;transition:opacity .25s,transform .25s;pointer-events:none}
+.email-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+<script>
+function copyEmailFallback(e){
+  try{
+    navigator.clipboard.writeText('connect4fund@gmail.com');
+    var t=document.createElement('div');
+    t.className='email-toast';
+    t.textContent='✓ Email copied: connect4fund@gmail.com';
+    document.body.appendChild(t);
+    requestAnimationFrame(function(){t.classList.add('show')});
+    setTimeout(function(){t.classList.remove('show');setTimeout(function(){t.remove()},300)},3500);
+  }catch(err){}
+}
 </script>
 </body>
 </html>

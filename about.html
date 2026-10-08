@@ -91,7 +91,7 @@
         <a href="/pricing.html">Pricing</a>
         <a href="/blog.html">Blog</a>
         <a href="/business.html">For Business</a>
-        <a href="mailto:connect4fund@gmail.com" id="nav-contact">Contact</a>
+        <a href="mailto:connect4fund@gmail.com" onclick="copyEmailFallback(event)" id="nav-contact">Contact</a>
         <a href="/" class="nav-cta" id="nav-upload">Upload →</a>
     </div>
     <button class="nav-hamburger" onclick="document.querySelector('.nav-mobile').classList.toggle('open')" aria-label="Menu">
@@ -104,7 +104,7 @@
     <a href="/pricing.html">Pricing</a>
     <a href="/blog.html">Blog</a>
     <a href="/business.html">For Business</a>
-    <a href="mailto:connect4fund@gmail.com" id="mob-contact">Contact</a>
+    <a href="mailto:connect4fund@gmail.com" onclick="copyEmailFallback(event)" id="mob-contact">Contact</a>
     <a href="/" id="mob-upload" style="color:var(--green-dk);font-weight:500">Upload →</a>
 </div>
 
@@ -126,7 +126,7 @@
         <a href="/roles/">Explore</a>
         <a href="/about.html" id="footer-about">About</a>
         <a href="/policy.html" id="footer-policy">Privacy & Terms</a>
-        <a href="mailto:connect4fund@gmail.com">connect4fund@gmail.com</a>
+        <a href="mailto:connect4fund@gmail.com" onclick="copyEmailFallback(event)">connect4fund@gmail.com</a>
         <a href="https://ko-fi.com/ontoguzlabs" target="_blank" rel="noopener">☕ Support</a>
         <a href="https://patreon.com/AzatIsrailov?utm_medium=unknown&utm_source=join_link&utm_campaign=creatorshare_creator&utm_content=copyLink" target="_blank" rel="noopener">🧡 Patreon</a>
     </div>
@@ -149,7 +149,7 @@ const T = {
             { label: "🌍 Multilingual", text: "ResumeLink auto-detects your resume language and adapts the interface accordingly. More languages are coming soon." }
         ],
         contactTitle: "👋 Get in touch",
-        contactBody: "ResumeLink is built solo by <b>Azat Israilov</b>. Have feedback, found a bug, or have an idea for the site? I'm genuinely open to suggestions — reach out any time.<br><br>📧 <a href=\"mailto:connect4fund@gmail.com\" style=\"color:var(--green-dk);font-weight:500\">connect4fund@gmail.com</a><br>🌐 <a href=\"https://azatisrail.org\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--green-dk);font-weight:500\">azatisrail.org</a>"
+        contactBody: "ResumeLink is built solo by <b>Azat Israilov</b>. Have feedback, found a bug, or have an idea for the site? I'm genuinely open to suggestions — reach out any time.<br><br>📧 <a href=\"mailto:connect4fund@gmail.com\" onclick=\"copyEmailFallback(event)\" style=\"color:var(--green-dk);font-weight:500\">connect4fund@gmail.com</a><br>🌐 <a href=\"https://azatisrail.org\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--green-dk);font-weight:500\">azatisrail.org</a>"
     },
     ru: {
         back: "← На главную",
@@ -164,7 +164,7 @@ const T = {
             { label: "🌍 Мультиязычность", text: "Сервис автоматически определяет язык резюме и адаптирует весь интерфейс. Скоро подключатся новые языки и регионы." }
         ],
         contactTitle: "👋 Связаться со мной",
-        contactBody: "ResumeLink создаёт и развивает <b>Азат Исраилов</b> в одиночку. Есть отзыв, нашли баг или идея по улучшению сайта? Я открыт для любых предложений — пишите в любое время.<br><br>📧 <a href=\"mailto:connect4fund@gmail.com\" style=\"color:var(--green-dk);font-weight:500\">connect4fund@gmail.com</a><br>🌐 <a href=\"https://azatisrail.org\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--green-dk);font-weight:500\">azatisrail.org</a>"
+        contactBody: "ResumeLink создаёт и развивает <b>Азат Исраилов</b> в одиночку. Есть отзыв, нашли баг или идея по улучшению сайта? Я открыт для любых предложений — пишите в любое время.<br><br>📧 <a href=\"mailto:connect4fund@gmail.com\" onclick=\"copyEmailFallback(event)\" style=\"color:var(--green-dk);font-weight:500\">connect4fund@gmail.com</a><br>🌐 <a href=\"https://azatisrail.org\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--green-dk);font-weight:500\">azatisrail.org</a>"
     }
 };
 
@@ -191,5 +191,23 @@ document.getElementById('contact-title').textContent = C.contactTitle;
 document.getElementById('contact-body').innerHTML = C.contactBody;
 </script>
 
+
+<style>
+.email-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--forest,#0D3D28);color:#fff;padding:13px 22px;border-radius:10px;font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;z-index:99999;box-shadow:0 8px 30px rgba(0,0,0,0.25);opacity:0;transition:opacity .25s,transform .25s;pointer-events:none}
+.email-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+<script>
+function copyEmailFallback(e){
+  try{
+    navigator.clipboard.writeText('connect4fund@gmail.com');
+    var t=document.createElement('div');
+    t.className='email-toast';
+    t.textContent='✓ Email copied: connect4fund@gmail.com';
+    document.body.appendChild(t);
+    requestAnimationFrame(function(){t.classList.add('show')});
+    setTimeout(function(){t.classList.remove('show');setTimeout(function(){t.remove()},300)},3500);
+  }catch(err){}
+}
+</script>
 </body>
 </html>
