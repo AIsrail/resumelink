@@ -91,7 +91,7 @@
         <a href="/pricing.html">Pricing</a>
         <a href="/blog.html">Blog</a>
         <a href="/business.html">For Business</a>
-        <a href="mailto:info@resumelink.cc" id="nav-contact">Contact</a>
+        <a href="mailto:connect4fund@gmail.com" id="nav-contact">Contact</a>
         <a href="/" class="nav-cta" id="nav-upload">Upload →</a>
     </div>
     <button class="nav-hamburger" onclick="document.querySelector('.nav-mobile').classList.toggle('open')" aria-label="Menu">
@@ -104,7 +104,7 @@
     <a href="/pricing.html">Pricing</a>
     <a href="/blog.html">Blog</a>
     <a href="/business.html">For Business</a>
-    <a href="mailto:info@resumelink.cc" id="mob-contact">Contact</a>
+    <a href="mailto:connect4fund@gmail.com" id="mob-contact">Contact</a>
     <a href="/" id="mob-upload" style="color:var(--green-dk);font-weight:500">Upload →</a>
 </div>
 
@@ -113,6 +113,11 @@
     <h1 class="page-h1" id="page-title">About <em>ResumeLink</em></h1>
     <div class="intro-card" id="intro-card"></div>
     <div class="cards-grid" id="cards-grid"></div>
+
+    <div class="intro-card" id="contact-card" style="margin-top: 20px;">
+        <div id="contact-title" style="font-weight: 500; color: var(--forest); margin-bottom: 10px; font-size: 15px;"></div>
+        <p id="contact-body" style="font-size: 14px; line-height: 1.8; color: var(--muted);"></p>
+    </div>
 </div>
 
 <footer>
@@ -121,7 +126,8 @@
         <a href="/roles/">Explore</a>
         <a href="/about.html" id="footer-about">About</a>
         <a href="/policy.html" id="footer-policy">Privacy & Terms</a>
-        <a href="mailto:info@resumelink.cc">info@resumelink.cc</a>
+        <a href="mailto:connect4fund@gmail.com">connect4fund@gmail.com</a>
+        <a href="https://ko-fi.com/ontoguzlabs" target="_blank" rel="noopener">☕ Support</a>
     </div>
     <div class="footer-copy">© 2026 ResumeLink</div>
 </footer>
@@ -140,7 +146,9 @@ const T = {
             { label: "🔗 Instant Access", text: "Your profile is always ready to share via link or QR code. No more attachments or formatting issues on recruiters' devices — just one clean link." },
             { label: "📊 ATS Score", text: "Understand exactly how your resume performs against automated hiring filters. Get an instant score and know where you stand before hitting \"Apply\"." },
             { label: "🌍 Multilingual", text: "ResumeLink auto-detects your resume language and adapts the interface accordingly. More languages are coming soon." }
-        ]
+        ],
+        contactTitle: "👋 Get in touch",
+        contactBody: "ResumeLink is built solo by <b>Azat Israilov</b>. Have feedback, found a bug, or have an idea for the site? I'm genuinely open to suggestions — reach out any time.<br><br>📧 <a href=\"mailto:connect4fund@gmail.com\" style=\"color:var(--green-dk);font-weight:500\">connect4fund@gmail.com</a><br>🌐 <a href=\"https://azatisrail.org\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--green-dk);font-weight:500\">azatisrail.org</a>"
     },
     ru: {
         back: "← На главную",
@@ -153,7 +161,9 @@ const T = {
             { label: "🔗 Цифровой профиль", text: "Ваше резюме превращается в интерактивную ссылку или QR-код. Забудьте о тяжёлых PDF-файлах, которые неудобно открывать на телефоне." },
             { label: "📊 ATS Score", text: "Мгновенная оценка соответствия вакансии. Понимайте, почему ваше резюме проходит или не проходит автоматические фильтры HR-систем." },
             { label: "🌍 Мультиязычность", text: "Сервис автоматически определяет язык резюме и адаптирует весь интерфейс. Скоро подключатся новые языки и регионы." }
-        ]
+        ],
+        contactTitle: "👋 Связаться со мной",
+        contactBody: "ResumeLink создаёт и развивает <b>Азат Исраилов</b> в одиночку. Есть отзыв, нашли баг или идея по улучшению сайта? Я открыт для любых предложений — пишите в любое время.<br><br>📧 <a href=\"mailto:connect4fund@gmail.com\" style=\"color:var(--green-dk);font-weight:500\">connect4fund@gmail.com</a><br>🌐 <a href=\"https://azatisrail.org\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--green-dk);font-weight:500\">azatisrail.org</a>"
     }
 };
 
@@ -176,6 +186,8 @@ document.getElementById('cards-grid').innerHTML = C.cards.map(card => `
         <p>${card.text}</p>
     </div>
 `).join('');
+document.getElementById('contact-title').textContent = C.contactTitle;
+document.getElementById('contact-body').innerHTML = C.contactBody;
 </script>
 
 </body>

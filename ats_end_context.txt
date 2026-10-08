@@ -1,0 +1,1 @@
+1px"}},"→"),React.createElement("span",null,e))))))})(),e.summary&&React.createElement("div",{className:"card card-summary"},React.createElement("div",{className:"card-label"},Xe.summary),React.createElement("p",null,e.summary)),React.createElement("div",{className:"card card-contacts"},React.createElement("div",{className:"card-label"},Xe.contacts
