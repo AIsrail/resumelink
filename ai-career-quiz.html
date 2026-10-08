@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Your AI Career Role — Interactive Quiz</title>
+    <meta name="description" content="Quick 5-minute quiz to discover which AI career path fits your skills and interests.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --green: #1DB368;
+            --green-dk: #0D8A4E;
+            --forest: #0D3D28;
+            --bg: #F2FAF6;
+            --surface: #FFFFFF;
+            --mint: #EAF7F0;
+            --border: #C5E8D5;
+            --text: #0D3D28;
+            --muted: #5A8A70;
+        }
+        [data-theme="dark"] {
+            --green: #2EE383;
+            --green-dk: #1FC46D;
+            --forest: #E8F5F0;
+            --bg: #0D3D28;
+            --surface: #1A5F42;
+            --mint: #0F6B47;
+            --border: #2E8A5F;
+            --text: #E8F5F0;
+            --muted: #A8D5BA;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body { background: var(--bg); font-family: 'DM Sans', sans-serif; color: var(--text); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+
+        .quiz-container { max-width: 600px; width: 100%; background: var(--surface); border-radius: 20px; padding: clamp(2rem, 5vw, 3rem); box-shadow: 0 4px 24px rgba(13,61,40,0.07); }
+
+        .quiz-header { text-align: center; margin-bottom: 2rem; }
+        .quiz-header h1 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 300; color: var(--forest); margin-bottom: 0.5rem; }
+        .quiz-header p { font-size: 14px; color: var(--muted); }
+
+        .progress-bar { height: 4px; background: var(--border); border-radius: 2px; margin-bottom: 2rem; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--green); transition: width .3s; }
+
+        .question { margin-bottom: 2rem; }
+        .question-text { font-size: 16px; font-weight: 500; color: var(--forest); margin-bottom: 1rem; }
+
+        .answer-options { display: flex; flex-direction: column; gap: 10px; }
+        .answer-btn { background: var(--bg); border: 0.5px solid var(--border); padding: 14px 16px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); cursor: pointer; transition: all .2s; text-align: left; }
+        .answer-btn:hover { border-color: var(--green); }
+        .answer-btn.selected { background: var(--mint); border-color: var(--green); color: var(--green-dk); font-weight: 500; }
+
+        .result-box { background: var(--mint); border: 0.5px solid var(--green); border-radius: 14px; padding: 24px; margin: 2rem 0; text-align: center; }
+        .result-title { font-size: 18px; font-weight: 500; color: var(--forest); margin-bottom: 0.5rem; }
+        .result-desc { font-size: 14px; color: var(--muted); margin-bottom: 1rem; }
+
+        .quiz-actions { display: flex; gap: 12px; margin-top: 2rem; }
+        button { background: var(--forest); color: var(--bg); padding: 12px 24px; border-radius: 10px; border: none; font-size: 14px; font-weight: 500; cursor: pointer; transition: background .2s; font-family: 'DM Sans', sans-serif; flex: 1; }
+        button:hover { background: var(--green-dk); }
+        .btn-ghost { background: transparent; color: var(--green); border: 0.5px solid var(--green); }
+        .btn-ghost:hover { background: var(--mint); }
+
+        .theme-toggle { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer; padding: 8px; }
+    </style>
+</head>
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+
+<div class="quiz-container">
+    <div class="quiz-header">
+        <h1>Find Your AI Role</h1>
+        <p>Quick 5-question quiz to discover your perfect career path</p>
+    </div>
+
+    <div id="quiz-content"></div>
+</div>
+
+<script>
+const quizData = [
+    {
+        q: "What excites you most?",
+        options: [
+            { text: "Building & coding", score: { engineer: 2, data: 1 } },
+            { text: "Understanding data patterns", score: { data: 2, engineer: 1 } },
+            { text: "Business strategy", score: { business: 2, ethics: 1 } },
+            { text: "Keeping systems safe", score: { security: 2, ethics: 1 } },
+        ]
+    },
+    {
+        q: "Your strongest skill?",
+        options: [
+            { text: "Software engineering", score: { engineer: 2, data: 0.5 } },
+            { text: "Statistics & math", score: { data: 2, engineer: 0.5 } },
+            { text: "Communication", score: { business: 2, ethics: 1 } },
+            { text: "Problem-solving", score: { security: 1.5, data: 1 } },
+        ]
+    },
+    {
+        q: "Prefer to work on?",
+        options: [
+            { text: "Technical infrastructure", score: { engineer: 2 } },
+            { text: "Data & ML models", score: { data: 2 } },
+            { text: "Strategy & vision", score: { business: 2 } },
+            { text: "Risk & compliance", score: { security: 2, ethics: 1 } },
+        ]
+    },
+    {
+        q: "Impact matters most in:",
+        options: [
+            { text: "Product performance", score: { engineer: 2 } },
+            { text: "Data-driven insights", score: { data: 2 } },
+            { text: "Revenue & growth", score: { business: 2 } },
+            { text: "Ethics & fairness", score: { ethics: 2 } },
+        ]
+    },
+    {
+        q: "Your ideal work environment?",
+        options: [
+            { text: "Deep technical work", score: { engineer: 2, data: 1 } },
+            { text: "Research & experimentation", score: { data: 2 } },
+            { text: "Leadership & strategy", score: { business: 2 } },
+            { text: "Helping others avoid risks", score: { security: 2, ethics: 1 } },
+        ]
+    }
+];
+
+const roles = {
+    engineer: { name: "AI Engineer", desc: "Build ML systems & infrastructure", link: "ai-infrastructure-engineer" },
+    data: { name: "Data Scientist", desc: "Extract insights from data", link: "ai-data-curator" },
+    business: { name: "AI Business Lead", desc: "Drive AI strategy & value", link: "ai-business-lead" },
+    security: { name: "Security Specialist", desc: "Protect AI systems", link: "ai-adversarial-security-tester" },
+    ethics: { name: "AI Ethics Officer", desc: "Ensure responsible AI", link: "ai-ethics-officer" },
+};
+
+let scores = { engineer: 0, data: 0, business: 0, security: 0, ethics: 0 };
+let currentQuestion = 0;
+
+function renderQuiz() {
+    const content = document.getElementById('quiz-content');
+
+    if (currentQuestion < quizData.length) {
+        const q = quizData[currentQuestion];
+        const progress = (currentQuestion / quizData.length) * 100;
+
+        content.innerHTML = `
+            <div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div>
+            <div class="question">
+                <div class="question-text">Q${currentQuestion + 1}. ${q.q}</div>
+                <div class="answer-options">
+                    ${q.options.map((opt, i) => `
+                        <button class="answer-btn" onclick="selectAnswer(${i})">${opt.text}</button>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    } else {
+        showResult();
+    }
+}
+
+function selectAnswer(index) {
+    const q = quizData[currentQuestion];
+    const option = q.options[index];
+
+    Object.keys(option.score).forEach(role => {
+        scores[role] += option.score[role];
+    });
+
+    currentQuestion++;
+    renderQuiz();
+}
+
+function showResult() {
+    const topRole = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+    const role = roles[topRole];
+
+    document.getElementById('quiz-content').innerHTML = `
+        <div class="result-box">
+            <div style="font-size:48px;margin-bottom:1rem">✨</div>
+            <div class="result-title">Your ideal path:</div>
+            <div style="font-size:24px;font-weight:500;color:var(--green);margin:0.5rem 0">${role.name}</div>
+            <div class="result-desc">${role.desc}</div>
+            <p style="font-size:13px;color:var(--muted);margin-top:1rem">This role aligns with your skills and interests. Explore the full guide to learn more.</p>
+        </div>
+        <div class="quiz-actions">
+            <a href="/roles/${role.link}/" style="text-decoration:none;flex:1">
+                <button>View Full Guide →</button>
+            </a>
+            <button class="btn-ghost" onclick="location.href='/roles/'">Explore All Roles</button>
+        </div>
+    `;
+}
+
+function toggleTheme() {
+    const html = document.documentElement;
+    const theme = html.getAttribute('data-theme');
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+}
+
+window.addEventListener('load', () => {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    renderQuiz();
+});
+</script>
+
+</body>
+</html>

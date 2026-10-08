@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,6 +33,18 @@
             --text:     #0D3D28;
             --muted:    #5A8A70;
             --faint:    #A8CDB9;
+        }
+        [data-theme="dark"] {
+            --green:    #2EE383;
+            --green-dk: #1FC46D;
+            --forest:   #E8F5F0;
+            --bg:       #0D3D28;
+            --surface:  #1A5F42;
+            --mint:     #0F6B47;
+            --border:   #2E8A5F;
+            --text:     #E8F5F0;
+            --muted:    #A8D5BA;
+            --faint:    #5A8A70;
         }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; }
@@ -104,3 +116,17 @@
         <a href="/about.html">About</a>
         <a href="/policy.html">Privacy & Terms</a>
         <a href="/cdn-cgi/l/email-protection#ea83848c85aa988f999f878f86838481c48989"><span class="__cf_email__" data-cfemail="056c6b636a45776076706860696c6b6e2b6666">[email&#160;protected]</s
+
+<script>
+function toggleTheme() {
+    const html = document.documentElement;
+    const theme = html.getAttribute('data-theme');
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+}
+window.addEventListener('load', () => {
+    const saved = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', saved);
+});
+</script>

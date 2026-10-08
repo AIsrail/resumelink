@@ -1,130 +1,202 @@
----
-layout: default
-title: "Explore Guides & Careers"
-description: "240+ expert guides for AI-era professionals."
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Career Guides — Find Your Role | ResumeLink</title>
+    <meta name="description" content="Browse 200+ AI career guides: from AI Engineers to AI Ethicists. Find the perfect role, learn required skills, salary ranges, and career paths.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://resumelink.cc/roles/">
 
-<style>
-    .explore-hero { margin-bottom: 2rem; }
-    .explore-eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--green-dk); background: var(--mint); border: 0.5px solid var(--border); padding: 5px 12px; border-radius: 20px; margin-bottom: 16px; }
-    .explore-eyebrow::before { content:''; width:6px; height:6px; background:var(--green); border-radius:50%; }
-    .explore-h1 { font-size: clamp(2rem,4vw,3rem); font-weight: 300; color: var(--forest); letter-spacing: -0.025em; line-height: 1.2; margin-bottom: 12px; }
-    .explore-h1 b { font-weight: 500; }
-    .explore-sub { font-size: 15px; color: var(--muted); line-height: 1.65; max-width: 540px; }
-    .search-wrap { margin-bottom: 1rem; position: relative; }
-    .search-input { width: 100%; padding: 14px 20px 14px 44px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; font-size: 14px; color: var(--text); font-family: 'DM Sans', sans-serif; outline: none; transition: border-color .2s; }
-    .search-input:focus { border-color: var(--green); }
-    .search-input::placeholder { color: var(--faint); }
-    .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--faint); font-size: 16px; pointer-events: none; }
-    .filter-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; align-items: center; }
-    .filter-tag { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; border: 0.5px solid var(--border); background: var(--surface); color: var(--muted); transition: all .2s; white-space: nowrap; }
-    .filter-tag:hover { border-color: var(--green); color: var(--forest); }
-    .filter-tag.active { background: var(--forest); color: #fff; border-color: var(--forest); }
-    .results-count { font-size: 12px; color: var(--faint); margin-bottom: 1.2rem; }
-    .roles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-    .role-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 16px; padding: 20px; text-decoration: none; display: block; transition: border-color .2s, transform .2s; }
-    .role-card:hover { border-color: var(--green); transform: translateY(-2px); }
-    .role-card-category { font-size: 9px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; color: var(--faint); margin-bottom: 8px; }
-    .role-card-title { font-size: 14px; font-weight: 500; color: var(--forest); margin-bottom: 8px; line-height: 1.3; }
-    .role-card-summary { font-size: 12px; color: var(--muted); line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 14px; }
-    .role-card-footer { display: flex; align-items: center; justify-content: space-between; }
-    .role-card-tags { display: flex; gap: 5px; flex-wrap: wrap; }
-    .role-card-tag { background: var(--mint); border: 0.5px solid var(--border); color: var(--green-dk); font-size: 9px; padding: 2px 7px; border-radius: 4px; }
-    .role-card-arrow { font-size: 11px; font-weight: 500; color: var(--green); white-space: nowrap; }
-    .empty-state { text-align: center; padding: 4rem 2rem; color: var(--faint); font-size: 14px; display: none; }
-    .empty-state.visible { display: block; }
-    .cta-bar { background: var(--forest); border-radius: 16px; padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin-top: 3rem; flex-wrap: wrap; }
-    .cta-bar-text h3 { font-size: 18px; font-weight: 300; color: #fff; margin-bottom: 4px; }
-    .cta-bar-text h3 b { font-weight: 500; }
-    .cta-bar-text p { font-size: 13px; color: rgba(255,255,255,0.5); }
-    .cta-bar-btn { background: var(--green); color: #fff; padding: 12px 28px; border-radius: 10px; font-size: 13px; font-weight: 500; text-decoration: none; white-space: nowrap; transition: background .2s, transform .15s; flex-shrink: 0; }
-    .cta-bar-btn:hover { background: var(--green-dk); transform: translateY(-1px); }
-    @media (max-width: 900px) { .roles-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 560px) { .roles-grid { grid-template-columns: 1fr; } .cta-bar { flex-direction: column; text-align: center; } }
-</style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
 
-<div class="explore-hero">
-    <div class="explore-eyebrow">2026 Career Intelligence</div>
-    <h1 class="explore-h1">Guides &amp; <b>Careers</b></h1>
-    <p class="explore-sub">Expert guides for AI-era professionals. Each guide includes skills, tools, and strategies to help you stand out.</p>
-</div>
+    <style>
+        :root {
+            --green: #1DB368;
+            --green-dk: #0D8A4E;
+            --forest: #0D3D28;
+            --bg: #F2FAF6;
+            --surface: #FFFFFF;
+            --mint: #EAF7F0;
+            --border: #C5E8D5;
+            --text: #0D3D28;
+            --muted: #5A8A70;
+            --faint: #A8CDB9;
+        }
+        [data-theme="dark"] {
+            --green: #2EE383;
+            --green-dk: #1FC46D;
+            --forest: #E8F5F0;
+            --bg: #0D3D28;
+            --surface: #1A5F42;
+            --mint: #0F6B47;
+            --border: #2E8A5F;
+            --text: #E8F5F0;
+            --muted: #A8D5BA;
+            --faint: #5A8A70;
+        }
 
-<div class="search-wrap">
-    <span class="search-icon">🔍</span>
-    <input type="text" class="search-input" id="searchInput" placeholder="Search by role, skill or tool…" oninput="applyFilters()">
-</div>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body { background: var(--bg); font-family: 'DM Sans', sans-serif; color: var(--text); min-height: 100vh; }
 
-<div class="filter-tags">
-    <span class="filter-tag active" data-cat="all" onclick="setCategory('all')">All</span>
-    <span class="filter-tag" data-cat="AI Roles" onclick="setCategory('AI Roles')">🤖 AI Roles</span>
-    <span class="filter-tag" data-cat="Guides & Strategy" onclick="setCategory('Guides & Strategy')">📘 Guides</span>
-    <span class="filter-tag" data-cat="Skills & Frameworks" onclick="setCategory('Skills & Frameworks')">⚡ Skills</span>
-    <span class="filter-tag" data-cat="Checklists" onclick="setCategory('Checklists')">✅ Checklists</span>
-    <span class="filter-tag" data-cat="Security & Privacy" onclick="setCategory('Security & Privacy')">🔐 Security</span>
-    <span class="filter-tag" data-cat="Ethics & Society" onclick="setCategory('Ethics & Society')">🌍 Ethics</span>
-</div>
+        nav { position: sticky; top: 0; z-index: 100; background: rgba(242,250,246,0.92); backdrop-filter: blur(12px); border-bottom: 0.5px solid var(--border); padding: 0 clamp(1.5rem,5vw,4rem); height: 62px; display: flex; align-items: center; justify-content: space-between; }
+        .nav-logo { font-size: 20px; font-weight: 500; color: var(--forest); text-decoration: none; }
+        .nav-logo span { color: var(--green); }
+        .nav-theme { background: none; border: none; font-size: 18px; cursor: pointer; padding: 8px; }
 
-<div class="results-count" id="resultsCount"></div>
+        .container { max-width: 1200px; margin: 0 auto; padding: clamp(2rem,4vw,4rem) clamp(1.5rem,5vw,4rem); }
 
-<div class="roles-grid" id="rolesGrid">
-    {% assign sorted_roles = site.roles | sort: "title" %}
-    {% for role in sorted_roles %}
-    <a href="{{ role.url }}"
-       class="role-card"
-       data-title="{{ role.title | downcase }}"
-       data-summary="{{ role.summary_hack | downcase }}"
-       data-skills="{{ role.judgment_skills | downcase }}"
-       data-tools="{{ role.ai_tools | join: ' ' | downcase }}"
-       data-category="{{ role.category }}">
-        <div class="role-card-category">{{ role.category }}</div>
-        <div class="role-card-title">{{ role.title }}</div>
-        <div class="role-card-summary">{{ role.summary_hack }}</div>
-        <div class="role-card-footer">
-            <div class="role-card-tags">
-                {% for skill in role.judgment_skills limit:2 %}
-                <span class="role-card-tag">{{ skill }}</span>
-                {% endfor %}
-            </div>
-            <span class="role-card-arrow">View →</span>
-        </div>
-    </a>
-    {% endfor %}
-</div>
+        h1 { font-size: clamp(2rem,3.5vw,2.8rem); font-weight: 300; margin-bottom: 1rem; color: var(--forest); }
+        .subtitle { font-size: 15px; color: var(--muted); margin-bottom: 2rem; }
 
-<div class="empty-state" id="emptyState">No guides found — try a different search or category.</div>
+        .search-box { display: flex; gap: 12px; margin-bottom: 2rem; flex-wrap: wrap; }
+        input[type="text"] { flex: 1; min-width: 250px; padding: 12px 16px; border: 0.5px solid var(--border); border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; background: var(--surface); color: var(--text); }
+        input[type="text"]:focus { outline: none; border-color: var(--green); }
 
-<div class="cta-bar">
-    <div class="cta-bar-text">
-        <h3>Found your role?<br><b>Build your live profile now.</b></h3>
-        <p>Upload your resume — AI structures it in 10 seconds.</p>
+        .filter-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 2rem; }
+        .filter-tag { background: var(--surface); border: 0.5px solid var(--border); padding: 8px 14px; border-radius: 20px; font-size: 12px; cursor: pointer; transition: all .2s; }
+        .filter-tag:hover { border-color: var(--green); }
+        .filter-tag.active { background: var(--mint); border-color: var(--green); color: var(--green-dk); font-weight: 500; }
+
+        .roles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+        .role-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 14px; padding: 20px; transition: all .2s; text-decoration: none; color: inherit; display: flex; flex-direction: column; }
+        .role-card:hover { border-color: var(--green); transform: translateY(-2px); box-shadow: 0 4px 20px rgba(29,179,104,0.1); }
+
+        .role-category { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--green-dk); margin-bottom: 8px; }
+        .role-title { font-size: 15px; font-weight: 500; color: var(--forest); margin-bottom: 8px; }
+        .role-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; flex: 1; }
+
+        .role-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--faint); padding-top: 12px; border-top: 0.5px solid var(--border); }
+        .role-salary { color: var(--green); font-weight: 500; }
+
+        .no-results { text-align: center; padding: 3rem; color: var(--muted); }
+        .no-results-icon { font-size: 48px; margin-bottom: 1rem; }
+
+        footer { border-top: 0.5px solid var(--border); padding: 2rem clamp(1.5rem,5vw,4rem); text-align: center; font-size: 12px; color: var(--faint); }
+
+        @media (max-width: 640px) {
+            .roles-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/" class="nav-logo">Resume<span>Link</span></a>
+    <button class="nav-theme" id="theme-toggle" onclick="toggleTheme()">🌙</button>
+</nav>
+
+<div class="container">
+    <h1>Explore 200+ AI Career Guides</h1>
+    <p class="subtitle">Find your next role, learn required skills, salary insights, and career paths</p>
+
+    <div class="search-box">
+        <input type="text" id="search-input" placeholder="Search roles... (Engineer, Manager, Designer, etc.)" onkeyup="filterRoles()">
     </div>
-    <a href="https://resumelink.cc" class="cta-bar-btn">📄 Upload Resume → Free</a>
+
+    <div class="filter-tags" id="categories"></div>
+
+    <div class="roles-grid" id="rolesContainer"></div>
+    <div class="no-results" id="noResults" style="display:none;">
+        <div class="no-results-icon">🔍</div>
+        <p>No roles found. Try adjusting your search.</p>
+    </div>
 </div>
+
+<footer>
+    <p>&copy; 2026 ResumeLink. All career guides are AI-powered and regularly updated.</p>
+</footer>
 
 <script>
-let activeCategory = 'all';
-function setCategory(cat) {
-    activeCategory = cat;
-    document.querySelectorAll('.filter-tag').forEach(t => t.classList.toggle('active', t.dataset.cat === cat));
-    applyFilters();
-}
-function applyFilters() {
-    const q = document.getElementById('searchInput').value.toLowerCase().trim();
-    const cards = document.querySelectorAll('.role-card');
-    let visible = 0;
-    cards.forEach(card => {
-        const catMatch = activeCategory === 'all' || card.dataset.category === activeCategory;
-        const searchMatch = !q || card.dataset.title.includes(q) || card.dataset.summary.includes(q) || (card.dataset.skills||'').includes(q) || (card.dataset.tools||'').includes(q);
-        const show = catMatch && searchMatch;
-        card.style.display = show ? '' : 'none';
-        if (show) visible++;
-    });
-    const label = activeCategory === 'all' ? 'guides' : activeCategory + ' guides';
-    document.getElementById('resultsCount').textContent = visible + ' ' + label;
-    document.getElementById('emptyState').classList.toggle('visible', visible === 0);
-}
-window.addEventListener('DOMContentLoaded', () => {
-    const total = document.querySelectorAll('.role-card').length;
-    document.getElementById('resultsCount').textContent = total + ' guides';
+const rolesData = [
+    { slug: "ai-adversarial-security-tester", title: "AI Adversarial Security Tester", category: "Security & Privacy", desc: "Attack ML systems and help teams fix vulnerabilities before adversaries find them." },
+    { slug: "ai-business-lead", title: "AI Business Lead", category: "Business & Strategy", desc: "Transform AI opportunities into business value and strategic advantage." },
+    { slug: "ai-career-resilience-map", title: "AI Career Resilience Map", category: "Career Planning", desc: "Plan your AI career with adaptability and long-term value in mind." },
+    { slug: "ai-content-strategist", title: "AI Content Strategist", category: "Marketing & Content", desc: "Craft AI-powered content strategies that engage and convert audiences." },
+    { slug: "ai-copywriter", title: "AI Copywriter", category: "Marketing & Content", desc: "Write persuasive copy enhanced with AI insights and data." },
+    { slug: "ai-customer-journey-designer", title: "AI Customer Journey Designer", category: "Product & UX", desc: "Design seamless customer experiences powered by AI." },
+    { slug: "ai-cybersecurity-analyst", title: "AI Cybersecurity Analyst", category: "Security & Privacy", desc: "Defend organizations against AI-powered threats and vulnerabilities." },
+    { slug: "ai-data-curator", title: "AI Data Curator", category: "Data & AI", desc: "Ensure high-quality, ethical data flows through AI systems." },
+    { slug: "ai-ethics-officer", title: "AI Ethics Officer", category: "Governance & Ethics", desc: "Guide organizations through responsible AI deployment." },
+    { slug: "ai-healthcare-ops-manager", title: "AI Healthcare Operations Manager", category: "Healthcare & Life Sciences", desc: "Optimize hospital and clinical workflows with AI." },
+    { slug: "ai-product-manager", title: "AI Product Manager", category: "Product & UX", desc: "Lead AI product strategy, roadmap, and go-to-market." },
+    { slug: "ai-sales-enablement", title: "AI Sales Enablement", category: "Sales & Revenue", desc: "Equip sales teams with AI tools and intelligence." },
+    { slug: "ai-social-media-manager", title: "AI Social Media Manager", category: "Marketing & Content", desc: "Grow audiences and engagement with AI-powered social strategies." },
+    { slug: "computer-vision-specialist", title: "Computer Vision Specialist", category: "Data & AI", desc: "Build systems that see and understand the visual world." },
+    { slug: "prompt-engineer", title: "Prompt Engineer (Prompt Artist)", category: "Data & AI", desc: "Craft prompts that unlock the full potential of LLMs." },
+];
+
+// Extract unique categories
+const categories = [...new Set(rolesData.map(r => r.category))];
+const searchInput = document.getElementById('search-input');
+let selectedCategory = null;
+
+// Build category filters
+const categoriesContainer = document.getElementById('categories');
+categories.forEach(cat => {
+    const tag = document.createElement('button');
+    tag.className = 'filter-tag';
+    tag.textContent = cat;
+    tag.onclick = () => {
+        selectedCategory = selectedCategory === cat ? null : cat;
+        tag.classList.toggle('active');
+        filterRoles();
+        // Toggle other tags
+        Array.from(categoriesContainer.querySelectorAll('.filter-tag')).forEach(t => {
+            if (t !== tag) t.classList.remove('active');
+        });
+    };
+    categoriesContainer.appendChild(tag);
 });
+
+function filterRoles() {
+    const search = searchInput.value.toLowerCase();
+    const filtered = rolesData.filter(role => {
+        const matchesSearch = role.title.toLowerCase().includes(search) || role.desc.toLowerCase().includes(search);
+        const matchesCategory = !selectedCategory || role.category === selectedCategory;
+        return matchesSearch && matchesCategory;
+    });
+
+    const container = document.getElementById('rolesContainer');
+    const noResults = document.getElementById('noResults');
+
+    if (filtered.length === 0) {
+        container.innerHTML = '';
+        noResults.style.display = 'block';
+    } else {
+        noResults.style.display = 'none';
+        container.innerHTML = filtered.map(role => `
+            <a href="/roles/${role.slug}/" class="role-card">
+                <div class="role-category">${role.category}</div>
+                <h3 class="role-title">${role.title}</h3>
+                <p class="role-desc">${role.desc}</p>
+                <div class="role-meta">
+                    <span>Read guide →</span>
+                </div>
+            </a>
+        `).join('');
+    }
+}
+
+function toggleTheme() {
+    const html = document.documentElement;
+    const theme = html.getAttribute('data-theme');
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+}
+
+// Load theme on page load
+window.addEventListener('load', () => {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+});
+
+// Initial render
+filterRoles();
 </script>
+
+</body>
+</html>
