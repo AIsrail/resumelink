@@ -46,6 +46,7 @@ related_roles:
   - chief-ai-officer
   - ai-governance-consultant
   - computer-vision-specialist
+description: \"Generative AI Disaster Recovery Specialist professionals combine domain expertise with AI tools to deliver measurable results. In 2026, this role sits at the...\"
 ---
 
 ## What does a Generative AI Disaster Recovery Specialist do?

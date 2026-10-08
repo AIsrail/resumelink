@@ -46,6 +46,7 @@ related_roles:
   - career-change-roadmap
   - job-search-organization
   - first-90-days-plan
+description: \"Interview Preparation Specialist professionals combine domain expertise with AI tools to deliver measurable results. In 2026, this role sits at the frontier ...\"
 ---
 
 ## What does a Interview Preparation Specialist do?
