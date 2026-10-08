@@ -1,0 +1,43 @@
+<div class="r-section" style="margin-top: 2rem; background: linear-gradient(135deg, var(--mint) 0%, rgba(29,179,104,0.05) 100%); border: 0.5px solid var(--green); border-radius: 14px; padding: 20px;">
+  <div class="r-section-title" style="color: var(--green-dk);">💼 Open Positions for {{ page.title }}</div>
+  <p style="font-size: 13px; color: var(--muted); margin-bottom: 14px;">Find real job openings matching this role on top job boards:</p>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px;">
+    <!-- LinkedIn Jobs -->
+    <a href="https://www.linkedin.com/jobs/search/?keywords={{ page.title | replace: ' ', '%20' }}&f_TP=1%2C2%2C3&sort=DD" target="_blank" rel="noopener" style="
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 14px; background: var(--surface); border: 0.5px solid var(--green);
+      border-radius: 10px; text-decoration: none; transition: all .2s;
+      color: var(--forest); font-size: 13px; font-weight: 500;
+    " onmouseover="this.style.background='var(--green)'; this.style.color='white'" onmouseout="this.style.background='var(--surface)'; this.style.color='var(--forest)'">
+      <span style="font-size: 18px;">🔗</span>
+      LinkedIn Jobs
+    </a>
+
+    <!-- Indeed -->
+    <a href="https://www.indeed.com/jobs?q={{ page.title | replace: ' ', '+' }}&sort=date" target="_blank" rel="noopener" style="
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 14px; background: var(--surface); border: 0.5px solid var(--green);
+      border-radius: 10px; text-decoration: none; transition: all .2s;
+      color: var(--forest); font-size: 13px; font-weight: 500;
+    " onmouseover="this.style.background='var(--green)'; this.style.color='white'" onmouseout="this.style.background='var(--surface)'; this.style.color='var(--forest)'">
+      <span style="font-size: 18px;">💼</span>
+      Indeed
+    </a>
+
+    <!-- RemoteOK (for remote positions) -->
+    <a href="https://remoteok.io/remote-jobs?tag={{ page.title | replace: ' ', '-' | downcase }}" target="_blank" rel="noopener" style="
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 14px; background: var(--surface); border: 0.5px solid var(--green);
+      border-radius: 10px; text-decoration: none; transition: all .2s;
+      color: var(--forest); font-size: 13px; font-weight: 500;
+    " onmouseover="this.style.background='var(--green)'; this.style.color='white'" onmouseout="this.style.background='var(--surface)'; this.style.color='var(--forest)'">
+      <span style="font-size: 18px;">🌍</span>
+      Remote OK
+    </a>
+  </div>
+
+  <p style="font-size: 11px; color: var(--faint); margin-top: 12px;">
+    💡 Pro tip: Combine insights from this guide with real job descriptions to craft your application.
+  </p>
+</div>
