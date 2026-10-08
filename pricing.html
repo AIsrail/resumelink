@@ -327,7 +327,10 @@ document.getElementById('faqGrid').innerHTML = C.faqs.map(f => `
 document.getElementById('kofi-block').innerHTML = `
     <p style="font-size:13px;color:var(--muted);margin-bottom:4px;font-weight:500">${C.kofi.title}</p>
     <p style="font-size:12px;color:var(--faint);margin-bottom:16px">${C.kofi.sub}</p>
-    <a href="https://ko-fi.com/resumelink" target="_blank" class="kofi-btn">${C.kofi.btn}</a>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+        <a href="https://ko-fi.com/resumelink" target="_blank" rel="noopener" class="kofi-btn">${C.kofi.btn}</a>
+        <a href="https://patreon.com/AzatIsrailov?utm_medium=unknown&utm_source=join_link&utm_campaign=creatorshare_creator&utm_content=copyLink" target="_blank" rel="noopener" class="kofi-btn" style="background:#FF424D">🧡 Patreon</a>
+    </div>
 `;
 </script>
 </body>
