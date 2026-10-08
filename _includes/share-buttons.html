@@ -1,0 +1,19 @@
+<div class="r-share">
+  <div class="r-share-label">Share this guide</div>
+  <div class="r-share-btns">
+    <a class="r-share-btn r-share-li" href="https://www.linkedin.com/sharing/share-offsite/?url={{ page.url | absolute_url | url_encode }}" target="_blank" rel="noopener">🔗 LinkedIn</a>
+    <a class="r-share-btn r-share-x" href="https://twitter.com/intent/tweet?url={{ page.url | absolute_url | url_encode }}&text=I%20found%20%22{{ page.title | url_encode }}%22%20AI%20career%20guide%20on%20ResumeLink" target="_blank" rel="noopener">𝕏 Twitter</a>
+    <a class="r-share-btn r-share-wa" href="https://wa.me/?text={{ page.title | url_encode }}%20-%20{{ page.url | absolute_url | url_encode }}" target="_blank" rel="noopener">💬 WhatsApp</a>
+    <button class="r-share-btn r-share-copy" onclick="copyLink(this); return false;">📋 Copy Link</button>
+  </div>
+</div>
+
+<script>
+function copyLink(btn) {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  });
+}
+</script>
